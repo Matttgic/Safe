@@ -1,76 +1,76 @@
-Type,Match,Pari,Fiabilité,League_ID,Flags
-UltraSafe Over15,FC Augsburg vs Bayern München,+1.5 Buts,0.997,78,
-UltraSafe Result,FC Augsburg vs Bayern München,Bayern München ou Nul,0.694,78,
-UltraSafe Over15,Galatasaray vs Rizespor,+1.5 Buts,0.992,203,
-UltraSafe Result,Galatasaray vs Rizespor,Galatasaray ou Nul,0.684,203,
-UltraSafe Over15,Mlada Boleslav vs Slavia Praha,+1.5 Buts,0.995,345,
-UltraSafe Result,Mlada Boleslav vs Slavia Praha,Slavia Praha ou Nul,0.638,345,
-UltraSafe Over15,Volos NFC vs Olympiakos Piraeus,+1.5 Buts,0.948,197,
-UltraSafe Result,Volos NFC vs Olympiakos Piraeus,Olympiakos Piraeus ou Nul,0.620,197,
-UltraSafe Over15,Kolos Kovalivka vs Epitsentr Dunayivtsi,+1.5 Buts,0.980,333,low_sample_B(1.5999999999999999)
-Safe Result,Kolos Kovalivka vs Epitsentr Dunayivtsi,Kolos Kovalivka ou Nul,0.536,333,low_sample_B(1.5999999999999999)
-UltraSafe Over15,Grazer AK vs Sturm Graz,+1.5 Buts,0.997,218,
-Safe Result,Grazer AK vs Sturm Graz,Sturm Graz ou Nul,0.534,218,
-UltraSafe Over15,Real Madrid vs Mallorca,+1.5 Buts,0.980,140,
-Safe Result,Real Madrid vs Mallorca,Real Madrid ou Nul,0.532,140,
-UltraSafe Over15,Mjallby AIF vs Halmstad,+1.5 Buts,0.995,113,
-Safe Result,Mjallby AIF vs Halmstad,Mjallby AIF ou Nul,0.517,113,
-UltraSafe Over15,FC Volendam vs Ajax,+1.5 Buts,0.965,88,low_sample_A(0.8999999999999999)
-Safe Result,FC Volendam vs Ajax,Ajax ou Nul,0.504,88,low_sample_A(0.8999999999999999)
-UltraSafe Over15,Napoli vs Cagliari,+1.5 Buts,0.949,135,
-Safe Result,Napoli vs Cagliari,Napoli ou Nul,0.485,135,
-UltraSafe Over15,Parma vs Atalanta,+1.5 Buts,0.987,135,
-Safe Result,Parma vs Atalanta,Atalanta ou Nul,0.476,135,
-UltraSafe Over15,AVS vs Famalicao,+1.5 Buts,0.973,94,
-UltraSafe Over15,Slovácko vs FK Jablonec,+1.5 Buts,0.949,345,
-UltraSafe Over15,Red Bull Salzburg vs FC BW Linz,+1.5 Buts,0.989,218,
-UltraSafe Over15,1899 Hoffenheim vs Eintracht Frankfurt,+1.5 Buts,0.997,78,
-UltraSafe Over15,PSV Eindhoven vs Telstar,+1.5 Buts,0.991,88,low_sample_B(5.1)
-UltraSafe Over15,Toulouse vs Paris Saint Germain,+1.5 Buts,0.988,61,
-Safe Over15,Pisa vs AS Roma,+1.5 Buts,0.762,135,low_sample_A(0.3)
-UltraSafe Over15,Excelsior vs Twente,+1.5 Buts,0.972,88,low_sample_A(0.8999999999999999)
-UltraSafe Over15,Aris Thessalonikis vs Panetolikos,+1.5 Buts,0.894,197,
-UltraSafe Over15,NK Varazdin vs Dinamo Zagreb,+1.5 Buts,0.979,210,
-UltraSafe Over15,Werder Bremen vs Bayer Leverkusen,+1.5 Buts,0.997,78,
-UltraSafe Over15,Alaves vs Atletico Madrid,+1.5 Buts,0.962,140,
-UltraSafe Over15,Metalist 1925 Kharkiv vs Ruh Lviv,+1.5 Buts,0.942,333,low_sample_A(2.9999999999999996)
-UltraSafe Over15,IFK Goteborg vs IFK Varnamo,+1.5 Buts,0.994,113,
-UltraSafe Over15,Chelsea vs Fulham,+1.5 Buts,0.993,39,
-UltraSafe Over15,Wolves vs Everton,+1.5 Buts,0.984,39,
-UltraSafe Over15,Charleroi vs Dender,+1.5 Buts,0.974,144,
-UltraSafe Over15,Livingston vs Heart Of Midlothian,+1.5 Buts,0.997,179,low_sample_A(3.6999999999999997)
-UltraSafe Over15,Oviedo vs Real Sociedad,+1.5 Buts,0.853,140,low_sample_A(0.6)
-UltraSafe Over15,Dukla Praha vs Hradec Králové,+1.5 Buts,0.949,345,
-UltraSafe Over15,Panserraikos vs OFI,+1.5 Buts,0.949,197,
-UltraSafe Over15,IF Brommapojkarna vs IF Elfsborg,+1.5 Buts,0.997,113,
-UltraSafe Over15,Pardubice vs Bohemians 1905,+1.5 Buts,0.977,345,
-UltraSafe Over15,Kryvbas KR vs Obolon'-Brovar,+1.5 Buts,0.918,333,
-UltraSafe Over15,Gornik Zabrze vs Motor Lublin,+1.5 Buts,0.990,106,
-UltraSafe Over15,Manchester United vs Burnley,+1.5 Buts,0.830,39,low_sample_B(0.6)
-UltraSafe Over15,Antalyaspor vs Fatih Karagümrük,+1.5 Buts,0.860,203,low_sample_B(0.6)
-UltraSafe Over15,Guimaraes vs Arouca,+1.5 Buts,0.996,94,
-UltraSafe Over15,Unirea Slobozia vs Universitatea Cluj,+1.5 Buts,0.975,283,
-UltraSafe Over15,Sporting CP vs FC Porto,+1.5 Buts,0.997,94,
-UltraSafe Over15,Girona vs Sevilla,+1.5 Buts,0.997,140,
-UltraSafe Over15,KVC Westerlo vs Antwerp,+1.5 Buts,0.995,144,
-UltraSafe Over15,Sunderland vs Brentford,+1.5 Buts,0.965,39,low_sample_A(0.6)
-UltraSafe Over15,Valerenga vs Bryne,+1.5 Buts,0.918,103,
-UltraSafe Over15,Casa Pia vs Nacional,+1.5 Buts,0.976,94,
-UltraSafe Over15,Vukovar vs NK Slaven Belupo,+1.5 Buts,0.918,210,low_sample_A(1.2)
-UltraSafe Over15,Leeds vs Newcastle,+1.5 Buts,0.965,39,low_sample_A(0.6)
-UltraSafe Over15,Nantes vs Auxerre,+1.5 Buts,0.978,61,
-UltraSafe Over15,Nieciecza vs Korona Kielce,+1.5 Buts,0.846,106,low_sample_A(1.7999999999999998)
-UltraSafe Over15,Heerenveen vs GO Ahead Eagles,+1.5 Buts,0.997,88,
-UltraSafe Over15,Lorient vs Lille,+1.5 Buts,0.965,61,low_sample_A(0.6)
-UltraSafe Over15,Tottenham vs Bournemouth,+1.5 Buts,0.997,39,
-UltraSafe Over15,Bologna vs Como,+1.5 Buts,0.954,135,
-UltraSafe Over15,Lask Linz vs Ried,+1.5 Buts,0.958,218,low_sample_B(1.2)
-UltraSafe Over15,RB Leipzig vs 1. FC Heidenheim,+1.5 Buts,0.997,78,
-UltraSafe Over15,KV Mechelen vs RAAL La Louvière,+1.5 Buts,0.944,144,low_sample_B(1.5)
-UltraSafe Over15,Zaglebie Lubin vs Piast Gliwice,+1.5 Buts,0.977,106,
-UltraSafe Over15,Dinamo Bucuresti vs AFC Hermannstadt,+1.5 Buts,0.956,283,
-UltraSafe Over15,Motherwell vs Kilmarnock,+1.5 Buts,0.996,179,
-UltraSafe Over15,VfB Stuttgart vs Borussia Mönchengladbach,+1.5 Buts,0.988,78,
-UltraSafe Over15,Kasimpasa vs Gazişehir Gaziantep,+1.5 Buts,0.997,203,
-UltraSafe Over15,Karviná vs Teplice,+1.5 Buts,0.993,345,
-UltraSafe Over15,Kocaelispor vs Kayserispor,+1.5 Buts,0.965,203,low_sample_A(0.8999999999999999)
+Type,Match,Pari,Decision,Fiabilité,League_ID,Flags
+UltraSafe Over15,FC Augsburg vs Bayern München,+1.5 Buts,UltraSafe +1.5,0.997,78,
+UltraSafe Result,FC Augsburg vs Bayern München,Bayern München ou Nul,UltraSafe B ou Nul,0.694,78,
+UltraSafe Over15,Galatasaray vs Rizespor,+1.5 Buts,UltraSafe +1.5,0.992,203,
+UltraSafe Result,Galatasaray vs Rizespor,Galatasaray ou Nul,UltraSafe A ou Nul,0.684,203,
+UltraSafe Over15,Mlada Boleslav vs Slavia Praha,+1.5 Buts,UltraSafe +1.5,0.995,345,
+UltraSafe Result,Mlada Boleslav vs Slavia Praha,Slavia Praha ou Nul,UltraSafe B ou Nul,0.638,345,
+UltraSafe Over15,Volos NFC vs Olympiakos Piraeus,+1.5 Buts,UltraSafe +1.5,0.948,197,
+UltraSafe Result,Volos NFC vs Olympiakos Piraeus,Olympiakos Piraeus ou Nul,UltraSafe B ou Nul,0.620,197,
+UltraSafe Over15,Kolos Kovalivka vs Epitsentr Dunayivtsi,+1.5 Buts,UltraSafe +1.5,0.980,333,low_sample_B(1.5999999999999999)
+Safe Result,Kolos Kovalivka vs Epitsentr Dunayivtsi,Kolos Kovalivka ou Nul,Safe A ou Nul,0.536,333,low_sample_B(1.5999999999999999)
+UltraSafe Over15,Grazer AK vs Sturm Graz,+1.5 Buts,UltraSafe +1.5,0.997,218,
+Safe Result,Grazer AK vs Sturm Graz,Sturm Graz ou Nul,Safe B ou Nul,0.534,218,
+UltraSafe Over15,Real Madrid vs Mallorca,+1.5 Buts,UltraSafe +1.5,0.980,140,
+Safe Result,Real Madrid vs Mallorca,Real Madrid ou Nul,Safe A ou Nul,0.532,140,
+UltraSafe Over15,Mjallby AIF vs Halmstad,+1.5 Buts,UltraSafe +1.5,0.995,113,
+Safe Result,Mjallby AIF vs Halmstad,Mjallby AIF ou Nul,Safe A ou Nul,0.517,113,
+UltraSafe Over15,FC Volendam vs Ajax,+1.5 Buts,UltraSafe +1.5,0.965,88,low_sample_A(0.8999999999999999)
+Safe Result,FC Volendam vs Ajax,Ajax ou Nul,Safe B ou Nul,0.504,88,low_sample_A(0.8999999999999999)
+UltraSafe Over15,Napoli vs Cagliari,+1.5 Buts,UltraSafe +1.5,0.949,135,
+Safe Result,Napoli vs Cagliari,Napoli ou Nul,Safe A ou Nul,0.485,135,
+UltraSafe Over15,Parma vs Atalanta,+1.5 Buts,UltraSafe +1.5,0.987,135,
+Safe Result,Parma vs Atalanta,Atalanta ou Nul,Safe B ou Nul,0.476,135,
+UltraSafe Over15,AVS vs Famalicao,+1.5 Buts,UltraSafe +1.5,0.973,94,
+UltraSafe Over15,Slovácko vs FK Jablonec,+1.5 Buts,UltraSafe +1.5,0.949,345,
+UltraSafe Over15,Red Bull Salzburg vs FC BW Linz,+1.5 Buts,UltraSafe +1.5,0.989,218,
+UltraSafe Over15,1899 Hoffenheim vs Eintracht Frankfurt,+1.5 Buts,UltraSafe +1.5,0.997,78,
+UltraSafe Over15,PSV Eindhoven vs Telstar,+1.5 Buts,UltraSafe +1.5,0.991,88,low_sample_B(5.1)
+UltraSafe Over15,Toulouse vs Paris Saint Germain,+1.5 Buts,UltraSafe +1.5,0.988,61,
+Safe Over15,Pisa vs AS Roma,+1.5 Buts,Safe +1.5,0.762,135,low_sample_A(0.3)
+UltraSafe Over15,Excelsior vs Twente,+1.5 Buts,UltraSafe +1.5,0.972,88,low_sample_A(0.8999999999999999)
+UltraSafe Over15,Aris Thessalonikis vs Panetolikos,+1.5 Buts,UltraSafe +1.5,0.894,197,
+UltraSafe Over15,NK Varazdin vs Dinamo Zagreb,+1.5 Buts,UltraSafe +1.5,0.979,210,
+UltraSafe Over15,Werder Bremen vs Bayer Leverkusen,+1.5 Buts,UltraSafe +1.5,0.997,78,
+UltraSafe Over15,Alaves vs Atletico Madrid,+1.5 Buts,UltraSafe +1.5,0.962,140,
+UltraSafe Over15,Metalist 1925 Kharkiv vs Ruh Lviv,+1.5 Buts,UltraSafe +1.5,0.942,333,low_sample_A(2.9999999999999996)
+UltraSafe Over15,IFK Goteborg vs IFK Varnamo,+1.5 Buts,UltraSafe +1.5,0.994,113,
+UltraSafe Over15,Chelsea vs Fulham,+1.5 Buts,UltraSafe +1.5,0.993,39,
+UltraSafe Over15,Wolves vs Everton,+1.5 Buts,UltraSafe +1.5,0.984,39,
+UltraSafe Over15,Charleroi vs Dender,+1.5 Buts,UltraSafe +1.5,0.974,144,
+UltraSafe Over15,Livingston vs Heart Of Midlothian,+1.5 Buts,UltraSafe +1.5,0.997,179,low_sample_A(3.6999999999999997)
+UltraSafe Over15,Oviedo vs Real Sociedad,+1.5 Buts,UltraSafe +1.5,0.853,140,low_sample_A(0.6)
+UltraSafe Over15,Dukla Praha vs Hradec Králové,+1.5 Buts,UltraSafe +1.5,0.949,345,
+UltraSafe Over15,Panserraikos vs OFI,+1.5 Buts,UltraSafe +1.5,0.949,197,
+UltraSafe Over15,IF Brommapojkarna vs IF Elfsborg,+1.5 Buts,UltraSafe +1.5,0.997,113,
+UltraSafe Over15,Pardubice vs Bohemians 1905,+1.5 Buts,UltraSafe +1.5,0.977,345,
+UltraSafe Over15,Kryvbas KR vs Obolon'-Brovar,+1.5 Buts,UltraSafe +1.5,0.918,333,
+UltraSafe Over15,Gornik Zabrze vs Motor Lublin,+1.5 Buts,UltraSafe +1.5,0.990,106,
+UltraSafe Over15,Manchester United vs Burnley,+1.5 Buts,UltraSafe +1.5,0.830,39,low_sample_B(0.6)
+UltraSafe Over15,Antalyaspor vs Fatih Karagümrük,+1.5 Buts,UltraSafe +1.5,0.860,203,low_sample_B(0.6)
+UltraSafe Over15,Guimaraes vs Arouca,+1.5 Buts,UltraSafe +1.5,0.996,94,
+UltraSafe Over15,Unirea Slobozia vs Universitatea Cluj,+1.5 Buts,UltraSafe +1.5,0.975,283,
+UltraSafe Over15,Sporting CP vs FC Porto,+1.5 Buts,UltraSafe +1.5,0.997,94,
+UltraSafe Over15,Girona vs Sevilla,+1.5 Buts,UltraSafe +1.5,0.997,140,
+UltraSafe Over15,KVC Westerlo vs Antwerp,+1.5 Buts,UltraSafe +1.5,0.995,144,
+UltraSafe Over15,Sunderland vs Brentford,+1.5 Buts,UltraSafe +1.5,0.965,39,low_sample_A(0.6)
+UltraSafe Over15,Valerenga vs Bryne,+1.5 Buts,UltraSafe +1.5,0.918,103,
+UltraSafe Over15,Casa Pia vs Nacional,+1.5 Buts,UltraSafe +1.5,0.976,94,
+UltraSafe Over15,Vukovar vs NK Slaven Belupo,+1.5 Buts,UltraSafe +1.5,0.918,210,low_sample_A(1.2)
+UltraSafe Over15,Leeds vs Newcastle,+1.5 Buts,UltraSafe +1.5,0.965,39,low_sample_A(0.6)
+UltraSafe Over15,Nantes vs Auxerre,+1.5 Buts,UltraSafe +1.5,0.978,61,
+UltraSafe Over15,Nieciecza vs Korona Kielce,+1.5 Buts,UltraSafe +1.5,0.846,106,low_sample_A(1.7999999999999998)
+UltraSafe Over15,Heerenveen vs GO Ahead Eagles,+1.5 Buts,UltraSafe +1.5,0.997,88,
+UltraSafe Over15,Lorient vs Lille,+1.5 Buts,UltraSafe +1.5,0.965,61,low_sample_A(0.6)
+UltraSafe Over15,Tottenham vs Bournemouth,+1.5 Buts,UltraSafe +1.5,0.997,39,
+UltraSafe Over15,Bologna vs Como,+1.5 Buts,UltraSafe +1.5,0.954,135,
+UltraSafe Over15,Lask Linz vs Ried,+1.5 Buts,UltraSafe +1.5,0.958,218,low_sample_B(1.2)
+UltraSafe Over15,RB Leipzig vs 1. FC Heidenheim,+1.5 Buts,UltraSafe +1.5,0.997,78,
+UltraSafe Over15,KV Mechelen vs RAAL La Louvière,+1.5 Buts,UltraSafe +1.5,0.944,144,low_sample_B(1.5)
+UltraSafe Over15,Zaglebie Lubin vs Piast Gliwice,+1.5 Buts,UltraSafe +1.5,0.977,106,
+UltraSafe Over15,Dinamo Bucuresti vs AFC Hermannstadt,+1.5 Buts,UltraSafe +1.5,0.956,283,
+UltraSafe Over15,Motherwell vs Kilmarnock,+1.5 Buts,UltraSafe +1.5,0.996,179,
+UltraSafe Over15,VfB Stuttgart vs Borussia Mönchengladbach,+1.5 Buts,UltraSafe +1.5,0.988,78,
+UltraSafe Over15,Kasimpasa vs Gazişehir Gaziantep,+1.5 Buts,UltraSafe +1.5,0.997,203,
+UltraSafe Over15,Karviná vs Teplice,+1.5 Buts,UltraSafe +1.5,0.993,345,
+UltraSafe Over15,Kocaelispor vs Kayserispor,+1.5 Buts,UltraSafe +1.5,0.965,203,low_sample_A(0.8999999999999999)

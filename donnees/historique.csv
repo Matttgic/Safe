@@ -129,3 +129,68 @@ Date,Match,League_ID,Decision_Over15,Decision_Result,O15I,RSI_A,Fiabilite_Over15
 2025-08-30,Kryvbas KR vs Obolon'-Brovar,333,UltraSafe +1.5,Éviter,0.918,0.188,0.918,0.188,
 2025-08-30,Kolos Kovalivka vs Epitsentr Dunayivtsi,333,UltraSafe +1.5,Safe A ou Nul,0.980,0.536,0.980,0.536,low_sample_B(1.5999999999999999)
 2025-08-30,Metalist 1925 Kharkiv vs Ruh Lviv,333,UltraSafe +1.5,Éviter,0.942,0.273,0.942,0.273,low_sample_A(2.9999999999999996)
+2025-08-30,Chelsea vs Fulham,39,UltraSafe +1.5,Éviter,0.993,0.247,0.993,0.247,
+2025-08-30,Manchester United vs Burnley,39,UltraSafe +1.5,Éviter,0.830,-0.185,0.830,0.185,low_sample_B(0.6)
+2025-08-30,Wolves vs Everton,39,UltraSafe +1.5,Éviter,0.984,-0.227,0.984,0.227,
+2025-08-30,Tottenham vs Bournemouth,39,UltraSafe +1.5,Éviter,0.997,0.074,0.997,0.074,
+2025-08-30,Sunderland vs Brentford,39,UltraSafe +1.5,Éviter,0.965,0.143,0.965,0.143,low_sample_A(0.6)
+2025-08-30,Leeds vs Newcastle,39,UltraSafe +1.5,Éviter,0.965,-0.102,0.965,0.102,low_sample_A(0.6)
+2025-08-30,Alaves vs Atletico Madrid,140,UltraSafe +1.5,Éviter,0.962,-0.276,0.962,0.276,
+2025-08-30,Oviedo vs Real Sociedad,140,UltraSafe +1.5,Éviter,0.853,-0.212,0.853,0.212,low_sample_A(0.6)
+2025-08-30,Girona vs Sevilla,140,UltraSafe +1.5,Éviter,0.997,-0.149,0.997,0.149,
+2025-08-30,Real Madrid vs Mallorca,140,UltraSafe +1.5,Safe A ou Nul,0.980,0.532,0.980,0.532,
+2025-08-30,Bologna vs Como,135,UltraSafe +1.5,Éviter,0.954,-0.070,0.954,0.070,
+2025-08-30,Parma vs Atalanta,135,UltraSafe +1.5,Safe B ou Nul,0.987,-0.476,0.987,0.476,
+2025-08-30,Napoli vs Cagliari,135,UltraSafe +1.5,Safe A ou Nul,0.949,0.485,0.949,0.485,
+2025-08-30,Pisa vs AS Roma,135,Safe +1.5,Éviter,0.762,-0.352,0.762,0.352,low_sample_A(0.3)
+2025-08-30,Werder Bremen vs Bayer Leverkusen,78,UltraSafe +1.5,Éviter,0.997,-0.316,0.997,0.316,
+2025-08-30,1899 Hoffenheim vs Eintracht Frankfurt,78,UltraSafe +1.5,Éviter,0.997,-0.389,0.997,0.389,
+2025-08-30,VfB Stuttgart vs Borussia Mönchengladbach,78,UltraSafe +1.5,Éviter,0.988,-0.024,0.988,0.024,
+2025-08-30,RB Leipzig vs 1. FC Heidenheim,78,UltraSafe +1.5,Éviter,0.997,-0.046,0.997,0.046,
+2025-08-30,FC Augsburg vs Bayern München,78,UltraSafe +1.5,UltraSafe B ou Nul,0.997,-0.694,0.997,0.694,
+2025-08-30,Lorient vs Lille,61,UltraSafe +1.5,Éviter,0.965,0.074,0.965,0.074,low_sample_A(0.6)
+2025-08-30,Nantes vs Auxerre,61,UltraSafe +1.5,Éviter,0.978,-0.093,0.978,0.093,
+2025-08-30,Toulouse vs Paris Saint Germain,61,UltraSafe +1.5,Éviter,0.988,-0.385,0.988,0.385,
+2025-08-30,FC Volendam vs Ajax,88,UltraSafe +1.5,Safe B ou Nul,0.965,-0.504,0.965,0.504,low_sample_A(0.8999999999999999)
+2025-08-30,Heerenveen vs GO Ahead Eagles,88,UltraSafe +1.5,Éviter,0.997,-0.075,0.997,0.075,
+2025-08-30,PSV Eindhoven vs Telstar,88,UltraSafe +1.5,Éviter,0.991,0.387,0.991,0.387,low_sample_B(5.1)
+2025-08-30,Excelsior vs Twente,88,UltraSafe +1.5,Éviter,0.972,-0.348,0.972,0.348,low_sample_A(0.8999999999999999)
+2025-08-30,Casa Pia vs Nacional,94,UltraSafe +1.5,Éviter,0.976,0.119,0.976,0.119,
+2025-08-30,Guimaraes vs Arouca,94,UltraSafe +1.5,Éviter,0.996,0.178,0.996,0.178,
+2025-08-30,AVS vs Famalicao,94,UltraSafe +1.5,Éviter,0.973,-0.408,0.973,0.408,
+2025-08-30,Sporting CP vs FC Porto,94,UltraSafe +1.5,Éviter,0.997,0.157,0.997,0.157,
+2025-08-30,KV Mechelen vs RAAL La Louvière,144,UltraSafe +1.5,Éviter,0.944,0.044,0.944,0.044,low_sample_B(1.5)
+2025-08-30,KVC Westerlo vs Antwerp,144,UltraSafe +1.5,Éviter,0.995,-0.147,0.995,0.147,
+2025-08-30,Charleroi vs Dender,144,UltraSafe +1.5,Éviter,0.974,0.215,0.974,0.215,
+2025-08-30,Kasimpasa vs Gazişehir Gaziantep,203,UltraSafe +1.5,Éviter,0.997,0.007,0.997,0.007,
+2025-08-30,Kocaelispor vs Kayserispor,203,UltraSafe +1.5,Éviter,0.965,-0.000,0.965,0.000,low_sample_A(0.8999999999999999)
+2025-08-30,Galatasaray vs Rizespor,203,UltraSafe +1.5,UltraSafe A ou Nul,0.992,0.684,0.992,0.684,
+2025-08-30,Antalyaspor vs Fatih Karagümrük,203,UltraSafe +1.5,Éviter,0.860,0.182,0.860,0.182,low_sample_B(0.6)
+2025-08-30,Livingston vs Heart Of Midlothian,179,UltraSafe +1.5,Éviter,0.997,0.213,0.997,0.213,low_sample_A(3.6999999999999997)
+2025-08-30,Motherwell vs Kilmarnock,179,UltraSafe +1.5,Éviter,0.996,0.025,0.996,0.025,
+2025-08-30,Red Bull Salzburg vs FC BW Linz,218,UltraSafe +1.5,Éviter,0.989,0.391,0.989,0.391,
+2025-08-30,Lask Linz vs Ried,218,UltraSafe +1.5,Éviter,0.958,0.053,0.958,0.053,low_sample_B(1.2)
+2025-08-30,Grazer AK vs Sturm Graz,218,UltraSafe +1.5,Safe B ou Nul,0.997,-0.534,0.997,0.534,
+2025-08-30,Volos NFC vs Olympiakos Piraeus,197,UltraSafe +1.5,UltraSafe B ou Nul,0.948,-0.620,0.948,0.620,
+2025-08-30,Panserraikos vs OFI,197,UltraSafe +1.5,Éviter,0.949,-0.200,0.949,0.200,
+2025-08-30,Aris Thessalonikis vs Panetolikos,197,UltraSafe +1.5,Éviter,0.894,0.332,0.894,0.332,
+2025-08-30,Larisa vs Kifisia,197,Éviter,Éviter,0.650,0.040,0.650,0.040,low_sample_A(0.3)|low_sample_B(0.3)
+2025-08-30,Nieciecza vs Korona Kielce,106,UltraSafe +1.5,Éviter,0.846,0.087,0.846,0.087,low_sample_A(1.7999999999999998)
+2025-08-30,Zaglebie Lubin vs Piast Gliwice,106,UltraSafe +1.5,Éviter,0.977,-0.043,0.977,0.043,
+2025-08-30,Gornik Zabrze vs Motor Lublin,106,UltraSafe +1.5,Éviter,0.990,0.185,0.990,0.185,
+2025-08-30,IFK Goteborg vs IFK Varnamo,113,UltraSafe +1.5,Éviter,0.994,0.264,0.994,0.264,
+2025-08-30,IF Brommapojkarna vs IF Elfsborg,113,UltraSafe +1.5,Éviter,0.997,-0.196,0.997,0.196,
+2025-08-30,Mjallby AIF vs Halmstad,113,UltraSafe +1.5,Safe A ou Nul,0.995,0.517,0.995,0.517,
+2025-08-30,Valerenga vs Bryne,103,UltraSafe +1.5,Éviter,0.918,0.136,0.918,0.136,
+2025-08-30,Dukla Praha vs Hradec Králové,345,UltraSafe +1.5,Éviter,0.949,-0.205,0.949,0.205,
+2025-08-30,Karviná vs Teplice,345,UltraSafe +1.5,Éviter,0.993,-0.002,0.993,0.002,
+2025-08-30,Slovácko vs FK Jablonec,345,UltraSafe +1.5,Éviter,0.949,-0.403,0.949,0.403,
+2025-08-30,Pardubice vs Bohemians 1905,345,UltraSafe +1.5,Éviter,0.977,-0.191,0.977,0.191,
+2025-08-30,Mlada Boleslav vs Slavia Praha,345,UltraSafe +1.5,UltraSafe B ou Nul,0.995,-0.638,0.995,0.638,
+2025-08-30,Unirea Slobozia vs Universitatea Cluj,283,UltraSafe +1.5,Éviter,0.975,-0.171,0.975,0.171,
+2025-08-30,Dinamo Bucuresti vs AFC Hermannstadt,283,UltraSafe +1.5,Éviter,0.956,0.038,0.956,0.038,
+2025-08-30,Vukovar vs NK Slaven Belupo,210,UltraSafe +1.5,Éviter,0.918,-0.103,0.918,0.103,low_sample_A(1.2)
+2025-08-30,NK Varazdin vs Dinamo Zagreb,210,UltraSafe +1.5,Éviter,0.979,-0.330,0.979,0.330,
+2025-08-30,Kryvbas KR vs Obolon'-Brovar,333,UltraSafe +1.5,Éviter,0.918,0.188,0.918,0.188,
+2025-08-30,Kolos Kovalivka vs Epitsentr Dunayivtsi,333,UltraSafe +1.5,Safe A ou Nul,0.980,0.536,0.980,0.536,low_sample_B(1.5999999999999999)
+2025-08-30,Metalist 1925 Kharkiv vs Ruh Lviv,333,UltraSafe +1.5,Éviter,0.942,0.273,0.942,0.273,low_sample_A(2.9999999999999996)
