@@ -88,26 +88,49 @@ class MoteurUltraSafe:
         }
         self.stats_cache: Dict[int, TeamStats] = {}
 
-    def charger_stats_equipes(self, fichier_stats: str):
+    def charger_stats_equipes(self, fichier_stats: str, fichier_fallback: str = None):
         """Charge et traite le fichier stats_equipes.jsonl en pondérant les saisons."""
         print(f"📊 Chargement des statistiques depuis {fichier_stats}...")
+        if fichier_fallback:
+            print(f"🔄 Fichier fallback disponible : {fichier_fallback}")
+            
         stats_par_saison = defaultdict(lambda: defaultdict(dict))
         total_lignes = 0
         lignes_valides = 0
 
-        with open(fichier_stats, 'r', encoding='utf-8') as f:
-            for line in f:
-                total_lignes += 1
-                if not line.strip(): continue
-                try:
-                    record = json.loads(line)
-                    if record.get('raw_data_available', False):
-                        team_id = record['team_id']
-                        season = record['season']
-                        stats_par_saison[season][team_id] = record
-                        lignes_valides += 1
-                except json.JSONDecodeError:
-                    if self.debug: print(f"[AVERTISSEMENT] Ligne JSON invalide ignorée.")
+        # Charger le fichier principal
+        if os.path.exists(fichier_stats):
+            with open(fichier_stats, 'r', encoding='utf-8') as f:
+                for line in f:
+                    total_lignes += 1
+                    if not line.strip(): continue
+                    try:
+                        record = json.loads(line)
+                        if record.get('raw_data_available', False):
+                            team_id = record['team_id']
+                            season = record['season']
+                            stats_par_saison[season][team_id] = record
+                            lignes_valides += 1
+                    except json.JSONDecodeError:
+                        if self.debug: print(f"[AVERTISSEMENT] Ligne JSON invalide ignorée.")
+
+        # Charger le fichier fallback si nécessaire et disponible
+        if fichier_fallback and os.path.exists(fichier_fallback):
+            with open(fichier_fallback, 'r', encoding='utf-8') as f:
+                for line in f:
+                    total_lignes += 1
+                    if not line.strip(): continue
+                    try:
+                        record = json.loads(line)
+                        if record.get('raw_data_available', False):
+                            team_id = record['team_id']
+                            season = record['season']
+                            # Ne pas écraser si déjà présent dans le fichier principal
+                            if team_id not in stats_par_saison.get(season, {}):
+                                stats_par_saison[season][team_id] = record
+                                lignes_valides += 1
+                    except json.JSONDecodeError:
+                        if self.debug: print(f"[AVERTISSEMENT] Ligne JSON invalide ignorée dans fallback.")
         
         if self.debug:
             print(f"📈 Lignes totales: {total_lignes}, lignes valides: {lignes_valides}")
@@ -334,6 +357,7 @@ def charger_matchs(fichier_matchs: str) -> List[Tuple[int, int]]:
 def main():
     parser = argparse.ArgumentParser(description="Moteur de Paris UltraSafe")
     parser.add_argument("--stats-file", required=True, help="Chemin vers le fichier stats_equipes.jsonl")
+    parser.add_argument("--fallback-stats", help="Chemin vers le fichier fallback stats_equipes.jsonl (optionnel)")
     parser.add_argument("--matchs-file", required=True, help="Chemin vers le fichier JSON des matchs du jour")
     parser.add_argument("--output", default="donnees/paris_du_jour.csv", help="Fichier de sortie pour les paris")
     parser.add_argument("--historique", default="donnees/historique.csv", help="Fichier d'historique des analyses")
@@ -355,7 +379,7 @@ def main():
         except Exception as e:
             print(f"[AVERTISSEMENT] Impossible de charger le fichier de seuils : {e}")
     
-    moteur.charger_stats_equipes(args.stats_file)
+    moteur.charger_stats_equipes(args.stats_file, args.fallback_stats)
     
     # Diagnostic si le cache est vide
     if len(moteur.stats_cache) == 0:
@@ -387,4 +411,4 @@ def main():
     print("\n🎉 Processus terminé avec succès !")
 
 if __name__ == "__main__":
-    main()
+    main() 
