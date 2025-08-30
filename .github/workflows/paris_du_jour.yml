@@ -1,0 +1,407 @@
+name: Générer Paris du Jour UltraSafe
+
+on:
+  workflow_dispatch:
+    inputs:
+      matchs_source:
+        description: "Source des matchs (test/api/manuel)"
+        required: false
+        default: "test"
+        type: choice
+        options:
+          - test
+          - api
+          - manuel
+      seuils_custom:
+        description: "Seuils custom JSON (optionnel)"
+        required: false
+        type: string
+      debug_mode:
+        description: "Mode debug verbose"
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    # Exécution automatique chaque jour à 8h UTC (optionnel)
+    - cron: '0 8 * * *'
+  
+jobs:
+  generer_paris:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Vérifier prérequis
+        run: |
+          echo "🔍 Vérification des fichiers requis..."
+          
+          # Vérifier stats_equipes.jsonl
+          if [ ! -f donnees/stats_equipes.jsonl ]; then
+            echo "❌ Fichier donnees/stats_equipes.jsonl manquant"
+            echo "💡 Exécutez d'abord le workflow 'Récupérer Stats Équipes'"
+            exit 1
+          fi
+          
+          echo "✅ stats_equipes.jsonl trouvé"
+          echo "📊 Taille: $(wc -c < donnees/stats_equipes.jsonl) bytes"
+          echo "📄 Lignes: $(wc -l < donnees/stats_equipes.jsonl)"
+          
+          # Compter les équipes avec stats
+          equipes_avec_stats=$(python3 -c "
+import json
+count = 0
+with open('donnees/stats_equipes.jsonl', 'r') as f:
+    for line in f:
+        if line.strip():
+            record = json.loads(line)
+            if record.get('raw_data_available', False):
+                count += 1
+print(count)
+")
+          echo "⚽ Équipes avec statistiques: $equipes_avec_stats"
+          
+          if [ "$equipes_avec_stats" -lt 20 ]; then
+            echo "⚠️ Peu d'équipes avec stats - résultats limités"
+          fi
+
+      - name: Préparer source des matchs
+        run: |
+          matchs_source="${{ github.event.inputs.matchs_source || 'test' }}"
+          echo "🎯 Source matchs: $matchs_source"
+          
+          case $matchs_source in
+            "test")
+              echo "🧪 Création matchs de test..."
+              python3 -c "
+import json, os
+os.makedirs('donnees', exist_ok=True)
+
+# Matchs test avec équipes ayant probablement des stats
+matchs_test = {
+    'generated_at': '$(date -u +%Y-%m-%dT%H:%M:%SZ)',
+    'source': 'test',
+    'matchs': [
+        {'team_a_id': 50, 'team_b_id': 42, 'commentaire': 'Man City vs Arsenal'},
+        {'team_a_id': 40, 'team_b_id': 49, 'commentaire': 'Liverpool vs Chelsea'}, 
+        {'team_a_id': 33, 'team_b_id': 47, 'commentaire': 'Man United vs Tottenham'},
+        {'team_a_id': 66, 'team_b_id': 51, 'commentaire': 'Aston Villa vs Brighton'},
+        {'team_a_id': 48, 'team_b_id': 45, 'commentaire': 'West Ham vs Everton'},
+        {'team_a_id': 529, 'team_b_id': 541, 'commentaire': 'Barcelona vs Real Madrid'},
+        {'team_a_id': 489, 'team_b_id': 496, 'commentaire': 'AC Milan vs Juventus'},
+        {'team_a_id': 157, 'team_b_id': 165, 'commentaire': 'Bayern vs Dortmund'}
+    ]
+}
+
+with open('donnees/matchs_du_jour.json', 'w', encoding='utf-8') as f:
+    json.dump(matchs_test, f, indent=2, ensure_ascii=False)
+
+print('✅ Matchs test générés')
+"
+              ;;
+              
+            "api")
+              echo "🌐 Récupération matchs via API..."
+              # TODO: implémenter récupération API des matchs du jour
+              echo "⚠️ Mode API pas encore implémenté - utilisation du mode test"
+              python3 -c "exec(open('.github/workflows/create_test_matches.py').read())" 2>/dev/null || echo "Fallback test matches"
+              ;;
+              
+            "manuel")
+              echo "📝 Mode manuel - vérification fichier existant..."
+              if [ ! -f donnees/matchs_du_jour.json ]; then
+                echo "❌ Fichier donnees/matchs_du_jour.json manquant en mode manuel"
+                echo "💡 Créez le fichier avec vos matchs ou utilisez le mode 'test'"
+                exit 1
+              fi
+              echo "✅ Fichier manuel trouvé"
+              ;;
+          esac
+          
+          # Vérifier le fichier final
+          if [ -f donnees/matchs_du_jour.json ]; then
+            echo "📋 Aperçu matchs du jour:"
+            python3 -c "
+import json
+with open('donnees/matchs_du_jour.json', 'r') as f:
+    data = json.load(f)
+matchs = data.get('matchs', [])
+print(f'Total matchs: {len(matchs)}')
+for i, m in enumerate(matchs[:3], 1):
+    print(f'{i}. Team {m[\"team_a_id\"]} vs Team {m[\"team_b_id\"]} - {m.get(\"commentaire\", \"\")}')
+if len(matchs) > 3:
+    print(f'... et {len(matchs)-3} autres')
+"
+          else
+            echo "❌ Aucun fichier de matchs généré"
+            exit 1
+          fi
+
+      - name: Créer seuils custom si fournis
+        if: github.event.inputs.seuils_custom != ''
+        run: |
+          echo "🎛️ Création seuils custom..."
+          seuils_input='${{ github.event.inputs.seuils_custom }}'
+          
+          # Valider et écrire le JSON
+          echo "$seuils_input" | python3 -c "
+import json, sys
+try:
+    data = json.load(sys.stdin)
+    with open('donnees/seuils_custom.json', 'w') as f:
+        json.dump(data, f, indent=2)
+    print('✅ Seuils custom validés et sauvegardés')
+except Exception as e:
+    print(f'❌ Seuils JSON invalides: {e}')
+    sys.exit(1)
+"
+
+      - name: Exécuter moteur UltraSafe
+        run: |
+          echo "🚀 Lancement du moteur UltraSafe..."
+          
+          # Arguments de base
+          args="--stats-file donnees/stats_equipes.jsonl --matchs-file donnees/matchs_du_jour.json"
+          args="$args --output donnees/paris_du_jour.csv --historique donnees/historique.csv"
+          
+          # Seuils custom si fournis
+          if [ -f donnees/seuils_custom.json ]; then
+            args="$args --seuils donnees/seuils_custom.json"
+          fi
+          
+          # Mode debug
+          if [ "${{ github.event.inputs.debug_mode }}" = "true" ]; then
+            args="$args --debug"
+          fi
+          
+          echo "📋 Commande: python3 scripts/moteur_paris_ultrasafe.py $args"
+          
+          # Exécuter
+          python3 scripts/moteur_paris_ultrasafe.py $args
+
+      - name: Analyser les résultats
+        run: |
+          echo "📊 ANALYSE DES RÉSULTATS"
+          echo "=" * 40
+          
+          # Vérifier paris_du_jour.csv
+          if [ -f donnees/paris_du_jour.csv ]; then
+            echo "✅ paris_du_jour.csv généré"
+            echo "📊 Taille: $(wc -c < donnees/paris_du_jour.csv) bytes"
+            
+            # Analyser le contenu
+            python3 -c "
+import csv
+from collections import Counter
+
+ultrasafe_count = 0
+safe_count = 0
+type_counts = Counter()
+
+try:
+    with open('donnees/paris_du_jour.csv', 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        
+        for row in reader:
+            pari_type = row.get('Type', '')
+            type_counts[pari_type] += 1
+            
+            if 'UltraSafe' in pari_type:
+                ultrasafe_count += 1
+            elif 'Safe' in pari_type:
+                safe_count += 1
+
+    print(f'📈 RÉPARTITION DES PARIS:')
+    print(f'   🎯 UltraSafe: {ultrasafe_count}')
+    print(f'   ✅ Safe: {safe_count}')
+    print(f'   📊 Détail par type:')
+    for ptype, count in type_counts.items():
+        print(f'     - {ptype}: {count}')
+        
+except Exception as e:
+    print(f'❌ Erreur analyse paris_du_jour.csv: {e}')
+"
+            
+            echo ""
+            echo "📋 Aperçu paris du jour (top 3):"
+            head -4 donnees/paris_du_jour.csv | column -t -s, 2>/dev/null || head -4 donnees/paris_du_jour.csv
+            
+          else
+            echo "❌ Fichier paris_du_jour.csv manquant"
+            exit 1
+          fi
+          
+          # Vérifier historique.csv
+          if [ -f donnees/historique.csv ]; then
+            lignes_hist=$(wc -l < donnees/historique.csv)
+            echo ""
+            echo "✅ historique.csv mis à jour ($lignes_hist lignes total)"
+            
+            # Compter les entrées du jour
+            today=$(date -u +%Y-%m-%d)
+            entries_today=$(grep "^$today," donnees/historique.csv | wc -l)
+            echo "📅 Entrées ajoutées aujourd'hui: $entries_today"
+            
+          else
+            echo "⚠️ Fichier historique.csv non créé (normal si premier run)"
+          fi
+
+      - name: Validation qualité
+        run: |
+          echo "🔍 VALIDATION QUALITÉ"
+          echo "=" * 30
+          
+          # Test de cohérence des données
+          python3 -c "
+import csv, json
+import sys
+
+errors = []
+warnings = []
+
+# Vérifier paris_du_jour.csv
+try:
+    with open('donnees/paris_du_jour.csv', 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+    
+    if not rows:
+        errors.append('Aucun pari généré')
+    
+    for i, row in enumerate(rows, 1):
+        # Vérifier champs requis
+        required = ['Type', 'Match', 'Pari', 'Fiabilité']
+        for field in required:
+            if not row.get(field):
+                errors.append(f'Ligne {i}: champ {field} manquant')
+        
+        # Vérifier fiabilité [0-1]
+        try:
+            fiab = float(row.get('Fiabilité', 0))
+            if not (0 <= fiab <= 1):
+                warnings.append(f'Ligne {i}: fiabilité {fiab} hors [0,1]')
+        except ValueError:
+            errors.append(f'Ligne {i}: fiabilité non numérique')
+        
+        # Vérifier cohérence UltraSafe
+        if 'UltraSafe' in row.get('Type', ''):
+            if fiab < 0.6:  # Seuil minimum UltraSafe
+                warnings.append(f'Ligne {i}: UltraSafe avec fiabilité faible ({fiab})')
+
+    print(f'📊 Validation: {len(rows)} paris analysés')
+    
+    if errors:
+        print(f'❌ ERREURS ({len(errors)}):')
+        for err in errors[:5]:  # Limite affichage
+            print(f'   - {err}')
+        sys.exit(1)
+    
+    if warnings:
+        print(f'⚠️ AVERTISSEMENTS ({len(warnings)}):')
+        for warn in warnings[:3]:
+            print(f'   - {warn}')
+    
+    print('✅ Validation réussie')
+    
+except Exception as e:
+    print(f'❌ Erreur validation: {e}')
+    sys.exit(1)
+"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: paris_ultrasafe_${{ github.run_number }}
+          path: |
+            donnees/paris_du_jour.csv
+            donnees/historique.csv
+            donnees/matchs_du_jour.json
+            donnees/seuils_custom.json
+          retention-days: 30  # Garder plus longtemps pour l'historique
+
+      - name: Afficher résumé final
+        if: success()
+        run: |
+          echo ""
+          echo "🎉 GÉNÉRATION TERMINÉE AVEC SUCCÈS!"
+          echo "=" * 50
+          
+          # Statistiques finales
+          if [ -f donnees/paris_du_jour.csv ]; then
+            total_paris=$(tail -n +2 donnees/paris_du_jour.csv | wc -l)
+            ultrasafe_count=$(grep "UltraSafe" donnees/paris_du_jour.csv | wc -l)
+            
+            echo "📊 RÉSUMÉ DU JOUR:"
+            echo "   🎯 Total paris: $total_paris"
+            echo "   🎯 UltraSafe: $ultrasafe_count"
+            echo "   📅 Date: $(date -u +%Y-%m-%d)"
+            
+            if [ "$ultrasafe_count" -gt 0 ]; then
+              echo ""
+              echo "🏆 TOP ULTRASAFE:"
+              head -2 donnees/paris_du_jour.csv | tail -1 | cut -d, -f1-4
+            fi
+          fi
+          
+          echo ""
+          echo "📁 Fichiers générés:"
+          echo "   - donnees/paris_du_jour.csv (écrasé quotidiennement)"
+          echo "   - donnees/historique.csv (cumulatif)"
+          echo ""
+          echo "🚀 Prêt pour la martingale!"
+
+      - name: Commit des résultats
+        if: success()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action UltraSafe"
+          
+          # Ajouter les fichiers modifiés
+          if [ -f donnees/paris_du_jour.csv ]; then
+            git add donnees/paris_du_jour.csv
+          fi
+          
+          if [ -f donnees/historique.csv ]; then
+            git add donnees/historique.csv
+          fi
+          
+          # Vérifier s'il y a des changements
+          if [ -n "$(git status --porcelain)" ]; then
+            # Compter les paris générés
+            if [ -f donnees/paris_du_jour.csv ]; then
+              paris_count=$(tail -n +2 donnees/paris_du_jour.csv | wc -l)
+              ultrasafe_count=$(grep -c "UltraSafe" donnees/paris_du_jour.csv || echo "0")
+            else
+              paris_count=0
+              ultrasafe_count=0
+            fi
+            
+            commit_msg="🎰 Paris UltraSafe du $(date -u +%Y-%m-%d) - $paris_count paris ($ultrasafe_count UltraSafe)"
+            
+            git commit -m "$commit_msg"
+            git push
+            echo "✅ Paris commitées: $commit_msg"
+          else
+            echo "ℹ️ Aucun changement à committer"
+          fi
+
+      - name: Nettoyer fichiers temporaires
+        if: always()
+        run: |
+          # Nettoyer les fichiers de debug/test si présents
+          rm -f donnees/seuils_custom.json || true
+          rm -f debug_*.json || true
+          echo "🧹 Nettoyage terminé"
