@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       season:
-        description: "Saison (ex: 2024 pour 2024-25)"
+        description: "Saison (ex: 2025)"
         required: true
-        default: "2024"  # Changé de 2025 à 2024
+        default: "2025"
   push:
     paths:
       - ligues.yaml
@@ -28,18 +28,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests pyyaml
 
-      - name: Debug API (optionnel)
+      - name: Test API (Quick check)
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-          RAPIDAPI_HOST: api-football-v1.p.rapidapi.com
         run: |
-          # Test rapide avec Premier League
+          echo "🧪 Test rapide de l'API..."
           python -c "
-          import requests, os
-          headers = {'X-RapidAPI-Key': os.getenv('RAPIDAPI_KEY'), 'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'}
-          resp = requests.get('https://api-football-v1.p.rapidapi.com/v3/teams?league=39&season=2024', headers=headers)
-          print(f'Status: {resp.status_code}')
-          print(f'Response preview: {resp.text[:200]}')
+          import requests, os, json
+          headers = {
+              'X-RapidAPI-Key': os.getenv('RAPIDAPI_KEY'),
+              'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+          }
+          resp = requests.get('https://api-football-v1.p.rapidapi.com/v3/teams?league=39&season=${{ github.event.inputs.season || '2025' }}', headers=headers)
+          print(f'✅ Status: {resp.status_code}')
+          if resp.status_code == 200:
+              data = resp.json()
+              print(f'✅ Premier League: {data.get(\"results\", 0)} équipes trouvées')
+          else:
+              print(f'❌ Erreur: {resp.text[:100]}')
           "
 
       - name: Récupérer Team IDs
@@ -47,37 +53,62 @@ jobs:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           RAPIDAPI_HOST: api-football-v1.p.rapidapi.com
         run: |
+          echo "🚀 Récupération des Team IDs..."
           python scripts/recuperer_team_ids.py \
-            --saison "${{ github.event.inputs.season || '2024' }}" \
+            --saison "${{ github.event.inputs.season || '2025' }}" \
             --entree ligues.yaml \
             --sortie donnees/team_ids.json
 
-      - name: Vérifier le fichier généré
+      - name: Vérifier résultats
         run: |
           if [ -f donnees/team_ids.json ]; then
             echo "✅ Fichier team_ids.json généré"
-            echo "Taille: $(wc -c < donnees/team_ids.json) bytes"
-            echo "Aperçu du contenu:"
+            echo "📊 Taille: $(wc -c < donnees/team_ids.json) bytes"
+            
+            # Statistiques avec Python
+            python3 -c "
+            import json
+            with open('donnees/team_ids.json', 'r') as f:
+                data = json.load(f)
+            
+            print(f'📅 Saison: {data.get(\"season\", \"N/A\")}')
+            print(f'🏆 Ligues: {data.get(\"total_leagues\", 0)}')
+            
+            total = 0
+            for league in data.get('leagues', []):
+                count = league.get('teams_count', 0)
+                total += count
+                if count > 0:
+                    print(f'  ✅ {league.get(\"league_name\", \"?\")}: {count} équipes')
+                else:
+                    print(f'  ❌ {league.get(\"league_name\", \"?\")}: {count} équipes')
+            
+            print(f'⚽ TOTAL: {total} équipes')
+            "
+            
+            echo "📋 Aperçu JSON:"
             head -20 donnees/team_ids.json
           else
-            echo "❌ Fichier team_ids.json non généré"
+            echo "❌ Fichier team_ids.json manquant"
             exit 1
           fi
 
-      - name: Upload du fichier (artifact)
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: team_ids
+          name: team_ids_saison_${{ github.event.inputs.season || '2025' }}
           path: donnees/team_ids.json
 
-      - name: Commit et push (si changements)
+      - name: Commit automatique
         run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
           if [ -n "$(git status --porcelain donnees/team_ids.json)" ]; then
-            git config --local user.email "action@github.com"
-            git config --local user.name "GitHub Action"
             git add donnees/team_ids.json
-            git commit -m "🤖 Mise à jour automatique des team IDs (saison ${{ github.event.inputs.season || '2024' }})"
+            git commit -m "🤖 Mise à jour Team IDs saison ${{ github.event.inputs.season || '2025' }} - $(date +'%Y-%m-%d %H:%M UTC')"
             git push
+            echo "✅ Changements commitées"
           else
-            echo "Aucun changement détecté"
+            echo "ℹ️ Aucun changement détecté"
           fi
