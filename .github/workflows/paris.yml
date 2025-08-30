@@ -55,14 +55,24 @@ jobs:
 import json, os
 file_path = 'donnees/matchs_du_jour.json'
 try:
-    with open(file_path, 'r', encoding='utf-8') as f: data = json.load(f)
+    with open(file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
     if 'fixtures' in data and 'matchs' not in data:
         print('Détection du format API (fixtures), conversion...')
-        converted = [{'team_a_id': f['home_team']['id'], 'team_b_id': f['away_team']['id']} for f in data.get('fixtures', []) if f.get('home_team',{}).get('id') and f.get('away_team',{}).get('id')]
-        with open(file_path, 'w', encoding='utf-8') as f: json.dump({'source': 'converted', 'matchs': converted}, f, indent=2)
+        converted = []
+        for fixture in data.get('fixtures', []):
+            home_id = fixture.get('home_team', {}).get('id')
+            away_id = fixture.get('away_team', {}).get('id')
+            if home_id and away_id:
+                converted.append({'team_a_id': home_id, 'team_b_id': away_id})
+        new_data = {'source': 'converted', 'matchs': converted}
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(new_data, f, indent=2)
         print(f'✅ Conversion réussie: {len(converted)} matchs préparés.')
+    else:
+        print('Format déjà converti ou pas de fixtures trouvées.')
 except Exception as e:
-    print(f'⚠️ Impossible de traiter le fichier de matchs : {e}')
+    print(f'⚠️ Erreur : {e}')
 "
           else
             echo "❌ Fichier 'donnees/matchs_du_jour.json' non trouvé."
@@ -110,4 +120,3 @@ except Exception as e:
           path: |
             donnees/paris_du_jour.csv
             donnees/historique.csv
-`
