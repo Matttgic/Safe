@@ -111,7 +111,6 @@ class MoteurUltraSafe:
                 if not line.strip(): continue
                 try:
                     record = json.loads(line)
-                    # **CORRECTION**: On ne vérifie plus 'raw_data_available'.
                     # On vérifie juste si les stats essentielles sont là.
                     if 'stats' in record and record['stats'].get('played_total') is not None:
                         stats_dict[record['team_id']] = record
@@ -304,5 +303,4 @@ def main():
     print("\n🎉 Processus terminé avec succès !")
 
 if __name__ == "__main__":
-    main()
-`
+    main() 
