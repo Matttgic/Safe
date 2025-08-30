@@ -1,0 +1,2758 @@
+{
+  "generated_at": "2025-08-30T00:13:25.971265+00:00",
+  "season": "2025",
+  "leagues": [
+    {
+      "league_id": 39,
+      "league_name": "Premier League",
+      "season": "2025",
+      "teams_count": 20,
+      "teams": [
+        {
+          "team_id": 33,
+          "name": "Manchester United",
+          "code": "MUN",
+          "country": "England",
+          "founded": 1878,
+          "logo": "https://media.api-sports.io/football/teams/33.png"
+        },
+        {
+          "team_id": 34,
+          "name": "Newcastle",
+          "code": "NEW",
+          "country": "England",
+          "founded": 1892,
+          "logo": "https://media.api-sports.io/football/teams/34.png"
+        },
+        {
+          "team_id": 35,
+          "name": "Bournemouth",
+          "code": "BOU",
+          "country": "England",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/35.png"
+        },
+        {
+          "team_id": 36,
+          "name": "Fulham",
+          "code": "FUL",
+          "country": "England",
+          "founded": 1879,
+          "logo": "https://media.api-sports.io/football/teams/36.png"
+        },
+        {
+          "team_id": 39,
+          "name": "Wolves",
+          "code": "WOL",
+          "country": "England",
+          "founded": 1877,
+          "logo": "https://media.api-sports.io/football/teams/39.png"
+        },
+        {
+          "team_id": 40,
+          "name": "Liverpool",
+          "code": "LIV",
+          "country": "England",
+          "founded": 1892,
+          "logo": "https://media.api-sports.io/football/teams/40.png"
+        },
+        {
+          "team_id": 42,
+          "name": "Arsenal",
+          "code": "ARS",
+          "country": "England",
+          "founded": 1886,
+          "logo": "https://media.api-sports.io/football/teams/42.png"
+        },
+        {
+          "team_id": 44,
+          "name": "Burnley",
+          "code": "BUR",
+          "country": "England",
+          "founded": 1882,
+          "logo": "https://media.api-sports.io/football/teams/44.png"
+        },
+        {
+          "team_id": 45,
+          "name": "Everton",
+          "code": "EVE",
+          "country": "England",
+          "founded": 1878,
+          "logo": "https://media.api-sports.io/football/teams/45.png"
+        },
+        {
+          "team_id": 47,
+          "name": "Tottenham",
+          "code": "TOT",
+          "country": "England",
+          "founded": 1882,
+          "logo": "https://media.api-sports.io/football/teams/47.png"
+        },
+        {
+          "team_id": 48,
+          "name": "West Ham",
+          "code": "WES",
+          "country": "England",
+          "founded": 1895,
+          "logo": "https://media.api-sports.io/football/teams/48.png"
+        },
+        {
+          "team_id": 49,
+          "name": "Chelsea",
+          "code": "CHE",
+          "country": "England",
+          "founded": 1905,
+          "logo": "https://media.api-sports.io/football/teams/49.png"
+        },
+        {
+          "team_id": 50,
+          "name": "Manchester City",
+          "code": "MAC",
+          "country": "England",
+          "founded": 1880,
+          "logo": "https://media.api-sports.io/football/teams/50.png"
+        },
+        {
+          "team_id": 51,
+          "name": "Brighton",
+          "code": "BRI",
+          "country": "England",
+          "founded": 1901,
+          "logo": "https://media.api-sports.io/football/teams/51.png"
+        },
+        {
+          "team_id": 52,
+          "name": "Crystal Palace",
+          "code": "CRY",
+          "country": "England",
+          "founded": 1861,
+          "logo": "https://media.api-sports.io/football/teams/52.png"
+        },
+        {
+          "team_id": 55,
+          "name": "Brentford",
+          "code": "BRE",
+          "country": "England",
+          "founded": 1889,
+          "logo": "https://media.api-sports.io/football/teams/55.png"
+        },
+        {
+          "team_id": 63,
+          "name": "Leeds",
+          "code": "LEE",
+          "country": "England",
+          "founded": 1919,
+          "logo": "https://media.api-sports.io/football/teams/63.png"
+        },
+        {
+          "team_id": 65,
+          "name": "Nottingham Forest",
+          "code": "NOT",
+          "country": "England",
+          "founded": 1865,
+          "logo": "https://media.api-sports.io/football/teams/65.png"
+        },
+        {
+          "team_id": 66,
+          "name": "Aston Villa",
+          "code": "AST",
+          "country": "England",
+          "founded": 1874,
+          "logo": "https://media.api-sports.io/football/teams/66.png"
+        },
+        {
+          "team_id": 746,
+          "name": "Sunderland",
+          "code": "SUN",
+          "country": "England",
+          "founded": 1879,
+          "logo": "https://media.api-sports.io/football/teams/746.png"
+        }
+      ]
+    },
+    {
+      "league_id": 140,
+      "league_name": "La Liga",
+      "season": "2025",
+      "teams_count": 20,
+      "teams": [
+        {
+          "team_id": 529,
+          "name": "Barcelona",
+          "code": "BAR",
+          "country": "Spain",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/529.png"
+        },
+        {
+          "team_id": 530,
+          "name": "Atletico Madrid",
+          "code": "MAD",
+          "country": "Spain",
+          "founded": 1903,
+          "logo": "https://media.api-sports.io/football/teams/530.png"
+        },
+        {
+          "team_id": 531,
+          "name": "Athletic Club",
+          "code": "BIL",
+          "country": "Spain",
+          "founded": 1898,
+          "logo": "https://media.api-sports.io/football/teams/531.png"
+        },
+        {
+          "team_id": 532,
+          "name": "Valencia",
+          "code": "VAL",
+          "country": "Spain",
+          "founded": 1919,
+          "logo": "https://media.api-sports.io/football/teams/532.png"
+        },
+        {
+          "team_id": 533,
+          "name": "Villarreal",
+          "code": "VIL",
+          "country": "Spain",
+          "founded": 1923,
+          "logo": "https://media.api-sports.io/football/teams/533.png"
+        },
+        {
+          "team_id": 536,
+          "name": "Sevilla",
+          "code": "SEV",
+          "country": "Spain",
+          "founded": 1890,
+          "logo": "https://media.api-sports.io/football/teams/536.png"
+        },
+        {
+          "team_id": 538,
+          "name": "Celta Vigo",
+          "code": "CEL",
+          "country": "Spain",
+          "founded": 1923,
+          "logo": "https://media.api-sports.io/football/teams/538.png"
+        },
+        {
+          "team_id": 539,
+          "name": "Levante",
+          "code": "LEV",
+          "country": "Spain",
+          "founded": 1909,
+          "logo": "https://media.api-sports.io/football/teams/539.png"
+        },
+        {
+          "team_id": 540,
+          "name": "Espanyol",
+          "code": "ESP",
+          "country": "Spain",
+          "founded": 1900,
+          "logo": "https://media.api-sports.io/football/teams/540.png"
+        },
+        {
+          "team_id": 541,
+          "name": "Real Madrid",
+          "code": "REA",
+          "country": "Spain",
+          "founded": 1902,
+          "logo": "https://media.api-sports.io/football/teams/541.png"
+        },
+        {
+          "team_id": 542,
+          "name": "Alaves",
+          "code": "ALA",
+          "country": "Spain",
+          "founded": 1921,
+          "logo": "https://media.api-sports.io/football/teams/542.png"
+        },
+        {
+          "team_id": 543,
+          "name": "Real Betis",
+          "code": "BET",
+          "country": "Spain",
+          "founded": 1907,
+          "logo": "https://media.api-sports.io/football/teams/543.png"
+        },
+        {
+          "team_id": 546,
+          "name": "Getafe",
+          "code": "GET",
+          "country": "Spain",
+          "founded": 1983,
+          "logo": "https://media.api-sports.io/football/teams/546.png"
+        },
+        {
+          "team_id": 547,
+          "name": "Girona",
+          "code": "GIR",
+          "country": "Spain",
+          "founded": 1930,
+          "logo": "https://media.api-sports.io/football/teams/547.png"
+        },
+        {
+          "team_id": 548,
+          "name": "Real Sociedad",
+          "code": "RSO",
+          "country": "Spain",
+          "founded": 1909,
+          "logo": "https://media.api-sports.io/football/teams/548.png"
+        },
+        {
+          "team_id": 718,
+          "name": "Oviedo",
+          "code": "OVI",
+          "country": "Spain",
+          "founded": 1926,
+          "logo": "https://media.api-sports.io/football/teams/718.png"
+        },
+        {
+          "team_id": 727,
+          "name": "Osasuna",
+          "code": "OSA",
+          "country": "Spain",
+          "founded": 1920,
+          "logo": "https://media.api-sports.io/football/teams/727.png"
+        },
+        {
+          "team_id": 728,
+          "name": "Rayo Vallecano",
+          "code": "RAY",
+          "country": "Spain",
+          "founded": 1924,
+          "logo": "https://media.api-sports.io/football/teams/728.png"
+        },
+        {
+          "team_id": 797,
+          "name": "Elche",
+          "code": "ELC",
+          "country": "Spain",
+          "founded": 1923,
+          "logo": "https://media.api-sports.io/football/teams/797.png"
+        },
+        {
+          "team_id": 798,
+          "name": "Mallorca",
+          "code": "MAL",
+          "country": "Spain",
+          "founded": 1916,
+          "logo": "https://media.api-sports.io/football/teams/798.png"
+        }
+      ]
+    },
+    {
+      "league_id": 135,
+      "league_name": "Serie A",
+      "season": "2025",
+      "teams_count": 20,
+      "teams": [
+        {
+          "team_id": 487,
+          "name": "Lazio",
+          "code": "LAZ",
+          "country": "Italy",
+          "founded": 1900,
+          "logo": "https://media.api-sports.io/football/teams/487.png"
+        },
+        {
+          "team_id": 488,
+          "name": "Sassuolo",
+          "code": "SAS",
+          "country": "Italy",
+          "founded": 1922,
+          "logo": "https://media.api-sports.io/football/teams/488.png"
+        },
+        {
+          "team_id": 489,
+          "name": "AC Milan",
+          "code": "MIL",
+          "country": "Italy",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/489.png"
+        },
+        {
+          "team_id": 490,
+          "name": "Cagliari",
+          "code": "CAG",
+          "country": "Italy",
+          "founded": 1920,
+          "logo": "https://media.api-sports.io/football/teams/490.png"
+        },
+        {
+          "team_id": 492,
+          "name": "Napoli",
+          "code": "NAP",
+          "country": "Italy",
+          "founded": 1904,
+          "logo": "https://media.api-sports.io/football/teams/492.png"
+        },
+        {
+          "team_id": 494,
+          "name": "Udinese",
+          "code": "UDI",
+          "country": "Italy",
+          "founded": 1896,
+          "logo": "https://media.api-sports.io/football/teams/494.png"
+        },
+        {
+          "team_id": 495,
+          "name": "Genoa",
+          "code": "GEN",
+          "country": "Italy",
+          "founded": 1893,
+          "logo": "https://media.api-sports.io/football/teams/495.png"
+        },
+        {
+          "team_id": 496,
+          "name": "Juventus",
+          "code": "JUV",
+          "country": "Italy",
+          "founded": 1897,
+          "logo": "https://media.api-sports.io/football/teams/496.png"
+        },
+        {
+          "team_id": 497,
+          "name": "AS Roma",
+          "code": "ROM",
+          "country": "Italy",
+          "founded": 1927,
+          "logo": "https://media.api-sports.io/football/teams/497.png"
+        },
+        {
+          "team_id": 499,
+          "name": "Atalanta",
+          "code": "ATA",
+          "country": "Italy",
+          "founded": 1907,
+          "logo": "https://media.api-sports.io/football/teams/499.png"
+        },
+        {
+          "team_id": 500,
+          "name": "Bologna",
+          "code": "BOL",
+          "country": "Italy",
+          "founded": 1909,
+          "logo": "https://media.api-sports.io/football/teams/500.png"
+        },
+        {
+          "team_id": 502,
+          "name": "Fiorentina",
+          "code": "FIO",
+          "country": "Italy",
+          "founded": 1926,
+          "logo": "https://media.api-sports.io/football/teams/502.png"
+        },
+        {
+          "team_id": 503,
+          "name": "Torino",
+          "code": "TOR",
+          "country": "Italy",
+          "founded": 1906,
+          "logo": "https://media.api-sports.io/football/teams/503.png"
+        },
+        {
+          "team_id": 504,
+          "name": "Verona",
+          "code": "VER",
+          "country": "Italy",
+          "founded": 1903,
+          "logo": "https://media.api-sports.io/football/teams/504.png"
+        },
+        {
+          "team_id": 505,
+          "name": "Inter",
+          "code": "INT",
+          "country": "Italy",
+          "founded": 1908,
+          "logo": "https://media.api-sports.io/football/teams/505.png"
+        },
+        {
+          "team_id": 520,
+          "name": "Cremonese",
+          "code": "CRE",
+          "country": "Italy",
+          "founded": 1903,
+          "logo": "https://media.api-sports.io/football/teams/520.png"
+        },
+        {
+          "team_id": 523,
+          "name": "Parma",
+          "code": "PAR",
+          "country": "Italy",
+          "founded": 1913,
+          "logo": "https://media.api-sports.io/football/teams/523.png"
+        },
+        {
+          "team_id": 801,
+          "name": "Pisa",
+          "code": "PIS",
+          "country": "Italy",
+          "founded": 1909,
+          "logo": "https://media.api-sports.io/football/teams/801.png"
+        },
+        {
+          "team_id": 867,
+          "name": "Lecce",
+          "code": "LEC",
+          "country": "Italy",
+          "founded": 1908,
+          "logo": "https://media.api-sports.io/football/teams/867.png"
+        },
+        {
+          "team_id": 895,
+          "name": "Como",
+          "code": "COM",
+          "country": "Italy",
+          "founded": 1907,
+          "logo": "https://media.api-sports.io/football/teams/895.png"
+        }
+      ]
+    },
+    {
+      "league_id": 78,
+      "league_name": "Bundesliga",
+      "season": "2025",
+      "teams_count": 18,
+      "teams": [
+        {
+          "team_id": 157,
+          "name": "Bayern München",
+          "code": "BAY",
+          "country": "Germany",
+          "founded": 1900,
+          "logo": "https://media.api-sports.io/football/teams/157.png"
+        },
+        {
+          "team_id": 160,
+          "name": "SC Freiburg",
+          "code": "FRE",
+          "country": "Germany",
+          "founded": 1904,
+          "logo": "https://media.api-sports.io/football/teams/160.png"
+        },
+        {
+          "team_id": 161,
+          "name": "VfL Wolfsburg",
+          "code": "WOL",
+          "country": "Germany",
+          "founded": 1945,
+          "logo": "https://media.api-sports.io/football/teams/161.png"
+        },
+        {
+          "team_id": 162,
+          "name": "Werder Bremen",
+          "code": "WER",
+          "country": "Germany",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/162.png"
+        },
+        {
+          "team_id": 163,
+          "name": "Borussia Mönchengladbach",
+          "code": "MOE",
+          "country": "Germany",
+          "founded": 1900,
+          "logo": "https://media.api-sports.io/football/teams/163.png"
+        },
+        {
+          "team_id": 164,
+          "name": "FSV Mainz 05",
+          "code": "MAI",
+          "country": "Germany",
+          "founded": 1905,
+          "logo": "https://media.api-sports.io/football/teams/164.png"
+        },
+        {
+          "team_id": 165,
+          "name": "Borussia Dortmund",
+          "code": "DOR",
+          "country": "Germany",
+          "founded": 1909,
+          "logo": "https://media.api-sports.io/football/teams/165.png"
+        },
+        {
+          "team_id": 167,
+          "name": "1899 Hoffenheim",
+          "code": "HOF",
+          "country": "Germany",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/167.png"
+        },
+        {
+          "team_id": 168,
+          "name": "Bayer Leverkusen",
+          "code": "BAY",
+          "country": "Germany",
+          "founded": 1904,
+          "logo": "https://media.api-sports.io/football/teams/168.png"
+        },
+        {
+          "team_id": 169,
+          "name": "Eintracht Frankfurt",
+          "code": "EIN",
+          "country": "Germany",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/169.png"
+        },
+        {
+          "team_id": 170,
+          "name": "FC Augsburg",
+          "code": "AUG",
+          "country": "Germany",
+          "founded": 1907,
+          "logo": "https://media.api-sports.io/football/teams/170.png"
+        },
+        {
+          "team_id": 172,
+          "name": "VfB Stuttgart",
+          "code": "STU",
+          "country": "Germany",
+          "founded": 1893,
+          "logo": "https://media.api-sports.io/football/teams/172.png"
+        },
+        {
+          "team_id": 173,
+          "name": "RB Leipzig",
+          "code": "LEI",
+          "country": "Germany",
+          "founded": 2009,
+          "logo": "https://media.api-sports.io/football/teams/173.png"
+        },
+        {
+          "team_id": 175,
+          "name": "Hamburger SV",
+          "code": "HAM",
+          "country": "Germany",
+          "founded": 1887,
+          "logo": "https://media.api-sports.io/football/teams/175.png"
+        },
+        {
+          "team_id": 180,
+          "name": "1. FC Heidenheim",
+          "code": "HEI",
+          "country": "Germany",
+          "founded": 1946,
+          "logo": "https://media.api-sports.io/football/teams/180.png"
+        },
+        {
+          "team_id": 182,
+          "name": "Union Berlin",
+          "code": "UNI",
+          "country": "Germany",
+          "founded": 1966,
+          "logo": "https://media.api-sports.io/football/teams/182.png"
+        },
+        {
+          "team_id": 186,
+          "name": "FC St. Pauli",
+          "code": "PAU",
+          "country": "Germany",
+          "founded": 1910,
+          "logo": "https://media.api-sports.io/football/teams/186.png"
+        },
+        {
+          "team_id": 192,
+          "name": "1.FC Köln",
+          "code": "KOL",
+          "country": "Germany",
+          "founded": 1948,
+          "logo": "https://media.api-sports.io/football/teams/192.png"
+        }
+      ]
+    },
+    {
+      "league_id": 61,
+      "league_name": "Ligue 1",
+      "season": "2025",
+      "teams_count": 18,
+      "teams": [
+        {
+          "team_id": 77,
+          "name": "Angers",
+          "code": "ANG",
+          "country": "France",
+          "founded": 1919,
+          "logo": "https://media.api-sports.io/football/teams/77.png"
+        },
+        {
+          "team_id": 79,
+          "name": "Lille",
+          "code": "LIL",
+          "country": "France",
+          "founded": 1944,
+          "logo": "https://media.api-sports.io/football/teams/79.png"
+        },
+        {
+          "team_id": 80,
+          "name": "Lyon",
+          "code": "LYO",
+          "country": "France",
+          "founded": 1950,
+          "logo": "https://media.api-sports.io/football/teams/80.png"
+        },
+        {
+          "team_id": 81,
+          "name": "Marseille",
+          "code": "MAR",
+          "country": "France",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/81.png"
+        },
+        {
+          "team_id": 83,
+          "name": "Nantes",
+          "code": "NAN",
+          "country": "France",
+          "founded": 1943,
+          "logo": "https://media.api-sports.io/football/teams/83.png"
+        },
+        {
+          "team_id": 84,
+          "name": "Nice",
+          "code": "NIC",
+          "country": "France",
+          "founded": 1904,
+          "logo": "https://media.api-sports.io/football/teams/84.png"
+        },
+        {
+          "team_id": 85,
+          "name": "Paris Saint Germain",
+          "code": "PAR",
+          "country": "France",
+          "founded": 1970,
+          "logo": "https://media.api-sports.io/football/teams/85.png"
+        },
+        {
+          "team_id": 91,
+          "name": "Monaco",
+          "code": "MON",
+          "country": "France",
+          "founded": 1919,
+          "logo": "https://media.api-sports.io/football/teams/91.png"
+        },
+        {
+          "team_id": 94,
+          "name": "Rennes",
+          "code": "REN",
+          "country": "France",
+          "founded": 1901,
+          "logo": "https://media.api-sports.io/football/teams/94.png"
+        },
+        {
+          "team_id": 95,
+          "name": "Strasbourg",
+          "code": "STR",
+          "country": "France",
+          "founded": 1906,
+          "logo": "https://media.api-sports.io/football/teams/95.png"
+        },
+        {
+          "team_id": 96,
+          "name": "Toulouse",
+          "code": "TOU",
+          "country": "France",
+          "founded": 1937,
+          "logo": "https://media.api-sports.io/football/teams/96.png"
+        },
+        {
+          "team_id": 97,
+          "name": "Lorient",
+          "code": "LOR",
+          "country": "France",
+          "founded": 1926,
+          "logo": "https://media.api-sports.io/football/teams/97.png"
+        },
+        {
+          "team_id": 106,
+          "name": "Stade Brestois 29",
+          "code": "BRE",
+          "country": "France",
+          "founded": 1950,
+          "logo": "https://media.api-sports.io/football/teams/106.png"
+        },
+        {
+          "team_id": 108,
+          "name": "Auxerre",
+          "code": "AUX",
+          "country": "France",
+          "founded": 1905,
+          "logo": "https://media.api-sports.io/football/teams/108.png"
+        },
+        {
+          "team_id": 111,
+          "name": "Le Havre",
+          "code": "HAV",
+          "country": "France",
+          "founded": 1872,
+          "logo": "https://media.api-sports.io/football/teams/111.png"
+        },
+        {
+          "team_id": 112,
+          "name": "Metz",
+          "code": "MET",
+          "country": "France",
+          "founded": 1932,
+          "logo": "https://media.api-sports.io/football/teams/112.png"
+        },
+        {
+          "team_id": 114,
+          "name": "Paris FC",
+          "code": "PAR",
+          "country": "France",
+          "founded": 1969,
+          "logo": "https://media.api-sports.io/football/teams/114.png"
+        },
+        {
+          "team_id": 116,
+          "name": "Lens",
+          "code": "LEN",
+          "country": "France",
+          "founded": 1906,
+          "logo": "https://media.api-sports.io/football/teams/116.png"
+        }
+      ]
+    },
+    {
+      "league_id": 88,
+      "league_name": "Eredivisie",
+      "season": "2025",
+      "teams_count": 18,
+      "teams": [
+        {
+          "team_id": 193,
+          "name": "PEC Zwolle",
+          "code": "ZWO",
+          "country": "Netherlands",
+          "founded": 1910,
+          "logo": "https://media.api-sports.io/football/teams/193.png"
+        },
+        {
+          "team_id": 194,
+          "name": "Ajax",
+          "code": "AJA",
+          "country": "Netherlands",
+          "founded": 1900,
+          "logo": "https://media.api-sports.io/football/teams/194.png"
+        },
+        {
+          "team_id": 196,
+          "name": "Excelsior",
+          "code": "EXC",
+          "country": "Netherlands",
+          "founded": 1902,
+          "logo": "https://media.api-sports.io/football/teams/196.png"
+        },
+        {
+          "team_id": 197,
+          "name": "PSV Eindhoven",
+          "code": "PSV",
+          "country": "Netherlands",
+          "founded": 1913,
+          "logo": "https://media.api-sports.io/football/teams/197.png"
+        },
+        {
+          "team_id": 201,
+          "name": "AZ Alkmaar",
+          "code": "ALK",
+          "country": "Netherlands",
+          "founded": 1967,
+          "logo": "https://media.api-sports.io/football/teams/201.png"
+        },
+        {
+          "team_id": 202,
+          "name": "Groningen",
+          "code": "GRO",
+          "country": "Netherlands",
+          "founded": 1971,
+          "logo": "https://media.api-sports.io/football/teams/202.png"
+        },
+        {
+          "team_id": 203,
+          "name": "NAC Breda",
+          "code": "BRE",
+          "country": "Netherlands",
+          "founded": 1912,
+          "logo": "https://media.api-sports.io/football/teams/203.png"
+        },
+        {
+          "team_id": 205,
+          "name": "Fortuna Sittard",
+          "code": "SIT",
+          "country": "Netherlands",
+          "founded": 1968,
+          "logo": "https://media.api-sports.io/football/teams/205.png"
+        },
+        {
+          "team_id": 206,
+          "name": "Heracles",
+          "code": "HER",
+          "country": "Netherlands",
+          "founded": 1903,
+          "logo": "https://media.api-sports.io/football/teams/206.png"
+        },
+        {
+          "team_id": 207,
+          "name": "Utrecht",
+          "code": "UTR",
+          "country": "Netherlands",
+          "founded": 1970,
+          "logo": "https://media.api-sports.io/football/teams/207.png"
+        },
+        {
+          "team_id": 209,
+          "name": "Feyenoord",
+          "code": "FEY",
+          "country": "Netherlands",
+          "founded": 1908,
+          "logo": "https://media.api-sports.io/football/teams/209.png"
+        },
+        {
+          "team_id": 210,
+          "name": "Heerenveen",
+          "code": "HEE",
+          "country": "Netherlands",
+          "founded": 1920,
+          "logo": "https://media.api-sports.io/football/teams/210.png"
+        },
+        {
+          "team_id": 410,
+          "name": "GO Ahead Eagles",
+          "code": "EAG",
+          "country": "Netherlands",
+          "founded": 1971,
+          "logo": "https://media.api-sports.io/football/teams/410.png"
+        },
+        {
+          "team_id": 413,
+          "name": "NEC Nijmegen",
+          "code": "NIJ",
+          "country": "Netherlands",
+          "founded": 1900,
+          "logo": "https://media.api-sports.io/football/teams/413.png"
+        },
+        {
+          "team_id": 415,
+          "name": "Twente",
+          "code": "TWE",
+          "country": "Netherlands",
+          "founded": 1965,
+          "logo": "https://media.api-sports.io/football/teams/415.png"
+        },
+        {
+          "team_id": 416,
+          "name": "FC Volendam",
+          "code": "VOL",
+          "country": "Netherlands",
+          "founded": 1920,
+          "logo": "https://media.api-sports.io/football/teams/416.png"
+        },
+        {
+          "team_id": 426,
+          "name": "Sparta Rotterdam",
+          "code": "SPA",
+          "country": "Netherlands",
+          "founded": 1888,
+          "logo": "https://media.api-sports.io/football/teams/426.png"
+        },
+        {
+          "team_id": 427,
+          "name": "Telstar",
+          "code": "STO",
+          "country": "Netherlands",
+          "founded": 1912,
+          "logo": "https://media.api-sports.io/football/teams/427.png"
+        }
+      ]
+    },
+    {
+      "league_id": 94,
+      "league_name": "Primeira Liga (Portugal)",
+      "season": "2025",
+      "teams_count": 18,
+      "teams": [
+        {
+          "team_id": 211,
+          "name": "Benfica",
+          "code": "BEN",
+          "country": "Portugal",
+          "founded": 1904,
+          "logo": "https://media.api-sports.io/football/teams/211.png"
+        },
+        {
+          "team_id": 212,
+          "name": "FC Porto",
+          "code": "POR",
+          "country": "Portugal",
+          "founded": 1893,
+          "logo": "https://media.api-sports.io/football/teams/212.png"
+        },
+        {
+          "team_id": 215,
+          "name": "Moreirense",
+          "code": "MOR",
+          "country": "Portugal",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/215.png"
+        },
+        {
+          "team_id": 217,
+          "name": "SC Braga",
+          "code": "BRA",
+          "country": "Portugal",
+          "founded": 1921,
+          "logo": "https://media.api-sports.io/football/teams/217.png"
+        },
+        {
+          "team_id": 218,
+          "name": "Tondela",
+          "code": "TON",
+          "country": "Portugal",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/218.png"
+        },
+        {
+          "team_id": 224,
+          "name": "Guimaraes",
+          "code": "GUI",
+          "country": "Portugal",
+          "founded": 1922,
+          "logo": "https://media.api-sports.io/football/teams/224.png"
+        },
+        {
+          "team_id": 225,
+          "name": "Nacional",
+          "code": "NAC",
+          "country": "Portugal",
+          "founded": 1910,
+          "logo": "https://media.api-sports.io/football/teams/225.png"
+        },
+        {
+          "team_id": 226,
+          "name": "Rio Ave",
+          "code": "RIO",
+          "country": "Portugal",
+          "founded": 1939,
+          "logo": "https://media.api-sports.io/football/teams/226.png"
+        },
+        {
+          "team_id": 227,
+          "name": "Santa Clara",
+          "code": "SAN",
+          "country": "Portugal",
+          "founded": 1921,
+          "logo": "https://media.api-sports.io/football/teams/227.png"
+        },
+        {
+          "team_id": 228,
+          "name": "Sporting CP",
+          "code": "SPO",
+          "country": "Portugal",
+          "founded": 1906,
+          "logo": "https://media.api-sports.io/football/teams/228.png"
+        },
+        {
+          "team_id": 230,
+          "name": "Estoril",
+          "code": "EST",
+          "country": "Portugal",
+          "founded": 1939,
+          "logo": "https://media.api-sports.io/football/teams/230.png"
+        },
+        {
+          "team_id": 240,
+          "name": "Arouca",
+          "code": "ARO",
+          "country": "Portugal",
+          "founded": 1951,
+          "logo": "https://media.api-sports.io/football/teams/240.png"
+        },
+        {
+          "team_id": 242,
+          "name": "Famalicao",
+          "code": "FAM",
+          "country": "Portugal",
+          "founded": 1931,
+          "logo": "https://media.api-sports.io/football/teams/242.png"
+        },
+        {
+          "team_id": 762,
+          "name": "GIL Vicente",
+          "code": "VIC",
+          "country": "Portugal",
+          "founded": 1924,
+          "logo": "https://media.api-sports.io/football/teams/762.png"
+        },
+        {
+          "team_id": 4716,
+          "name": "Casa Pia",
+          "code": "CAS",
+          "country": "Portugal",
+          "founded": 1920,
+          "logo": "https://media.api-sports.io/football/teams/4716.png"
+        },
+        {
+          "team_id": 4724,
+          "name": "Alverca",
+          "code": null,
+          "country": "Portugal",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/4724.png"
+        },
+        {
+          "team_id": 15130,
+          "name": "Estrela",
+          "code": null,
+          "country": "Portugal",
+          "founded": 2018,
+          "logo": "https://media.api-sports.io/football/teams/15130.png"
+        },
+        {
+          "team_id": 21595,
+          "name": "AVS",
+          "code": null,
+          "country": "Portugal",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/21595.png"
+        }
+      ]
+    },
+    {
+      "league_id": 144,
+      "league_name": "Jupiler Pro League",
+      "season": "2025",
+      "teams_count": 16,
+      "teams": [
+        {
+          "team_id": 260,
+          "name": "OH Leuven",
+          "code": "LEU",
+          "country": "Belgium",
+          "founded": 1957,
+          "logo": "https://media.api-sports.io/football/teams/260.png"
+        },
+        {
+          "team_id": 261,
+          "name": "KVC Westerlo",
+          "code": "WES",
+          "country": "Belgium",
+          "founded": 1933,
+          "logo": "https://media.api-sports.io/football/teams/261.png"
+        },
+        {
+          "team_id": 266,
+          "name": "KV Mechelen",
+          "code": "MEC",
+          "country": "Belgium",
+          "founded": 1904,
+          "logo": "https://media.api-sports.io/football/teams/266.png"
+        },
+        {
+          "team_id": 554,
+          "name": "Anderlecht",
+          "code": "AND",
+          "country": "Belgium",
+          "founded": 1908,
+          "logo": "https://media.api-sports.io/football/teams/554.png"
+        },
+        {
+          "team_id": 569,
+          "name": "Club Brugge KV",
+          "code": "CLU",
+          "country": "Belgium",
+          "founded": 1891,
+          "logo": "https://media.api-sports.io/football/teams/569.png"
+        },
+        {
+          "team_id": 600,
+          "name": "Zulte Waregem",
+          "code": "WAR",
+          "country": "Belgium",
+          "founded": 2001,
+          "logo": "https://media.api-sports.io/football/teams/600.png"
+        },
+        {
+          "team_id": 631,
+          "name": "Gent",
+          "code": "GEN",
+          "country": "Belgium",
+          "founded": 1900,
+          "logo": "https://media.api-sports.io/football/teams/631.png"
+        },
+        {
+          "team_id": 733,
+          "name": "Standard Liege",
+          "code": "STA",
+          "country": "Belgium",
+          "founded": 1898,
+          "logo": "https://media.api-sports.io/football/teams/733.png"
+        },
+        {
+          "team_id": 735,
+          "name": "St. Truiden",
+          "code": "TRU",
+          "country": "Belgium",
+          "founded": 1924,
+          "logo": "https://media.api-sports.io/football/teams/735.png"
+        },
+        {
+          "team_id": 736,
+          "name": "Charleroi",
+          "code": "CHA",
+          "country": "Belgium",
+          "founded": 1904,
+          "logo": "https://media.api-sports.io/football/teams/736.png"
+        },
+        {
+          "team_id": 740,
+          "name": "Antwerp",
+          "code": "ANT",
+          "country": "Belgium",
+          "founded": 1880,
+          "logo": "https://media.api-sports.io/football/teams/740.png"
+        },
+        {
+          "team_id": 741,
+          "name": "Cercle Brugge",
+          "code": "CER",
+          "country": "Belgium",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/741.png"
+        },
+        {
+          "team_id": 742,
+          "name": "Genk",
+          "code": "GEN",
+          "country": "Belgium",
+          "founded": 1988,
+          "logo": "https://media.api-sports.io/football/teams/742.png"
+        },
+        {
+          "team_id": 1393,
+          "name": "Union St. Gilloise",
+          "code": "GIL",
+          "country": "Belgium",
+          "founded": 1897,
+          "logo": "https://media.api-sports.io/football/teams/1393.png"
+        },
+        {
+          "team_id": 5902,
+          "name": "RAAL La Louvière",
+          "code": null,
+          "country": "Belgium",
+          "founded": 2017,
+          "logo": "https://media.api-sports.io/football/teams/5902.png"
+        },
+        {
+          "team_id": 6215,
+          "name": "Dender",
+          "code": "DEN",
+          "country": "Belgium",
+          "founded": 1935,
+          "logo": "https://media.api-sports.io/football/teams/6215.png"
+        }
+      ]
+    },
+    {
+      "league_id": 203,
+      "league_name": "Süper Lig (Turkey)",
+      "season": "2025",
+      "teams_count": 18,
+      "teams": [
+        {
+          "team_id": 549,
+          "name": "Besiktas",
+          "code": "BES",
+          "country": "Turkey",
+          "founded": 1903,
+          "logo": "https://media.api-sports.io/football/teams/549.png"
+        },
+        {
+          "team_id": 564,
+          "name": "Istanbul Basaksehir",
+          "code": "IST",
+          "country": "Turkey",
+          "founded": 1990,
+          "logo": "https://media.api-sports.io/football/teams/564.png"
+        },
+        {
+          "team_id": 607,
+          "name": "Konyaspor",
+          "code": "KON",
+          "country": "Turkey",
+          "founded": 1981,
+          "logo": "https://media.api-sports.io/football/teams/607.png"
+        },
+        {
+          "team_id": 611,
+          "name": "Fenerbahce",
+          "code": "FEN",
+          "country": "Turkey",
+          "founded": 1907,
+          "logo": "https://media.api-sports.io/football/teams/611.png"
+        },
+        {
+          "team_id": 645,
+          "name": "Galatasaray",
+          "code": "GAL",
+          "country": "Turkey",
+          "founded": 1905,
+          "logo": "https://media.api-sports.io/football/teams/645.png"
+        },
+        {
+          "team_id": 994,
+          "name": "Goztepe",
+          "code": "GOZ",
+          "country": "Turkey",
+          "founded": 1925,
+          "logo": "https://media.api-sports.io/football/teams/994.png"
+        },
+        {
+          "team_id": 996,
+          "name": "Alanyaspor",
+          "code": "ALA",
+          "country": "Turkey",
+          "founded": 1948,
+          "logo": "https://media.api-sports.io/football/teams/996.png"
+        },
+        {
+          "team_id": 997,
+          "name": "Genclerbirligi",
+          "code": "GEN",
+          "country": "Turkey",
+          "founded": 1923,
+          "logo": "https://media.api-sports.io/football/teams/997.png"
+        },
+        {
+          "team_id": 998,
+          "name": "Trabzonspor",
+          "code": "TRA",
+          "country": "Turkey",
+          "founded": 1967,
+          "logo": "https://media.api-sports.io/football/teams/998.png"
+        },
+        {
+          "team_id": 1001,
+          "name": "Kayserispor",
+          "code": "KAY",
+          "country": "Turkey",
+          "founded": 1966,
+          "logo": "https://media.api-sports.io/football/teams/1001.png"
+        },
+        {
+          "team_id": 1004,
+          "name": "Kasimpasa",
+          "code": "KAS",
+          "country": "Turkey",
+          "founded": 1921,
+          "logo": "https://media.api-sports.io/football/teams/1004.png"
+        },
+        {
+          "team_id": 1005,
+          "name": "Antalyaspor",
+          "code": "ANT",
+          "country": "Turkey",
+          "founded": 1966,
+          "logo": "https://media.api-sports.io/football/teams/1005.png"
+        },
+        {
+          "team_id": 1007,
+          "name": "Rizespor",
+          "code": "RIZ",
+          "country": "Turkey",
+          "founded": 1953,
+          "logo": "https://media.api-sports.io/football/teams/1007.png"
+        },
+        {
+          "team_id": 3573,
+          "name": "Gazişehir Gaziantep",
+          "code": "GAZ",
+          "country": "Turkey",
+          "founded": 1988,
+          "logo": "https://media.api-sports.io/football/teams/3573.png"
+        },
+        {
+          "team_id": 3588,
+          "name": "Eyüpspor",
+          "code": "EYU",
+          "country": "Turkey",
+          "founded": 1919,
+          "logo": "https://media.api-sports.io/football/teams/3588.png"
+        },
+        {
+          "team_id": 3589,
+          "name": "Fatih Karagümrük",
+          "code": "KAR",
+          "country": "Turkey",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/3589.png"
+        },
+        {
+          "team_id": 3603,
+          "name": "Samsunspor",
+          "code": "SAM",
+          "country": "Turkey",
+          "founded": 1965,
+          "logo": "https://media.api-sports.io/football/teams/3603.png"
+        },
+        {
+          "team_id": 7411,
+          "name": "Kocaelispor",
+          "code": "KOC",
+          "country": "Turkey",
+          "founded": 1966,
+          "logo": "https://media.api-sports.io/football/teams/7411.png"
+        }
+      ]
+    },
+    {
+      "league_id": 179,
+      "league_name": "Premiership (Scotland)",
+      "season": "2025",
+      "teams_count": 12,
+      "teams": [
+        {
+          "team_id": 247,
+          "name": "Celtic",
+          "code": "CEL",
+          "country": "Scotland",
+          "founded": 1888,
+          "logo": "https://media.api-sports.io/football/teams/247.png"
+        },
+        {
+          "team_id": 249,
+          "name": "Hibernian",
+          "code": "HIB",
+          "country": "Scotland",
+          "founded": 1875,
+          "logo": "https://media.api-sports.io/football/teams/249.png"
+        },
+        {
+          "team_id": 250,
+          "name": "Kilmarnock",
+          "code": "KIL",
+          "country": "Scotland",
+          "founded": 1869,
+          "logo": "https://media.api-sports.io/football/teams/250.png"
+        },
+        {
+          "team_id": 251,
+          "name": "ST Mirren",
+          "code": "MIR",
+          "country": "Scotland",
+          "founded": 1877,
+          "logo": "https://media.api-sports.io/football/teams/251.png"
+        },
+        {
+          "team_id": 252,
+          "name": "Aberdeen",
+          "code": "ABE",
+          "country": "Scotland",
+          "founded": 1903,
+          "logo": "https://media.api-sports.io/football/teams/252.png"
+        },
+        {
+          "team_id": 253,
+          "name": "Dundee",
+          "code": "DUN",
+          "country": "Scotland",
+          "founded": 1893,
+          "logo": "https://media.api-sports.io/football/teams/253.png"
+        },
+        {
+          "team_id": 254,
+          "name": "Heart Of Midlothian",
+          "code": "HEA",
+          "country": "Scotland",
+          "founded": 1874,
+          "logo": "https://media.api-sports.io/football/teams/254.png"
+        },
+        {
+          "team_id": 255,
+          "name": "Livingston",
+          "code": "LIV",
+          "country": "Scotland",
+          "founded": 1943,
+          "logo": "https://media.api-sports.io/football/teams/255.png"
+        },
+        {
+          "team_id": 256,
+          "name": "Motherwell",
+          "code": "MOT",
+          "country": "Scotland",
+          "founded": 1886,
+          "logo": "https://media.api-sports.io/football/teams/256.png"
+        },
+        {
+          "team_id": 257,
+          "name": "Rangers",
+          "code": "RAN",
+          "country": "Scotland",
+          "founded": 1873,
+          "logo": "https://media.api-sports.io/football/teams/257.png"
+        },
+        {
+          "team_id": 1386,
+          "name": "Dundee Utd",
+          "code": "DUN",
+          "country": "Scotland",
+          "founded": 1909,
+          "logo": "https://media.api-sports.io/football/teams/1386.png"
+        },
+        {
+          "team_id": 1389,
+          "name": "Falkirk",
+          "code": "FAL",
+          "country": "Scotland",
+          "founded": 1876,
+          "logo": "https://media.api-sports.io/football/teams/1389.png"
+        }
+      ]
+    },
+    {
+      "league_id": 218,
+      "league_name": "Tipp3 Bundesliga (Austria)",
+      "season": "2025",
+      "teams_count": 12,
+      "teams": [
+        {
+          "team_id": 571,
+          "name": "Red Bull Salzburg",
+          "code": "SAL",
+          "country": "Austria",
+          "founded": 1933,
+          "logo": "https://media.api-sports.io/football/teams/571.png"
+        },
+        {
+          "team_id": 601,
+          "name": "Austria Vienna",
+          "code": "AUS",
+          "country": "Austria",
+          "founded": 1911,
+          "logo": "https://media.api-sports.io/football/teams/601.png"
+        },
+        {
+          "team_id": 618,
+          "name": "SCR Altach",
+          "code": "ALT",
+          "country": "Austria",
+          "founded": 1929,
+          "logo": "https://media.api-sports.io/football/teams/618.png"
+        },
+        {
+          "team_id": 637,
+          "name": "Sturm Graz",
+          "code": "STU",
+          "country": "Austria",
+          "founded": 1909,
+          "logo": "https://media.api-sports.io/football/teams/637.png"
+        },
+        {
+          "team_id": 781,
+          "name": "Rapid Vienna",
+          "code": "RAP",
+          "country": "Austria",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/781.png"
+        },
+        {
+          "team_id": 1025,
+          "name": "Wolfsberger AC",
+          "code": "WOL",
+          "country": "Austria",
+          "founded": 1931,
+          "logo": "https://media.api-sports.io/football/teams/1025.png"
+        },
+        {
+          "team_id": 1026,
+          "name": "Lask Linz",
+          "code": "LAS",
+          "country": "Austria",
+          "founded": 1908,
+          "logo": "https://media.api-sports.io/football/teams/1026.png"
+        },
+        {
+          "team_id": 1028,
+          "name": "Ried",
+          "code": "RIE",
+          "country": "Austria",
+          "founded": 1912,
+          "logo": "https://media.api-sports.io/football/teams/1028.png"
+        },
+        {
+          "team_id": 1072,
+          "name": "TSV Hartberg",
+          "code": "HAR",
+          "country": "Austria",
+          "founded": 1946,
+          "logo": "https://media.api-sports.io/football/teams/1072.png"
+        },
+        {
+          "team_id": 1394,
+          "name": "FC BW Linz",
+          "code": "LIN",
+          "country": "Austria",
+          "founded": 1997,
+          "logo": "https://media.api-sports.io/football/teams/1394.png"
+        },
+        {
+          "team_id": 1398,
+          "name": "WSG Wattens",
+          "code": "WAT",
+          "country": "Austria",
+          "founded": 1930,
+          "logo": "https://media.api-sports.io/football/teams/1398.png"
+        },
+        {
+          "team_id": 4256,
+          "name": "Grazer AK",
+          "code": null,
+          "country": "Austria",
+          "founded": 1902,
+          "logo": "https://media.api-sports.io/football/teams/4256.png"
+        }
+      ]
+    },
+    {
+      "league_id": 197,
+      "league_name": "Super League (Switzerland/Greece)",
+      "season": "2025",
+      "teams_count": 14,
+      "teams": [
+        {
+          "team_id": 553,
+          "name": "Olympiakos Piraeus",
+          "code": "OLY",
+          "country": "Greece",
+          "founded": 1925,
+          "logo": "https://media.api-sports.io/football/teams/553.png"
+        },
+        {
+          "team_id": 575,
+          "name": "AEK Athens FC",
+          "code": "AEK",
+          "country": "Greece",
+          "founded": 1924,
+          "logo": "https://media.api-sports.io/football/teams/575.png"
+        },
+        {
+          "team_id": 617,
+          "name": "Panathinaikos",
+          "code": "PAN",
+          "country": "Greece",
+          "founded": 1908,
+          "logo": "https://media.api-sports.io/football/teams/617.png"
+        },
+        {
+          "team_id": 619,
+          "name": "PAOK",
+          "code": "PAO",
+          "country": "Greece",
+          "founded": 1926,
+          "logo": "https://media.api-sports.io/football/teams/619.png"
+        },
+        {
+          "team_id": 949,
+          "name": "Panetolikos",
+          "code": "PAN",
+          "country": "Greece",
+          "founded": 1926,
+          "logo": "https://media.api-sports.io/football/teams/949.png"
+        },
+        {
+          "team_id": 953,
+          "name": "Larisa",
+          "code": "AEL",
+          "country": "Greece",
+          "founded": 1964,
+          "logo": "https://media.api-sports.io/football/teams/953.png"
+        },
+        {
+          "team_id": 955,
+          "name": "Asteras Tripolis",
+          "code": "AST",
+          "country": "Greece",
+          "founded": 1930,
+          "logo": "https://media.api-sports.io/football/teams/955.png"
+        },
+        {
+          "team_id": 957,
+          "name": "Levadiakos",
+          "code": "LEV",
+          "country": "Greece",
+          "founded": 1961,
+          "logo": "https://media.api-sports.io/football/teams/957.png"
+        },
+        {
+          "team_id": 1123,
+          "name": "Aris Thessalonikis",
+          "code": "ARI",
+          "country": "Greece",
+          "founded": 1914,
+          "logo": "https://media.api-sports.io/football/teams/1123.png"
+        },
+        {
+          "team_id": 1124,
+          "name": "OFI",
+          "code": "CRE",
+          "country": "Greece",
+          "founded": 1925,
+          "logo": "https://media.api-sports.io/football/teams/1124.png"
+        },
+        {
+          "team_id": 2099,
+          "name": "Panserraikos",
+          "code": "PAN",
+          "country": "Greece",
+          "founded": 1964,
+          "logo": "https://media.api-sports.io/football/teams/2099.png"
+        },
+        {
+          "team_id": 2110,
+          "name": "Volos NFC",
+          "code": null,
+          "country": "Greece",
+          "founded": 2017,
+          "logo": "https://media.api-sports.io/football/teams/2110.png"
+        },
+        {
+          "team_id": 5050,
+          "name": "Kifisia",
+          "code": "KIF",
+          "country": "Greece",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/5050.png"
+        },
+        {
+          "team_id": 12260,
+          "name": "Atromitos",
+          "code": "ATR",
+          "country": "Greece",
+          "founded": 1923,
+          "logo": "https://media.api-sports.io/football/teams/12260.png"
+        }
+      ]
+    },
+    {
+      "league_id": 106,
+      "league_name": "Ekstraklasa (Poland)",
+      "season": "2025",
+      "teams_count": 18,
+      "teams": [
+        {
+          "team_id": 336,
+          "name": "Jagiellonia",
+          "code": "JAG",
+          "country": "Poland",
+          "founded": 1927,
+          "logo": "https://media.api-sports.io/football/teams/336.png"
+        },
+        {
+          "team_id": 339,
+          "name": "Legia Warszawa",
+          "code": "LEG",
+          "country": "Poland",
+          "founded": 1916,
+          "logo": "https://media.api-sports.io/football/teams/339.png"
+        },
+        {
+          "team_id": 340,
+          "name": "Gornik Zabrze",
+          "code": "GOR",
+          "country": "Poland",
+          "founded": 1948,
+          "logo": "https://media.api-sports.io/football/teams/340.png"
+        },
+        {
+          "team_id": 341,
+          "name": "Wisla Plock",
+          "code": "WIS",
+          "country": "Poland",
+          "founded": 1947,
+          "logo": "https://media.api-sports.io/football/teams/341.png"
+        },
+        {
+          "team_id": 343,
+          "name": "Lechia Gdansk",
+          "code": "LEC",
+          "country": "Poland",
+          "founded": 1945,
+          "logo": "https://media.api-sports.io/football/teams/343.png"
+        },
+        {
+          "team_id": 344,
+          "name": "Arka Gdynia",
+          "code": "ARK",
+          "country": "Poland",
+          "founded": 1929,
+          "logo": "https://media.api-sports.io/football/teams/344.png"
+        },
+        {
+          "team_id": 345,
+          "name": "Zaglebie Lubin",
+          "code": "ZAG",
+          "country": "Poland",
+          "founded": 1945,
+          "logo": "https://media.api-sports.io/football/teams/345.png"
+        },
+        {
+          "team_id": 346,
+          "name": "Korona Kielce",
+          "code": "KOR",
+          "country": "Poland",
+          "founded": 1973,
+          "logo": "https://media.api-sports.io/football/teams/346.png"
+        },
+        {
+          "team_id": 347,
+          "name": "Lech Poznan",
+          "code": "LEC",
+          "country": "Poland",
+          "founded": 1922,
+          "logo": "https://media.api-sports.io/football/teams/347.png"
+        },
+        {
+          "team_id": 348,
+          "name": "Pogon Szczecin",
+          "code": "POG",
+          "country": "Poland",
+          "founded": 1948,
+          "logo": "https://media.api-sports.io/football/teams/348.png"
+        },
+        {
+          "team_id": 349,
+          "name": "Piast Gliwice",
+          "code": "PIA",
+          "country": "Poland",
+          "founded": 1945,
+          "logo": "https://media.api-sports.io/football/teams/349.png"
+        },
+        {
+          "team_id": 350,
+          "name": "Cracovia Krakow",
+          "code": "CRA",
+          "country": "Poland",
+          "founded": 1906,
+          "logo": "https://media.api-sports.io/football/teams/350.png"
+        },
+        {
+          "team_id": 3484,
+          "name": "GKS Katowice",
+          "code": null,
+          "country": "Poland",
+          "founded": 1964,
+          "logo": "https://media.api-sports.io/football/teams/3484.png"
+        },
+        {
+          "team_id": 3487,
+          "name": "Nieciecza",
+          "code": "TER",
+          "country": "Poland",
+          "founded": 1922,
+          "logo": "https://media.api-sports.io/football/teams/3487.png"
+        },
+        {
+          "team_id": 3491,
+          "name": "Raków Częstochowa",
+          "code": "RAK",
+          "country": "Poland",
+          "founded": 1921,
+          "logo": "https://media.api-sports.io/football/teams/3491.png"
+        },
+        {
+          "team_id": 4248,
+          "name": "Radomiak Radom",
+          "code": "RAD",
+          "country": "Poland",
+          "founded": 1910,
+          "logo": "https://media.api-sports.io/football/teams/4248.png"
+        },
+        {
+          "team_id": 6962,
+          "name": "Widzew Łódź",
+          "code": "WID",
+          "country": "Poland",
+          "founded": 1910,
+          "logo": "https://media.api-sports.io/football/teams/6962.png"
+        },
+        {
+          "team_id": 14562,
+          "name": "Motor Lublin",
+          "code": "MOT",
+          "country": "Poland",
+          "founded": 1950,
+          "logo": "https://media.api-sports.io/football/teams/14562.png"
+        }
+      ]
+    },
+    {
+      "league_id": 113,
+      "league_name": "Allsvenskan (Sweden)",
+      "season": "2025",
+      "teams_count": 16,
+      "teams": [
+        {
+          "team_id": 363,
+          "name": "Hammarby FF",
+          "code": "HAM",
+          "country": "Sweden",
+          "founded": 1897,
+          "logo": "https://media.api-sports.io/football/teams/363.png"
+        },
+        {
+          "team_id": 364,
+          "name": "Djurgardens IF",
+          "code": "DJU",
+          "country": "Sweden",
+          "founded": 1891,
+          "logo": "https://media.api-sports.io/football/teams/364.png"
+        },
+        {
+          "team_id": 366,
+          "name": "IFK Goteborg",
+          "code": "GOT",
+          "country": "Sweden",
+          "founded": 1904,
+          "logo": "https://media.api-sports.io/football/teams/366.png"
+        },
+        {
+          "team_id": 367,
+          "name": "BK Hacken",
+          "code": "HAC",
+          "country": "Sweden",
+          "founded": 1940,
+          "logo": "https://media.api-sports.io/football/teams/367.png"
+        },
+        {
+          "team_id": 370,
+          "name": "Sirius",
+          "code": "SIR",
+          "country": "Sweden",
+          "founded": 1907,
+          "logo": "https://media.api-sports.io/football/teams/370.png"
+        },
+        {
+          "team_id": 371,
+          "name": "IF Brommapojkarna",
+          "code": "BRO",
+          "country": "Sweden",
+          "founded": 1942,
+          "logo": "https://media.api-sports.io/football/teams/371.png"
+        },
+        {
+          "team_id": 372,
+          "name": "IF Elfsborg",
+          "code": "ELF",
+          "country": "Sweden",
+          "founded": 1904,
+          "logo": "https://media.api-sports.io/football/teams/372.png"
+        },
+        {
+          "team_id": 375,
+          "name": "Malmo FF",
+          "code": "MAL",
+          "country": "Sweden",
+          "founded": 1910,
+          "logo": "https://media.api-sports.io/football/teams/375.png"
+        },
+        {
+          "team_id": 377,
+          "name": "AIK Stockholm",
+          "code": "AIK",
+          "country": "Sweden",
+          "founded": 1891,
+          "logo": "https://media.api-sports.io/football/teams/377.png"
+        },
+        {
+          "team_id": 378,
+          "name": "IFK Norrkoping",
+          "code": "NOR",
+          "country": "Sweden",
+          "founded": 1897,
+          "logo": "https://media.api-sports.io/football/teams/378.png"
+        },
+        {
+          "team_id": 766,
+          "name": "Halmstad",
+          "code": "HAL",
+          "country": "Sweden",
+          "founded": 1914,
+          "logo": "https://media.api-sports.io/football/teams/766.png"
+        },
+        {
+          "team_id": 2163,
+          "name": "IFK Varnamo",
+          "code": "VAR",
+          "country": "Sweden",
+          "founded": 1912,
+          "logo": "https://media.api-sports.io/football/teams/2163.png"
+        },
+        {
+          "team_id": 2170,
+          "name": "Gais",
+          "code": "GAI",
+          "country": "Sweden",
+          "founded": 1894,
+          "logo": "https://media.api-sports.io/football/teams/2170.png"
+        },
+        {
+          "team_id": 2172,
+          "name": "Degerfors IF",
+          "code": "DEG",
+          "country": "Sweden",
+          "founded": 1907,
+          "logo": "https://media.api-sports.io/football/teams/2172.png"
+        },
+        {
+          "team_id": 2174,
+          "name": "Osters IF",
+          "code": "OST",
+          "country": "Sweden",
+          "founded": 1930,
+          "logo": "https://media.api-sports.io/football/teams/2174.png"
+        },
+        {
+          "team_id": 2240,
+          "name": "Mjallby AIF",
+          "code": "MJA",
+          "country": "Sweden",
+          "founded": 1939,
+          "logo": "https://media.api-sports.io/football/teams/2240.png"
+        }
+      ]
+    },
+    {
+      "league_id": 103,
+      "league_name": "Eliteserien (Norway)",
+      "season": "2025",
+      "teams_count": 16,
+      "teams": [
+        {
+          "team_id": 319,
+          "name": "Brann",
+          "code": "BRA",
+          "country": "Norway",
+          "founded": 1908,
+          "logo": "https://media.api-sports.io/football/teams/319.png"
+        },
+        {
+          "team_id": 320,
+          "name": "Kristiansund BK",
+          "code": "KRI",
+          "country": "Norway",
+          "founded": 2003,
+          "logo": "https://media.api-sports.io/football/teams/320.png"
+        },
+        {
+          "team_id": 324,
+          "name": "Stromsgodset",
+          "code": "STR",
+          "country": "Norway",
+          "founded": 1907,
+          "logo": "https://media.api-sports.io/football/teams/324.png"
+        },
+        {
+          "team_id": 325,
+          "name": "Tromso",
+          "code": "TRO",
+          "country": "Norway",
+          "founded": 1920,
+          "logo": "https://media.api-sports.io/football/teams/325.png"
+        },
+        {
+          "team_id": 326,
+          "name": "Valerenga",
+          "code": "VAL",
+          "country": "Norway",
+          "founded": 1913,
+          "logo": "https://media.api-sports.io/football/teams/326.png"
+        },
+        {
+          "team_id": 327,
+          "name": "Bodo/Glimt",
+          "code": "BOD",
+          "country": "Norway",
+          "founded": 1916,
+          "logo": "https://media.api-sports.io/football/teams/327.png"
+        },
+        {
+          "team_id": 328,
+          "name": "Haugesund",
+          "code": "HAU",
+          "country": "Norway",
+          "founded": 1993,
+          "logo": "https://media.api-sports.io/football/teams/328.png"
+        },
+        {
+          "team_id": 329,
+          "name": "Molde",
+          "code": "MOL",
+          "country": "Norway",
+          "founded": 1911,
+          "logo": "https://media.api-sports.io/football/teams/329.png"
+        },
+        {
+          "team_id": 331,
+          "name": "Rosenborg",
+          "code": "ROS",
+          "country": "Norway",
+          "founded": 1917,
+          "logo": "https://media.api-sports.io/football/teams/331.png"
+        },
+        {
+          "team_id": 332,
+          "name": "Sandefjord",
+          "code": "SAN",
+          "country": "Norway",
+          "founded": 1998,
+          "logo": "https://media.api-sports.io/football/teams/332.png"
+        },
+        {
+          "team_id": 333,
+          "name": "Sarpsborg 08 FF",
+          "code": "SAR",
+          "country": "Norway",
+          "founded": 1928,
+          "logo": "https://media.api-sports.io/football/teams/333.png"
+        },
+        {
+          "team_id": 759,
+          "name": "Viking",
+          "code": "VIK",
+          "country": "Norway",
+          "founded": 1899,
+          "logo": "https://media.api-sports.io/football/teams/759.png"
+        },
+        {
+          "team_id": 2142,
+          "name": "Bryne",
+          "code": "BRY",
+          "country": "Norway",
+          "founded": 1926,
+          "logo": "https://media.api-sports.io/football/teams/2142.png"
+        },
+        {
+          "team_id": 2143,
+          "name": "KFUM Oslo",
+          "code": "KFU",
+          "country": "Norway",
+          "founded": 1939,
+          "logo": "https://media.api-sports.io/football/teams/2143.png"
+        },
+        {
+          "team_id": 2149,
+          "name": "Fredrikstad",
+          "code": "FRE",
+          "country": "Norway",
+          "founded": 1903,
+          "logo": "https://media.api-sports.io/football/teams/2149.png"
+        },
+        {
+          "team_id": 2159,
+          "name": "Ham-Kam",
+          "code": "HAM",
+          "country": "Norway",
+          "founded": 1918,
+          "logo": "https://media.api-sports.io/football/teams/2159.png"
+        }
+      ]
+    },
+    {
+      "league_id": 119,
+      "league_name": "Superligaen (Denmark)",
+      "season": "2025",
+      "teams_count": 12,
+      "teams": [
+        {
+          "team_id": 395,
+          "name": "Vejle",
+          "code": "VEJ",
+          "country": "Denmark",
+          "founded": 1891,
+          "logo": "https://media.api-sports.io/football/teams/395.png"
+        },
+        {
+          "team_id": 396,
+          "name": "Sonderjyske",
+          "code": "SON",
+          "country": "Denmark",
+          "founded": 2004,
+          "logo": "https://media.api-sports.io/football/teams/396.png"
+        },
+        {
+          "team_id": 397,
+          "name": "FC Midtjylland",
+          "code": "MID",
+          "country": "Denmark",
+          "founded": 1999,
+          "logo": "https://media.api-sports.io/football/teams/397.png"
+        },
+        {
+          "team_id": 398,
+          "name": "FC Nordsjaelland",
+          "code": "NOR",
+          "country": "Denmark",
+          "founded": 2003,
+          "logo": "https://media.api-sports.io/football/teams/398.png"
+        },
+        {
+          "team_id": 400,
+          "name": "FC Copenhagen",
+          "code": "COP",
+          "country": "Denmark",
+          "founded": 1992,
+          "logo": "https://media.api-sports.io/football/teams/400.png"
+        },
+        {
+          "team_id": 401,
+          "name": "Randers FC",
+          "code": "RAN",
+          "country": "Denmark",
+          "founded": 2003,
+          "logo": "https://media.api-sports.io/football/teams/401.png"
+        },
+        {
+          "team_id": 405,
+          "name": "Odense",
+          "code": "ODE",
+          "country": "Denmark",
+          "founded": 1889,
+          "logo": "https://media.api-sports.io/football/teams/405.png"
+        },
+        {
+          "team_id": 406,
+          "name": "Aarhus",
+          "code": "AAR",
+          "country": "Denmark",
+          "founded": 1902,
+          "logo": "https://media.api-sports.io/football/teams/406.png"
+        },
+        {
+          "team_id": 407,
+          "name": "Brondby",
+          "code": "BRO",
+          "country": "Denmark",
+          "founded": 1964,
+          "logo": "https://media.api-sports.io/football/teams/407.png"
+        },
+        {
+          "team_id": 2061,
+          "name": "FC Fredericia",
+          "code": "FRE",
+          "country": "Denmark",
+          "founded": 1991,
+          "logo": "https://media.api-sports.io/football/teams/2061.png"
+        },
+        {
+          "team_id": 2070,
+          "name": "Viborg",
+          "code": "VIB",
+          "country": "Denmark",
+          "founded": 1896,
+          "logo": "https://media.api-sports.io/football/teams/2070.png"
+        },
+        {
+          "team_id": 2073,
+          "name": "Silkeborg",
+          "code": "SIL",
+          "country": "Denmark",
+          "founded": 1917,
+          "logo": "https://media.api-sports.io/football/teams/2073.png"
+        }
+      ]
+    },
+    {
+      "league_id": 345,
+      "league_name": "Czech Liga",
+      "season": "2025",
+      "teams_count": 16,
+      "teams": [
+        {
+          "team_id": 560,
+          "name": "Slavia Praha",
+          "code": "SLA",
+          "country": "Czech-Republic",
+          "founded": 1892,
+          "logo": "https://media.api-sports.io/football/teams/560.png"
+        },
+        {
+          "team_id": 567,
+          "name": "Plzen",
+          "code": "PLZ",
+          "country": "Czech-Republic",
+          "founded": 1911,
+          "logo": "https://media.api-sports.io/football/teams/567.png"
+        },
+        {
+          "team_id": 603,
+          "name": "Zlin",
+          "code": "ZLI",
+          "country": "Czech-Republic",
+          "founded": 1919,
+          "logo": "https://media.api-sports.io/football/teams/603.png"
+        },
+        {
+          "team_id": 628,
+          "name": "Sparta Praha",
+          "code": "SPA",
+          "country": "Czech-Republic",
+          "founded": 1893,
+          "logo": "https://media.api-sports.io/football/teams/628.png"
+        },
+        {
+          "team_id": 640,
+          "name": "Mlada Boleslav",
+          "code": "MLA",
+          "country": "Czech-Republic",
+          "founded": 1902,
+          "logo": "https://media.api-sports.io/football/teams/640.png"
+        },
+        {
+          "team_id": 782,
+          "name": "Slovan Liberec",
+          "code": "LIB",
+          "country": "Czech-Republic",
+          "founded": 1921,
+          "logo": "https://media.api-sports.io/football/teams/782.png"
+        },
+        {
+          "team_id": 1122,
+          "name": "FK Jablonec",
+          "code": "JAB",
+          "country": "Czech-Republic",
+          "founded": 1945,
+          "logo": "https://media.api-sports.io/football/teams/1122.png"
+        },
+        {
+          "team_id": 2250,
+          "name": "Sigma Olomouc",
+          "code": "SIG",
+          "country": "Czech-Republic",
+          "founded": 1919,
+          "logo": "https://media.api-sports.io/football/teams/2250.png"
+        },
+        {
+          "team_id": 3713,
+          "name": "Baník Ostrava",
+          "code": "OST",
+          "country": "Czech-Republic",
+          "founded": 1922,
+          "logo": "https://media.api-sports.io/football/teams/3713.png"
+        },
+        {
+          "team_id": 3714,
+          "name": "Bohemians 1905",
+          "code": "BOH",
+          "country": "Czech-Republic",
+          "founded": 1905,
+          "logo": "https://media.api-sports.io/football/teams/3714.png"
+        },
+        {
+          "team_id": 3715,
+          "name": "Dukla Praha",
+          "code": "DUK",
+          "country": "Czech-Republic",
+          "founded": 1948,
+          "logo": "https://media.api-sports.io/football/teams/3715.png"
+        },
+        {
+          "team_id": 3716,
+          "name": "Karviná",
+          "code": "KAR",
+          "country": "Czech-Republic",
+          "founded": 2003,
+          "logo": "https://media.api-sports.io/football/teams/3716.png"
+        },
+        {
+          "team_id": 3719,
+          "name": "Slovácko",
+          "code": "SLO",
+          "country": "Czech-Republic",
+          "founded": 1927,
+          "logo": "https://media.api-sports.io/football/teams/3719.png"
+        },
+        {
+          "team_id": 3720,
+          "name": "Teplice",
+          "code": "TEP",
+          "country": "Czech-Republic",
+          "founded": 1945,
+          "logo": "https://media.api-sports.io/football/teams/3720.png"
+        },
+        {
+          "team_id": 3723,
+          "name": "Hradec Králové",
+          "code": "HRA",
+          "country": "Czech-Republic",
+          "founded": 1905,
+          "logo": "https://media.api-sports.io/football/teams/3723.png"
+        },
+        {
+          "team_id": 3724,
+          "name": "Pardubice",
+          "code": null,
+          "country": "Czech-Republic",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/3724.png"
+        }
+      ]
+    },
+    {
+      "league_id": 283,
+      "league_name": "Liga I (Romania)",
+      "season": "2025",
+      "teams_count": 16,
+      "teams": [
+        {
+          "team_id": 559,
+          "name": "FCSB",
+          "code": "STE",
+          "country": "Romania",
+          "founded": 1947,
+          "logo": "https://media.api-sports.io/football/teams/559.png"
+        },
+        {
+          "team_id": 632,
+          "name": "Universitatea Craiova",
+          "code": "UNI",
+          "country": "Romania",
+          "founded": 2013,
+          "logo": "https://media.api-sports.io/football/teams/632.png"
+        },
+        {
+          "team_id": 635,
+          "name": "Dinamo Bucuresti",
+          "code": "DIN",
+          "country": "Romania",
+          "founded": 1948,
+          "logo": "https://media.api-sports.io/football/teams/635.png"
+        },
+        {
+          "team_id": 2246,
+          "name": "CFR 1907 Cluj",
+          "code": "CLU",
+          "country": "Romania",
+          "founded": 1907,
+          "logo": "https://media.api-sports.io/football/teams/2246.png"
+        },
+        {
+          "team_id": 2579,
+          "name": "AFC Hermannstadt",
+          "code": null,
+          "country": "Romania",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/2579.png"
+        },
+        {
+          "team_id": 2581,
+          "name": "FC Botosani",
+          "code": "BOT",
+          "country": "Romania",
+          "founded": 1973,
+          "logo": "https://media.api-sports.io/football/teams/2581.png"
+        },
+        {
+          "team_id": 2589,
+          "name": "Uta Arad",
+          "code": "ARA",
+          "country": "Romania",
+          "founded": 2013,
+          "logo": "https://media.api-sports.io/football/teams/2589.png"
+        },
+        {
+          "team_id": 2592,
+          "name": "Arges Pitesti",
+          "code": "ARG",
+          "country": "Romania",
+          "founded": 2010,
+          "logo": "https://media.api-sports.io/football/teams/2592.png"
+        },
+        {
+          "team_id": 2596,
+          "name": "Farul Constanta",
+          "code": null,
+          "country": "Romania",
+          "founded": 2016,
+          "logo": "https://media.api-sports.io/football/teams/2596.png"
+        },
+        {
+          "team_id": 2598,
+          "name": "Petrolul Ploiesti",
+          "code": "PET",
+          "country": "Romania",
+          "founded": 1924,
+          "logo": "https://media.api-sports.io/football/teams/2598.png"
+        },
+        {
+          "team_id": 2599,
+          "name": "Universitatea Cluj",
+          "code": "UNI",
+          "country": "Romania",
+          "founded": 2016,
+          "logo": "https://media.api-sports.io/football/teams/2599.png"
+        },
+        {
+          "team_id": 2604,
+          "name": "Metaloglobus",
+          "code": null,
+          "country": "Romania",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/2604.png"
+        },
+        {
+          "team_id": 6230,
+          "name": "Csikszereda",
+          "code": null,
+          "country": "Romania",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/6230.png"
+        },
+        {
+          "team_id": 6231,
+          "name": "Rapid",
+          "code": "RAP",
+          "country": "Romania",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/6231.png"
+        },
+        {
+          "team_id": 6886,
+          "name": "Oţelul",
+          "code": "OTE",
+          "country": "Romania",
+          "founded": 1964,
+          "logo": "https://media.api-sports.io/football/teams/6886.png"
+        },
+        {
+          "team_id": 6916,
+          "name": "Unirea Slobozia",
+          "code": "SLO",
+          "country": "Romania",
+          "founded": 2004,
+          "logo": "https://media.api-sports.io/football/teams/6916.png"
+        }
+      ]
+    },
+    {
+      "league_id": 210,
+      "league_name": "Prva HNL (Croatia)",
+      "season": "2025",
+      "teams_count": 10,
+      "teams": [
+        {
+          "team_id": 561,
+          "name": "HNK Rijeka",
+          "code": "RIJ",
+          "country": "Croatia",
+          "founded": 1946,
+          "logo": "https://media.api-sports.io/football/teams/561.png"
+        },
+        {
+          "team_id": 608,
+          "name": "HNK Hajduk Split",
+          "code": "HAJ",
+          "country": "Croatia",
+          "founded": 1911,
+          "logo": "https://media.api-sports.io/football/teams/608.png"
+        },
+        {
+          "team_id": 616,
+          "name": "NK Osijek",
+          "code": "OSI",
+          "country": "Croatia",
+          "founded": 1947,
+          "logo": "https://media.api-sports.io/football/teams/616.png"
+        },
+        {
+          "team_id": 620,
+          "name": "Dinamo Zagreb",
+          "code": "ZAG",
+          "country": "Croatia",
+          "founded": 1911,
+          "logo": "https://media.api-sports.io/football/teams/620.png"
+        },
+        {
+          "team_id": 1016,
+          "name": "Istra 1961",
+          "code": "IST",
+          "country": "Croatia",
+          "founded": 1964,
+          "logo": "https://media.api-sports.io/football/teams/1016.png"
+        },
+        {
+          "team_id": 1017,
+          "name": "NK Lokomotiva Zagreb",
+          "code": "ZAG",
+          "country": "Croatia",
+          "founded": 1914,
+          "logo": "https://media.api-sports.io/football/teams/1017.png"
+        },
+        {
+          "team_id": 1018,
+          "name": "NK Slaven Belupo",
+          "code": "BEL",
+          "country": "Croatia",
+          "founded": 1912,
+          "logo": "https://media.api-sports.io/football/teams/1018.png"
+        },
+        {
+          "team_id": 1068,
+          "name": "HNK Gorica",
+          "code": null,
+          "country": "Croatia",
+          "founded": 2009,
+          "logo": "https://media.api-sports.io/football/teams/1068.png"
+        },
+        {
+          "team_id": 1483,
+          "name": "NK Varazdin",
+          "code": null,
+          "country": "Croatia",
+          "founded": 1932,
+          "logo": "https://media.api-sports.io/football/teams/1483.png"
+        },
+        {
+          "team_id": 5730,
+          "name": "Vukovar",
+          "code": null,
+          "country": "Croatia",
+          "founded": 1991,
+          "logo": "https://media.api-sports.io/football/teams/5730.png"
+        }
+      ]
+    },
+    {
+      "league_id": 333,
+      "league_name": "Premier League (Ukraine)",
+      "season": "2025",
+      "teams_count": 16,
+      "teams": [
+        {
+          "team_id": 550,
+          "name": "Shakhtar Donetsk",
+          "code": "SHA",
+          "country": "Ukraine",
+          "founded": 1936,
+          "logo": "https://media.api-sports.io/football/teams/550.png"
+        },
+        {
+          "team_id": 572,
+          "name": "Dynamo Kyiv",
+          "code": "DIN",
+          "country": "Ukraine",
+          "founded": 1927,
+          "logo": "https://media.api-sports.io/football/teams/572.png"
+        },
+        {
+          "team_id": 599,
+          "name": "Zorya Luhansk",
+          "code": "ZOR",
+          "country": "Ukraine",
+          "founded": 1923,
+          "logo": "https://media.api-sports.io/football/teams/599.png"
+        },
+        {
+          "team_id": 3617,
+          "name": "Karpaty",
+          "code": "KAR",
+          "country": "Ukraine",
+          "founded": 1963,
+          "logo": "https://media.api-sports.io/football/teams/3617.png"
+        },
+        {
+          "team_id": 3619,
+          "name": "Oleksandria",
+          "code": "OLE",
+          "country": "Ukraine",
+          "founded": 1991,
+          "logo": "https://media.api-sports.io/football/teams/3619.png"
+        },
+        {
+          "team_id": 3627,
+          "name": "Kolos Kovalivka",
+          "code": null,
+          "country": "Ukraine",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/3627.png"
+        },
+        {
+          "team_id": 3628,
+          "name": "Metalist 1925 Kharkiv",
+          "code": null,
+          "country": "Ukraine",
+          "founded": 2016,
+          "logo": "https://media.api-sports.io/football/teams/3628.png"
+        },
+        {
+          "team_id": 3630,
+          "name": "Obolon'-Brovar",
+          "code": null,
+          "country": "Ukraine",
+          "founded": 2013,
+          "logo": "https://media.api-sports.io/football/teams/3630.png"
+        },
+        {
+          "team_id": 3632,
+          "name": "Ruh Lviv",
+          "code": null,
+          "country": "Ukraine",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/3632.png"
+        },
+        {
+          "team_id": 6489,
+          "name": "Kryvbas KR",
+          "code": null,
+          "country": "Ukraine",
+          "founded": 2001,
+          "logo": "https://media.api-sports.io/football/teams/6489.png"
+        },
+        {
+          "team_id": 6496,
+          "name": "Polessya",
+          "code": null,
+          "country": "Ukraine",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/6496.png"
+        },
+        {
+          "team_id": 6501,
+          "name": "Veres Rivne",
+          "code": null,
+          "country": "Ukraine",
+          "founded": 2018,
+          "logo": "https://media.api-sports.io/football/teams/6501.png"
+        },
+        {
+          "team_id": 14434,
+          "name": "Epitsentr Dunayivtsi",
+          "code": null,
+          "country": "Ukraine",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/14434.png"
+        },
+        {
+          "team_id": 17161,
+          "name": "LNZ Cherkasy",
+          "code": null,
+          "country": "Ukraine",
+          "founded": null,
+          "logo": "https://media.api-sports.io/football/teams/17161.png"
+        },
+        {
+          "team_id": 17165,
+          "name": "SK Poltava",
+          "code": null,
+          "country": "Ukraine",
+          "founded": 2011,
+          "logo": "https://media.api-sports.io/football/teams/17165.png"
+        },
+        {
+          "team_id": 21953,
+          "name": "Kudrivka",
+          "code": null,
+          "country": "Ukraine",
+          "founded": 1982,
+          "logo": "https://media.api-sports.io/football/teams/21953.png"
+        }
+      ]
+    }
+  ]
+}
