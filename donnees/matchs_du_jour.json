@@ -1,0 +1,1114 @@
+{
+  "generated_at": "2025-08-30T02:21:32.233378+00:00",
+  "timezone": "Europe/Paris",
+  "season": "2025",
+  "date": "2025-08-30",
+  "count": 65,
+  "fixtures": [
+    {
+      "fixture_id": 1378991,
+      "league_id": 39,
+      "league_name": "Premier League",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T13:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 49,
+        "name": "Chelsea"
+      },
+      "away_team": {
+        "id": 36,
+        "name": "Fulham"
+      }
+    },
+    {
+      "fixture_id": 1378994,
+      "league_id": 39,
+      "league_name": "Premier League",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T16:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 33,
+        "name": "Manchester United"
+      },
+      "away_team": {
+        "id": 44,
+        "name": "Burnley"
+      }
+    },
+    {
+      "fixture_id": 1378998,
+      "league_id": 39,
+      "league_name": "Premier League",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T16:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 39,
+        "name": "Wolves"
+      },
+      "away_team": {
+        "id": 45,
+        "name": "Everton"
+      }
+    },
+    {
+      "fixture_id": 1378997,
+      "league_id": 39,
+      "league_name": "Premier League",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T16:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 47,
+        "name": "Tottenham"
+      },
+      "away_team": {
+        "id": 35,
+        "name": "Bournemouth"
+      }
+    },
+    {
+      "fixture_id": 1378996,
+      "league_id": 39,
+      "league_name": "Premier League",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T16:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 746,
+        "name": "Sunderland"
+      },
+      "away_team": {
+        "id": 55,
+        "name": "Brentford"
+      }
+    },
+    {
+      "fixture_id": 1378992,
+      "league_id": 39,
+      "league_name": "Premier League",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 63,
+        "name": "Leeds"
+      },
+      "away_team": {
+        "id": 34,
+        "name": "Newcastle"
+      }
+    },
+    {
+      "fixture_id": 1390839,
+      "league_id": 140,
+      "league_name": "La Liga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 542,
+        "name": "Alaves"
+      },
+      "away_team": {
+        "id": 530,
+        "name": "Atletico Madrid"
+      }
+    },
+    {
+      "fixture_id": 1390847,
+      "league_id": 140,
+      "league_name": "La Liga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T19:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 718,
+        "name": "Oviedo"
+      },
+      "away_team": {
+        "id": 548,
+        "name": "Real Sociedad"
+      }
+    },
+    {
+      "fixture_id": 1390844,
+      "league_id": 140,
+      "league_name": "La Liga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T19:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 547,
+        "name": "Girona"
+      },
+      "away_team": {
+        "id": 536,
+        "name": "Sevilla"
+      }
+    },
+    {
+      "fixture_id": 1390846,
+      "league_id": 140,
+      "league_name": "La Liga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T21:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 541,
+        "name": "Real Madrid"
+      },
+      "away_team": {
+        "id": 798,
+        "name": "Mallorca"
+      }
+    },
+    {
+      "fixture_id": 1377874,
+      "league_id": 135,
+      "league_name": "Serie A",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 500,
+        "name": "Bologna"
+      },
+      "away_team": {
+        "id": 895,
+        "name": "Como"
+      }
+    },
+    {
+      "fixture_id": 1377881,
+      "league_id": 135,
+      "league_name": "Serie A",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 523,
+        "name": "Parma"
+      },
+      "away_team": {
+        "id": 499,
+        "name": "Atalanta"
+      }
+    },
+    {
+      "fixture_id": 1377880,
+      "league_id": 135,
+      "league_name": "Serie A",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:45:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 492,
+        "name": "Napoli"
+      },
+      "away_team": {
+        "id": 490,
+        "name": "Cagliari"
+      }
+    },
+    {
+      "fixture_id": 1377882,
+      "league_id": 135,
+      "league_name": "Serie A",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:45:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 801,
+        "name": "Pisa"
+      },
+      "away_team": {
+        "id": 497,
+        "name": "AS Roma"
+      }
+    },
+    {
+      "fixture_id": 1388324,
+      "league_id": 78,
+      "league_name": "Bundesliga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T15:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 162,
+        "name": "Werder Bremen"
+      },
+      "away_team": {
+        "id": 168,
+        "name": "Bayer Leverkusen"
+      }
+    },
+    {
+      "fixture_id": 1388321,
+      "league_id": 78,
+      "league_name": "Bundesliga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T15:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 167,
+        "name": "1899 Hoffenheim"
+      },
+      "away_team": {
+        "id": 169,
+        "name": "Eintracht Frankfurt"
+      }
+    },
+    {
+      "fixture_id": 1388323,
+      "league_id": 78,
+      "league_name": "Bundesliga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T15:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 172,
+        "name": "VfB Stuttgart"
+      },
+      "away_team": {
+        "id": 163,
+        "name": "Borussia Mönchengladbach"
+      }
+    },
+    {
+      "fixture_id": 1388322,
+      "league_id": 78,
+      "league_name": "Bundesliga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T15:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 173,
+        "name": "RB Leipzig"
+      },
+      "away_team": {
+        "id": 180,
+        "name": "1. FC Heidenheim"
+      }
+    },
+    {
+      "fixture_id": 1388317,
+      "league_id": 78,
+      "league_name": "Bundesliga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 170,
+        "name": "FC Augsburg"
+      },
+      "away_team": {
+        "id": 157,
+        "name": "Bayern München"
+      }
+    },
+    {
+      "fixture_id": 1387719,
+      "league_id": 61,
+      "league_name": "Ligue 1",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 97,
+        "name": "Lorient"
+      },
+      "away_team": {
+        "id": 79,
+        "name": "Lille"
+      }
+    },
+    {
+      "fixture_id": 1387722,
+      "league_id": 61,
+      "league_name": "Ligue 1",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T19:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 83,
+        "name": "Nantes"
+      },
+      "away_team": {
+        "id": 108,
+        "name": "Auxerre"
+      }
+    },
+    {
+      "fixture_id": 1387724,
+      "league_id": 61,
+      "league_name": "Ligue 1",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T21:05:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 96,
+        "name": "Toulouse"
+      },
+      "away_team": {
+        "id": 85,
+        "name": "Paris Saint Germain"
+      }
+    },
+    {
+      "fixture_id": 1380894,
+      "league_id": 88,
+      "league_name": "Eredivisie",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T16:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 416,
+        "name": "FC Volendam"
+      },
+      "away_team": {
+        "id": 194,
+        "name": "Ajax"
+      }
+    },
+    {
+      "fixture_id": 1380895,
+      "league_id": 88,
+      "league_name": "Eredivisie",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:45:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 210,
+        "name": "Heerenveen"
+      },
+      "away_team": {
+        "id": 410,
+        "name": "GO Ahead Eagles"
+      }
+    },
+    {
+      "fixture_id": 1380896,
+      "league_id": 88,
+      "league_name": "Eredivisie",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 197,
+        "name": "PSV Eindhoven"
+      },
+      "away_team": {
+        "id": 427,
+        "name": "Telstar"
+      }
+    },
+    {
+      "fixture_id": 1380897,
+      "league_id": 88,
+      "league_name": "Eredivisie",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T21:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 196,
+        "name": "Excelsior"
+      },
+      "away_team": {
+        "id": 415,
+        "name": "Twente"
+      }
+    },
+    {
+      "fixture_id": 1396266,
+      "league_id": 94,
+      "league_name": "Primeira Liga (Portugal)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T16:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 4716,
+        "name": "Casa Pia"
+      },
+      "away_team": {
+        "id": 225,
+        "name": "Nacional"
+      }
+    },
+    {
+      "fixture_id": 1396272,
+      "league_id": 94,
+      "league_name": "Primeira Liga (Portugal)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T19:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 224,
+        "name": "Guimaraes"
+      },
+      "away_team": {
+        "id": 240,
+        "name": "Arouca"
+      }
+    },
+    {
+      "fixture_id": 1396264,
+      "league_id": 94,
+      "league_name": "Primeira Liga (Portugal)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T19:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 21595,
+        "name": "AVS"
+      },
+      "away_team": {
+        "id": 242,
+        "name": "Famalicao"
+      }
+    },
+    {
+      "fixture_id": 1396270,
+      "league_id": 94,
+      "league_name": "Primeira Liga (Portugal)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T21:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 228,
+        "name": "Sporting CP"
+      },
+      "away_team": {
+        "id": 212,
+        "name": "FC Porto"
+      }
+    },
+    {
+      "fixture_id": 1382467,
+      "league_id": 144,
+      "league_name": "Jupiler Pro League",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T16:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 266,
+        "name": "KV Mechelen"
+      },
+      "away_team": {
+        "id": 5902,
+        "name": "RAAL La Louvière"
+      }
+    },
+    {
+      "fixture_id": 1382468,
+      "league_id": 144,
+      "league_name": "Jupiler Pro League",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:15:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 261,
+        "name": "KVC Westerlo"
+      },
+      "away_team": {
+        "id": 740,
+        "name": "Antwerp"
+      }
+    },
+    {
+      "fixture_id": 1382471,
+      "league_id": 144,
+      "league_name": "Jupiler Pro League",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:45:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 736,
+        "name": "Charleroi"
+      },
+      "away_team": {
+        "id": 6215,
+        "name": "Dender"
+      }
+    },
+    {
+      "fixture_id": 1394466,
+      "league_id": 203,
+      "league_name": "Süper Lig (Turkey)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 1004,
+        "name": "Kasimpasa"
+      },
+      "away_team": {
+        "id": 3573,
+        "name": "Gazişehir Gaziantep"
+      }
+    },
+    {
+      "fixture_id": 1394467,
+      "league_id": 203,
+      "league_name": "Süper Lig (Turkey)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 7411,
+        "name": "Kocaelispor"
+      },
+      "away_team": {
+        "id": 1001,
+        "name": "Kayserispor"
+      }
+    },
+    {
+      "fixture_id": 1394463,
+      "league_id": 203,
+      "league_name": "Süper Lig (Turkey)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 645,
+        "name": "Galatasaray"
+      },
+      "away_team": {
+        "id": 1007,
+        "name": "Rizespor"
+      }
+    },
+    {
+      "fixture_id": 1394461,
+      "league_id": 203,
+      "league_name": "Süper Lig (Turkey)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 1005,
+        "name": "Antalyaspor"
+      },
+      "away_team": {
+        "id": 3589,
+        "name": "Fatih Karagümrük"
+      }
+    },
+    {
+      "fixture_id": 1382687,
+      "league_id": 179,
+      "league_name": "Premiership (Scotland)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T16:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 255,
+        "name": "Livingston"
+      },
+      "away_team": {
+        "id": 254,
+        "name": "Heart Of Midlothian"
+      }
+    },
+    {
+      "fixture_id": 1382688,
+      "league_id": 179,
+      "league_name": "Premiership (Scotland)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T16:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 256,
+        "name": "Motherwell"
+      },
+      "away_team": {
+        "id": 250,
+        "name": "Kilmarnock"
+      }
+    },
+    {
+      "fixture_id": 1390050,
+      "league_id": 218,
+      "league_name": "Tipp3 Bundesliga (Austria)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 571,
+        "name": "Red Bull Salzburg"
+      },
+      "away_team": {
+        "id": 1394,
+        "name": "FC BW Linz"
+      }
+    },
+    {
+      "fixture_id": 1390051,
+      "league_id": 218,
+      "league_name": "Tipp3 Bundesliga (Austria)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 1026,
+        "name": "Lask Linz"
+      },
+      "away_team": {
+        "id": 1028,
+        "name": "Ried"
+      }
+    },
+    {
+      "fixture_id": 1390052,
+      "league_id": 218,
+      "league_name": "Tipp3 Bundesliga (Austria)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T19:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 4256,
+        "name": "Grazer AK"
+      },
+      "away_team": {
+        "id": 637,
+        "name": "Sturm Graz"
+      }
+    },
+    {
+      "fixture_id": 1400751,
+      "league_id": 197,
+      "league_name": "Super League (Switzerland/Greece)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 2110,
+        "name": "Volos NFC"
+      },
+      "away_team": {
+        "id": 553,
+        "name": "Olympiakos Piraeus"
+      }
+    },
+    {
+      "fixture_id": 1400753,
+      "league_id": 197,
+      "league_name": "Super League (Switzerland/Greece)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 2099,
+        "name": "Panserraikos"
+      },
+      "away_team": {
+        "id": 1124,
+        "name": "OFI"
+      }
+    },
+    {
+      "fixture_id": 1400749,
+      "league_id": 197,
+      "league_name": "Super League (Switzerland/Greece)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 1123,
+        "name": "Aris Thessalonikis"
+      },
+      "away_team": {
+        "id": 949,
+        "name": "Panetolikos"
+      }
+    },
+    {
+      "fixture_id": 1400748,
+      "league_id": 197,
+      "league_name": "Super League (Switzerland/Greece)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 953,
+        "name": "Larisa"
+      },
+      "away_team": {
+        "id": 5050,
+        "name": "Kifisia"
+      }
+    },
+    {
+      "fixture_id": 1380445,
+      "league_id": 106,
+      "league_name": "Ekstraklasa (Poland)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T14:45:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 3487,
+        "name": "Nieciecza"
+      },
+      "away_team": {
+        "id": 346,
+        "name": "Korona Kielce"
+      }
+    },
+    {
+      "fixture_id": 1380446,
+      "league_id": 106,
+      "league_name": "Ekstraklasa (Poland)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 345,
+        "name": "Zaglebie Lubin"
+      },
+      "away_team": {
+        "id": 349,
+        "name": "Piast Gliwice"
+      }
+    },
+    {
+      "fixture_id": 1380441,
+      "league_id": 106,
+      "league_name": "Ekstraklasa (Poland)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:15:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 340,
+        "name": "Gornik Zabrze"
+      },
+      "away_team": {
+        "id": 14562,
+        "name": "Motor Lublin"
+      }
+    },
+    {
+      "fixture_id": 1342118,
+      "league_id": 113,
+      "league_name": "Allsvenskan (Sweden)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T15:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 366,
+        "name": "IFK Goteborg"
+      },
+      "away_team": {
+        "id": 2163,
+        "name": "IFK Varnamo"
+      }
+    },
+    {
+      "fixture_id": 1342116,
+      "league_id": 113,
+      "league_name": "Allsvenskan (Sweden)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T15:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 371,
+        "name": "IF Brommapojkarna"
+      },
+      "away_team": {
+        "id": 372,
+        "name": "IF Elfsborg"
+      }
+    },
+    {
+      "fixture_id": 1342120,
+      "league_id": 113,
+      "league_name": "Allsvenskan (Sweden)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 2240,
+        "name": "Mjallby AIF"
+      },
+      "away_team": {
+        "id": 766,
+        "name": "Halmstad"
+      }
+    },
+    {
+      "fixture_id": 1342345,
+      "league_id": 103,
+      "league_name": "Eliteserien (Norway)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 326,
+        "name": "Valerenga"
+      },
+      "away_team": {
+        "id": 2142,
+        "name": "Bryne"
+      }
+    },
+    {
+      "fixture_id": 1384699,
+      "league_id": 345,
+      "league_name": "Czech Liga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 3715,
+        "name": "Dukla Praha"
+      },
+      "away_team": {
+        "id": 3723,
+        "name": "Hradec Králové"
+      }
+    },
+    {
+      "fixture_id": 1384701,
+      "league_id": 345,
+      "league_name": "Czech Liga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 3716,
+        "name": "Karviná"
+      },
+      "away_team": {
+        "id": 3720,
+        "name": "Teplice"
+      }
+    },
+    {
+      "fixture_id": 1384705,
+      "league_id": 345,
+      "league_name": "Czech Liga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 3719,
+        "name": "Slovácko"
+      },
+      "away_team": {
+        "id": 1122,
+        "name": "FK Jablonec"
+      }
+    },
+    {
+      "fixture_id": 1384700,
+      "league_id": 345,
+      "league_name": "Czech Liga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 3724,
+        "name": "Pardubice"
+      },
+      "away_team": {
+        "id": 3714,
+        "name": "Bohemians 1905"
+      }
+    },
+    {
+      "fixture_id": 1384703,
+      "league_id": 345,
+      "league_name": "Czech Liga",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 640,
+        "name": "Mlada Boleslav"
+      },
+      "away_team": {
+        "id": 560,
+        "name": "Slavia Praha"
+      }
+    },
+    {
+      "fixture_id": 1385814,
+      "league_id": 283,
+      "league_name": "Liga I (Romania)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:45:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 6916,
+        "name": "Unirea Slobozia"
+      },
+      "away_team": {
+        "id": 2599,
+        "name": "Universitatea Cluj"
+      }
+    },
+    {
+      "fixture_id": 1385816,
+      "league_id": 283,
+      "league_name": "Liga I (Romania)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T20:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 635,
+        "name": "Dinamo Bucuresti"
+      },
+      "away_team": {
+        "id": 2579,
+        "name": "AFC Hermannstadt"
+      }
+    },
+    {
+      "fixture_id": 1383943,
+      "league_id": 210,
+      "league_name": "Prva HNL (Croatia)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T18:45:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 5730,
+        "name": "Vukovar"
+      },
+      "away_team": {
+        "id": 1018,
+        "name": "NK Slaven Belupo"
+      }
+    },
+    {
+      "fixture_id": 1383942,
+      "league_id": 210,
+      "league_name": "Prva HNL (Croatia)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T21:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 1483,
+        "name": "NK Varazdin"
+      },
+      "away_team": {
+        "id": 620,
+        "name": "Dinamo Zagreb"
+      }
+    },
+    {
+      "fixture_id": 1391441,
+      "league_id": 333,
+      "league_name": "Premier League (Ukraine)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T12:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 6489,
+        "name": "Kryvbas KR"
+      },
+      "away_team": {
+        "id": 3630,
+        "name": "Obolon'-Brovar"
+      }
+    },
+    {
+      "fixture_id": 1391445,
+      "league_id": 333,
+      "league_name": "Premier League (Ukraine)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T14:30:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 3627,
+        "name": "Kolos Kovalivka"
+      },
+      "away_team": {
+        "id": 14434,
+        "name": "Epitsentr Dunayivtsi"
+      }
+    },
+    {
+      "fixture_id": 1391446,
+      "league_id": 333,
+      "league_name": "Premier League (Ukraine)",
+      "season": "2025",
+      "date": "2025-08-30",
+      "kickoff": "2025-08-30T17:00:00+02:00",
+      "status": "NS",
+      "home_team": {
+        "id": 3628,
+        "name": "Metalist 1925 Kharkiv"
+      },
+      "away_team": {
+        "id": 3632,
+        "name": "Ruh Lviv"
+      }
+    }
+  ]
+}
