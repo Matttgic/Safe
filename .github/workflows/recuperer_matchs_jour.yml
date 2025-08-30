@@ -2,7 +2,7 @@ name: recuperer_matchs_jour
 
 on:
   schedule:
-    # Tous les jours vers 07:05 Europe/Paris
+    # Tous les jours vers 07:05 Europe/Paris (≈ 05:05 UTC en hiver / 06:05 en été)
     - cron: "05 5 * * *"
   workflow_dispatch:
     inputs:
