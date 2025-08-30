@@ -14,6 +14,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30  # Timeout global du job augmenté
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,11 +50,13 @@ jobs:
           "
 
       - name: Récupérer Team IDs
+        timeout-minutes: 15  # Timeout plus généreux
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           RAPIDAPI_HOST: api-football-v1.p.rapidapi.com
         run: |
           echo "🚀 Récupération des Team IDs..."
+          echo "⏱️ Timeout configuré: 15 minutes"
           python scripts/recuperer_team_ids.py \
             --saison "${{ github.event.inputs.season || '2025' }}" \
             --entree ligues.yaml \
@@ -64,30 +67,25 @@ jobs:
           if [ -f donnees/team_ids.json ]; then
             echo "✅ Fichier team_ids.json généré"
             echo "📊 Taille: $(wc -c < donnees/team_ids.json) bytes"
+            echo "📏 Lignes: $(wc -l < donnees/team_ids.json)"
             
-            # Statistiques avec Python
-            python3 -c "
-            import json
-            with open('donnees/team_ids.json', 'r') as f:
-                data = json.load(f)
+            # Compter les équipes avec jq si disponible, sinon grep simple
+            if command -v jq &> /dev/null; then
+              total_teams=$(jq '[.leagues[].teams_count] | add // 0' donnees/team_ids.json)
+              echo "⚽ Total équipes (jq): $total_teams"
+            else
+              team_count=$(grep -o '"team_id"' donnees/team_ids.json | wc -l)
+              echo "⚽ Total team_id trouvés: $team_count"
+            fi
             
-            print(f'📅 Saison: {data.get(\"season\", \"N/A\")}')
-            print(f'🏆 Ligues: {data.get(\"total_leagues\", 0)}')
+            echo ""
+            echo "📋 Début du fichier JSON:"
+            head -15 donnees/team_ids.json
             
-            total = 0
-            for league in data.get('leagues', []):
-                count = league.get('teams_count', 0)
-                total += count
-                if count > 0:
-                    print(f'  ✅ {league.get(\"league_name\", \"?\")}: {count} équipes')
-                else:
-                    print(f'  ❌ {league.get(\"league_name\", \"?\")}: {count} équipes')
+            echo ""
+            echo "📋 Fin du fichier JSON:"
+            tail -10 donnees/team_ids.json
             
-            print(f'⚽ TOTAL: {total} équipes')
-            "
-            
-            echo "📋 Aperçu JSON:"
-            head -20 donnees/team_ids.json
           else
             echo "❌ Fichier team_ids.json manquant"
             exit 1
