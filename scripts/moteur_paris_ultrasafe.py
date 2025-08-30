@@ -218,15 +218,15 @@ class MoteurUltraSafe:
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
-            writer.writerow(['Type', 'Match', 'Pari', 'Fiabilité', 'League_ID', 'Flags'])
+            writer.writerow(['Type', 'Match', 'Pari', 'Decision', 'Fiabilité', 'League_ID', 'Flags'])
             for analysis in all_paris:
                 if analysis.decision_over15 != "Éviter":
                     type_over = analysis.decision_over15.replace("+1.5", "Over15")
-                    writer.writerow([type_over, f"{analysis.equipe_a} vs {analysis.equipe_b}", '+1.5 Buts', f"{analysis.fiabilite_over15:.3f}", analysis.league_id, '|'.join(analysis.flags)])
+                    writer.writerow([type_over, f"{analysis.equipe_a} vs {analysis.equipe_b}", '+1.5 Buts', analysis.decision_over15, f"{analysis.fiabilite_over15:.3f}", analysis.league_id, '|'.join(analysis.flags)])
                 if analysis.decision_result != "Éviter":
                     type_result = analysis.decision_result.replace(" ou Nul", "").replace("A", "Result").replace("B", "Result")
                     pari = f"{analysis.equipe_a} ou Nul" if analysis.rsi_a > 0 else f"{analysis.equipe_b} ou Nul"
-                    writer.writerow([type_result, f"{analysis.equipe_a} vs {analysis.equipe_b}", pari, f"{analysis.fiabilite_result:.3f}", analysis.league_id, '|'.join(analysis.flags)])
+                    writer.writerow([type_result, f"{analysis.equipe_a} vs {analysis.equipe_b}", pari, analysis.decision_result, f"{analysis.fiabilite_result:.3f}", analysis.league_id, '|'.join(analysis.flags)])
         
         self._ajouter_historique(analyses, historique_file)
         print(f"✅ {len(all_paris)} paris écrits dans {output_file}.")
@@ -305,4 +305,4 @@ def main():
     print("\n🎉 Processus terminé avec succès !")
 
 if __name__ == "__main__":
-    main() 
+    main()
