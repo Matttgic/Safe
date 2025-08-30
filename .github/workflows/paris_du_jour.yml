@@ -87,54 +87,54 @@ jobs:
               # Vérifier que le fichier contient bien des matchs
               # Support both 'matchs' and 'fixtures' field names
               match_count=$(python3 -c "
-              import json
-              try:
-                  with open('donnees/matchs_du_jour.json', 'r') as f:
-                      data = json.load(f)
-                  # Check for both possible field names
-                  matches = data.get('matchs', data.get('fixtures', []))
-                  print(len(matches))
-              except Exception as e:
-                  print(0)
-              ")
+import json
+try:
+    with open('donnees/matchs_du_jour.json', 'r') as f:
+        data = json.load(f)
+    # Check for both possible field names
+    matches = data.get('matchs', data.get('fixtures', []))
+    print(len(matches))
+except Exception as e:
+    print(0)
+")
               
               if [ "$match_count" -gt 0 ]; then
                 echo "✅ Fichier existant valide trouvé avec $match_count matchs."
                 
                 # Convert fixtures to matchs format if needed
                 python3 -c "
-                import json
-                with open('donnees/matchs_du_jour.json', 'r') as f:
-                    data = json.load(f)
-                
-                # If using fixtures format, convert to expected matchs format
-                if 'fixtures' in data and 'matchs' not in data:
-                    converted_matches = []
-                    for fixture in data['fixtures']:
-                        converted_match = {
-                            'team_a_id': fixture['home_team']['id'],
-                            'team_b_id': fixture['away_team']['id'],
-                            'commentaire': f\"{fixture['home_team']['name']} vs {fixture['away_team']['name']} ({fixture['league_name']})\"
-                        }
-                        converted_matches.append(converted_match)
-                    
-                    # Create new format
-                    new_data = {
-                        'source': 'existing-converted',
-                        'matchs': converted_matches,
-                        'original_count': len(data['fixtures']),
-                        'converted_at': data.get('generated_at', 'unknown')
-                    }
-                    
-                    # Backup original and write new format
-                    with open('donnees/matchs_du_jour_original.json', 'w') as f:
-                        json.dump(data, f, indent=2)
-                    
-                    with open('donnees/matchs_du_jour.json', 'w') as f:
-                        json.dump(new_data, f, indent=2)
-                    
-                    print(f'✅ Converted {len(converted_matches)} fixtures to matchs format')
-                "
+import json
+with open('donnees/matchs_du_jour.json', 'r') as f:
+    data = json.load(f)
+
+# If using fixtures format, convert to expected matchs format
+if 'fixtures' in data and 'matchs' not in data:
+    converted_matches = []
+    for fixture in data['fixtures']:
+        converted_match = {
+            'team_a_id': fixture['home_team']['id'],
+            'team_b_id': fixture['away_team']['id'],
+            'commentaire': f\"{fixture['home_team']['name']} vs {fixture['away_team']['name']} ({fixture['league_name']})\"
+        }
+        converted_matches.append(converted_match)
+    
+    # Create new format
+    new_data = {
+        'source': 'existing-converted',
+        'matchs': converted_matches,
+        'original_count': len(data['fixtures']),
+        'converted_at': data.get('generated_at', 'unknown')
+    }
+    
+    # Backup original and write new format
+    with open('donnees/matchs_du_jour_original.json', 'w') as f:
+        json.dump(data, f, indent=2)
+    
+    with open('donnees/matchs_du_jour.json', 'w') as f:
+        json.dump(new_data, f, indent=2)
+    
+    print(f'✅ Converted {len(converted_matches)} fixtures to matchs format')
+"
               else
                 echo "⚠️ Fichier existant est vide. Basculement en mode 'test'."
                 final_source="test"
