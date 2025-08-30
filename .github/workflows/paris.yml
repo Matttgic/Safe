@@ -13,7 +13,6 @@ on:
         default: false
         type: boolean
   schedule:
-    # Exécution automatique chaque jour à 8h UTC
     - cron: '0 8 * * *'
 
 env:
@@ -44,7 +43,6 @@ jobs:
       - name: Trouver le fichier de stats
         id: find_stats
         run: |
-          # Chercher le fichier de stats le plus récent
           stats_file=""
           for year in 2025 2024 2023; do
             candidate="donnees/stats_equipes_${year}.jsonl"
@@ -62,66 +60,69 @@ jobs:
           
           echo "stats_file=$stats_file" >> "$GITHUB_OUTPUT"
 
+      - name: Créer script de conversion
+        run: |
+          cat > convert_matches.py << 'EOF'
+          import json
+          import sys
+          from datetime import datetime
+          
+          try:
+              with open('donnees/matchs_du_jour.json', 'r', encoding='utf-8') as f:
+                  data = json.load(f)
+              
+              if 'matchs' in data and isinstance(data['matchs'], list) and len(data['matchs']) > 0:
+                  print(f"Fichier déjà converti avec {len(data['matchs'])} matchs")
+                  sys.exit(0)
+              
+              fixtures = data.get('fixtures', [])
+              if not fixtures:
+                  print('Aucune fixture trouvée')
+                  sys.exit(1)
+              
+              matchs = []
+              for fixture in fixtures:
+                  try:
+                      home_name = fixture['home_team']['name']
+                      away_name = fixture['away_team']['name']
+                      league = fixture.get('league_name', 'Unknown')
+                      commentaire = f"{home_name} vs {away_name} ({league})"
+                      
+                      match = {
+                          'team_a_id': fixture['home_team']['id'],
+                          'team_b_id': fixture['away_team']['id'],
+                          'commentaire': commentaire
+                      }
+                      matchs.append(match)
+                  except Exception as e:
+                      print(f'Erreur fixture: {e}')
+                      continue
+              
+              if not matchs:
+                  print('Aucun match converti')
+                  sys.exit(1)
+              
+              new_data = {
+                  'source': 'converted',
+                  'matchs': matchs,
+                  'converted_at': datetime.now().isoformat(),
+                  'original_count': len(fixtures)
+              }
+              
+              with open('donnees/matchs_du_jour.json', 'w', encoding='utf-8') as f:
+                  json.dump(new_data, f, indent=2, ensure_ascii=False)
+              
+              print(f'Converti {len(matchs)} matchs depuis {len(fixtures)} fixtures')
+          
+          except Exception as e:
+              print(f'Erreur conversion: {e}')
+              sys.exit(1)
+          EOF
+
       - name: Convertir le fichier de matchs
         run: |
-          # Si le fichier existe et contient des fixtures, le convertir
           if [ -f "donnees/matchs_du_jour.json" ]; then
-            python3 -c "
-import json
-import sys
-from datetime import datetime
-
-try:
-    # Lire le fichier
-    with open('donnees/matchs_du_jour.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    
-    # Si déjà au bon format, ne rien faire
-    if 'matchs' in data and isinstance(data['matchs'], list) and len(data['matchs']) > 0:
-        print(f'✅ Fichier déjà converti avec {len(data[\"matchs\"])} matchs')
-        sys.exit(0)
-    
-    # Sinon convertir depuis fixtures
-    fixtures = data.get('fixtures', [])
-    if not fixtures:
-        print('❌ Aucune fixture trouvée')
-        sys.exit(1)
-    
-    # Conversion simple
-    matchs = []
-    for fixture in fixtures:
-        try:
-            match = {
-                'team_a_id': fixture['home_team']['id'],
-                'team_b_id': fixture['away_team']['id'],
-                'commentaire': fixture['home_team']['name'] + ' vs ' + fixture['away_team']['name'] + ' (' + fixture.get('league_name', 'Unknown') + ')'
-            }
-            matchs.append(match)
-        except Exception as e:
-            print(f'Erreur fixture: {e}')
-            continue
-    
-    if not matchs:
-        print('❌ Aucun match converti')
-        sys.exit(1)
-    
-    # Sauvegarder au nouveau format
-    new_data = {
-        'source': 'converted',
-        'matchs': matchs,
-        'converted_at': datetime.now().isoformat(),
-        'original_count': len(fixtures)
-    }
-    
-    with open('donnees/matchs_du_jour.json', 'w', encoding='utf-8') as f:
-        json.dump(new_data, f, indent=2, ensure_ascii=False)
-    
-    print(f'✅ Converti {len(matchs)} matchs depuis {len(fixtures)} fixtures')
-
-except Exception as e:
-    print(f'❌ Erreur conversion: {e}')
-    sys.exit(1)
-"
+            python3 convert_matches.py
           else
             echo "❌ Fichier donnees/matchs_du_jour.json introuvable"
             exit 1
@@ -135,18 +136,15 @@ except Exception as e:
 
       - name: Exécuter le moteur de paris
         run: |
-          # Arguments de base
           args="--stats-file ${{ steps.find_stats.outputs.stats_file }}"
           args="$args --matchs-file donnees/matchs_du_jour.json"
           args="$args --output donnees/paris_du_jour.csv"
           args="$args --historique donnees/historique.csv"
 
-          # Seuils custom
           if [ -f "donnees/seuils_custom.json" ]; then
             args="$args --seuils donnees/seuils_custom.json"
           fi
 
-          # Mode debug
           if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
             args="$args --debug"
           fi
