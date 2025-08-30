@@ -1,0 +1,71 @@
+name: recuperer_resultats_veille
+
+on:
+  schedule:
+    # 4h du matin Europe/Paris (≈ 02:00 UTC en hiver / 03:00 en été)
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Saison (ex: 2025)"
+        required: true
+        default: "2025"
+      date:
+        description: "Date au format YYYY-MM-DD (laisser vide = hier Europe/Paris)"
+        required: false
+        default: ""
+
+jobs:
+  fetch_results:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Compute date (hier Europe/Paris) if empty
+        id: dparis
+        run: |
+          if [ -z "${{ github.event.inputs.date }}" ]; then
+            echo "yesterday=$(TZ=Europe/Paris date -d 'yesterday' +%F)" >> $GITHUB_OUTPUT
+          else
+            echo "yesterday=${{ github.event.inputs.date }}" >> $GITHUB_OUTPUT
+          fi
+          if [ -z "${{ github.event.inputs.season }}" ]; then
+            echo "season=2025" >> $GITHUB_OUTPUT
+          else
+            echo "season=${{ github.event.inputs.season }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pyyaml
+
+      - name: Récupérer résultats de la veille
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          RAPIDAPI_HOST: api-football-v1.p.rapidapi.com
+        run: |
+          python scripts/recuperer_resultats_veille.py \
+            --ligues ligues.yaml \
+            --season "${{ steps.dparis.outputs.season }}" \
+            --date "${{ steps.dparis.outputs.yesterday }}" \
+            --historique "donnees/historique.csv"
+
+      - name: Commit & Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add donnees/historique.csv
+          git commit -m "feat(results): résultats du ${{ steps.dparis.outputs.yesterday }}" || echo "rien à committer"
+          git push 
