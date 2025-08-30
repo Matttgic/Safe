@@ -1,21 +1,23 @@
-name: Générer stats équipes (2025, quotidien)
+name: generer_stats_2025
 
 on:
   schedule:
-    - cron: "10 5 * * *"   # 05:10 UTC
+    - cron: "10 5 * * *"   # 05:10 UTC (≈ 07:10 Paris hiver / 06:10 été)
   workflow_dispatch: {}
 
 jobs:
-  gen-2025:
+  gen_2025:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write  # nécessaire pour commit/push
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           persist-credentials: true
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -24,7 +26,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Générer fichier 2025 (sans merge)
+      - name: Générer stats 2025 (indispensables)
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           RAPIDAPI_HOST: api-football-v1.p.rapidapi.com
@@ -39,5 +41,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add donnees/stats_equipes_2025.jsonl
-          git commit -m "chore(data): génération quotidienne stats équipes (2025)" || echo "rien à committer"
+          git commit -m "chore(data): génération quotidienne stats équipes 2025" || echo "rien à committer"
           git push
