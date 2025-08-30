@@ -11,7 +11,7 @@ import json
 import csv
 import argparse
 from datetime import datetime, timezone
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 from collections import defaultdict
 
@@ -25,34 +25,31 @@ class TeamStats:
     league_id: int
     played_total: int
     wins_total: int
-    gf_avg: float  # Buts marqués en moyenne
-    ga_avg: float  # Buts encaissés en moyenne
+    gf_avg: float
+    ga_avg: float
     clean_sheets_total: Optional[int] = None
     failed_to_score_total: Optional[int] = None
     over15_rate: Optional[float] = None
     
-    # Indicateurs dérivés calculés après l'initialisation
     win_rate: float = field(init=False)
     goal_diff_avg: float = field(init=False)
     reliability_attack: float = field(init=False)
     reliability_defense: float = field(init=False)
     
     def __post_init__(self):
-        """Calcule les métriques dérivées après la création de l'objet."""
+        """Calcule les métriques dérivées."""
         self.win_rate = self.wins_total / self.played_total if self.played_total > 0 else 0
         self.goal_diff_avg = self.gf_avg - self.ga_avg
         
-        # Fiabilité de l'attaque (capacité à ne pas rester muet)
         if self.failed_to_score_total is not None and self.played_total > 0:
             self.reliability_attack = 1 - (self.failed_to_score_total / self.played_total)
         else:
-            self.reliability_attack = min(self.gf_avg / 1.5, 0.95) # Estimation
+            self.reliability_attack = min(self.gf_avg / 1.5, 0.95)
         
-        # Fiabilité de la défense (capacité à réaliser des clean sheets)
         if self.clean_sheets_total is not None and self.played_total > 0:
             self.reliability_defense = self.clean_sheets_total / self.played_total
         else:
-            self.reliability_defense = max(0, 1 - self.ga_avg / 1.5) # Estimation
+            self.reliability_defense = max(0, 1 - self.ga_avg / 1.5)
 
 @dataclass 
 class MatchAnalysis:
@@ -62,9 +59,9 @@ class MatchAnalysis:
     equipe_a_id: int
     equipe_b_id: int
     league_id: int
-    o15i: float  # Over 1.5 Index
-    rsi_a: float # Relative Strength Index pour l'équipe A
-    rsi_b: float # Relative Strength Index pour l'équipe B
+    o15i: float
+    rsi_a: float
+    rsi_b: float
     decision_over15: str
     decision_result: str
     fiabilite_over15: float
@@ -79,128 +76,51 @@ class MoteurUltraSafe:
     def __init__(self, debug_mode=False):
         self.debug = debug_mode
         self.SEUILS = {
-            'ultrasafe_over15': 0.78,
-            'safe_over15': 0.68,
-            'ultrasafe_result': 0.60,
-            'safe_result': 0.45,
-            'played_min': 6,
-            'played_combine_min': 10
+            'ultrasafe_over15': 0.78, 'safe_over15': 0.68,
+            'ultrasafe_result': 0.60, 'safe_result': 0.45,
+            'played_min': 6, 'played_combine_min': 10
         }
         self.stats_cache: Dict[int, TeamStats] = {}
 
-    def charger_stats_equipes(self, fichier_stats: str, fichier_fallback: str = None):
-        """Charge et traite le fichier stats_equipes.jsonl en pondérant les saisons."""
-        print(f"📊 Chargement des statistiques depuis {fichier_stats}...")
-        if fichier_fallback:
-            print(f"🔄 Fichier fallback disponible : {fichier_fallback}")
-            
-        stats_par_saison = defaultdict(lambda: defaultdict(dict))
-        total_lignes = 0
-        lignes_valides = 0
-
-        # Charger le fichier principal
-        if os.path.exists(fichier_stats):
-            with open(fichier_stats, 'r', encoding='utf-8') as f:
-                for line in f:
-                    total_lignes += 1
-                    if not line.strip(): continue
-                    try:
-                        record = json.loads(line)
-                        if record.get('raw_data_available', False):
-                            team_id = record['team_id']
-                            season = record['season']
-                            stats_par_saison[season][team_id] = record
-                            lignes_valides += 1
-                    except json.JSONDecodeError:
-                        if self.debug: print(f"[AVERTISSEMENT] Ligne JSON invalide ignorée.")
-
-        # Charger le fichier fallback si nécessaire et disponible
-        if fichier_fallback and os.path.exists(fichier_fallback):
-            with open(fichier_fallback, 'r', encoding='utf-8') as f:
-                for line in f:
-                    total_lignes += 1
-                    if not line.strip(): continue
-                    try:
-                        record = json.loads(line)
-                        if record.get('raw_data_available', False):
-                            team_id = record['team_id']
-                            season = record['season']
-                            # Ne pas écraser si déjà présent dans le fichier principal
-                            if team_id not in stats_par_saison.get(season, {}):
-                                stats_par_saison[season][team_id] = record
-                                lignes_valides += 1
-                    except json.JSONDecodeError:
-                        if self.debug: print(f"[AVERTISSEMENT] Ligne JSON invalide ignorée dans fallback.")
+    def charger_stats_equipes(self, primary_stats_file: str, fallback_stats_file: Optional[str] = None):
+        """Charge les statistiques depuis les fichiers jsonl."""
+        print(f"📊 Chargement des statistiques depuis {primary_stats_file}...")
         
-        if self.debug:
-            print(f"📈 Lignes totales: {total_lignes}, lignes valides: {lignes_valides}")
-            print(f"📈 Données 2024: {len(stats_par_saison.get('2024', {}))}")
-            print(f"📈 Données 2025: {len(stats_par_saison.get('2025', {}))}")
+        stats2025 = self._read_stats_file(primary_stats_file)
+        stats2024 = self._read_stats_file(fallback_stats_file) if fallback_stats_file else {}
         
-        # Logique adaptative pour début de saison
-        total_equipes_2025 = len(stats_par_saison.get('2025', {}))
+        print(f"📈 Données 2025: {len(stats2025)} équipes valides.")
+        print(f"📈 Données 2024: {len(stats2024)} équipes valides.")
         
-        if total_equipes_2025 < 50:  # Début de saison détecté
-            print(f"🆕 Début de saison détecté ({total_equipes_2025} équipes en 2025)")
-            print("🔄 Application de la stratégie fallback : priorité aux données 2024")
-            self._creer_stats_ponderees_fallback(stats_par_saison.get('2024', {}), stats_par_saison.get('2025', {}))
+        # Logique adaptative : si peu de données en 2025, on privilégie 2024.
+        if len(stats2025) < 50:
+            print("🆕 Début de saison détecté. Application de la stratégie fallback (priorité 2024).")
+            self._creer_stats_ponderees(stats2024, stats2025, fallback_mode=True)
         else:
-            print("📊 Saison en cours : utilisation de la pondération standard")
-            self._creer_stats_ponderees(stats_par_saison.get('2024', {}), stats_par_saison.get('2025', {}))
-
-    def _creer_stats_ponderees_fallback(self, stats2024: Dict, stats2025: Dict):
-        """Stratégie fallback pour début de saison : privilégier 2024 avec ajustements légers de 2025."""
-        all_team_ids = set(stats2024.keys()) | set(stats2025.keys())
+            print("📊 Saison en cours. Application de la pondération standard.")
+            self._creer_stats_ponderees(stats2024, stats2025, fallback_mode=False)
+            
+    def _read_stats_file(self, file_path: Optional[str]) -> Dict[int, Dict]:
+        """Lit un fichier .jsonl et retourne un dictionnaire de stats par team_id."""
+        if not file_path or not os.path.exists(file_path):
+            return {}
         
-        for team_id in all_team_ids:
-            s24_record = stats2024.get(team_id, {})
-            s25_record = stats2025.get(team_id, {})
-            
-            # Prioriser les métadonnées de 2025 si disponibles, sinon 2024
-            meta = s25_record or s24_record
-            if not meta: continue
-                
-            s24 = s24_record.get('stats', {})
-            s25 = s25_record.get('stats', {})
-            
-            # Stratégie adaptative pour le poids
-            played2025 = s25.get('played_total', 0)
-            
-            if played2025 >= 5:  # Équipe avec quelques matchs en 2025
-                weight2025, weight2024 = 0.4, 0.6  # Plus de poids sur 2024
-            elif played2025 >= 1:  # Équipe avec très peu de matchs en 2025
-                weight2025, weight2024 = 0.2, 0.8  # Beaucoup plus de poids sur 2024
-            else:  # Pas de données 2025
-                weight2025, weight2024 = 0.0, 1.0  # Que les données 2024
-            
-            if self.debug:
-                print(f"Équipe {team_id}: {played2025} matchs 2025 → poids 2024={weight2024:.1f}, 2025={weight2025:.1f}")
-            
-            stats_final = {}
-            for field in ['played_total', 'wins_total', 'gf_avg', 'ga_avg', 'clean_sheets_total', 'failed_to_score_total', 'over15_rate']:
-                val2025 = s25.get(field)
-                val2024 = s24.get(field)
-                
-                if val2025 is not None and val2024 is not None:
-                    stats_final[field] = weight2025 * val2025 + weight2024 * val2024
-                elif val2024 is not None:  # Prioriser 2024 si 2025 manque
-                    stats_final[field] = val2024
-                elif val2025 is not None:  # Utiliser 2025 en dernier recours
-                    stats_final[field] = val2025
-            
-            # Créer l'objet stats seulement si on a des données suffisantes
-            if stats_final.get('played_total', 0) > 0:
-                self.stats_cache[team_id] = TeamStats(
-                    team_id=team_id,
-                    team_name=meta['team_name'],
-                    league_id=meta['league_id'],
-                    **{k: v for k, v in stats_final.items() if v is not None}
-                )
-        
-        print(f"✅ Cache de statistiques (fallback) créé avec {len(self.stats_cache)} équipes.")
+        stats_dict = {}
+        with open(file_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                if not line.strip(): continue
+                try:
+                    record = json.loads(line)
+                    # **CORRECTION**: On ne vérifie plus 'raw_data_available'.
+                    # On vérifie juste si les stats essentielles sont là.
+                    if 'stats' in record and record['stats'].get('played_total') is not None:
+                        stats_dict[record['team_id']] = record
+                except json.JSONDecodeError:
+                    if self.debug: print(f"[AVERTISSEMENT] Ligne JSON invalide dans {os.path.basename(file_path)}.")
+        return stats_dict
 
-    def _creer_stats_ponderees(self, stats2024: Dict, stats2025: Dict):
-        """Crée les stats finales en pondérant 2024 et 2025 (logique originale)."""
+    def _creer_stats_ponderees(self, stats2024: Dict, stats2025: Dict, fallback_mode: bool):
+        """Crée le cache final en pondérant les statistiques."""
         all_team_ids = set(stats2024.keys()) | set(stats2025.keys())
         
         for team_id in all_team_ids:
@@ -213,11 +133,17 @@ class MoteurUltraSafe:
             s24 = s24_record.get('stats', {})
             s25 = s25_record.get('stats', {})
             
+            # Définir les poids en fonction du mode
             played2025 = s25.get('played_total', 0)
-            weight2025, weight2024 = (0.7, 0.3) if played2025 >= 8 else (0.3, 0.7)
+            if fallback_mode:
+                weight2025, weight2024 = (0.2, 0.8) if played2025 > 0 else (0.0, 1.0)
+            else: # Mode standard
+                weight2025, weight2024 = (0.7, 0.3) if played2025 >= 8 else (0.3, 0.7)
             
             stats_final = {}
-            for field in ['played_total', 'wins_total', 'gf_avg', 'ga_avg', 'clean_sheets_total', 'failed_to_score_total', 'over15_rate']:
+            fields_to_process = ['played_total', 'wins_total', 'gf_avg', 'ga_avg', 'clean_sheets_total', 'failed_to_score_total', 'over15_rate']
+            
+            for field in fields_to_process:
                 val2025 = s25.get(field)
                 val2024 = s24.get(field)
                 
@@ -225,83 +151,71 @@ class MoteurUltraSafe:
                     stats_final[field] = weight2025 * val2025 + weight2024 * val2024
                 else:
                     stats_final[field] = val2025 if val2025 is not None else val2024
-            
-            if stats_final.get('played_total', 0) > 0:
+
+            if stats_final.get('played_total') is not None and stats_final.get('played_total', 0) > 0:
+                # Calcul de l'over15_rate si manquant
+                if stats_final.get('over15_rate') is None:
+                    open_avg = stats_final.get('gf_avg', 0) + stats_final.get('ga_avg', 0)
+                    stats_final['over15_rate'] = max(0.3, min(0.95, open_avg / 3.0))
+
                 self.stats_cache[team_id] = TeamStats(
-                    team_id=team_id,
-                    team_name=meta['team_name'],
-                    league_id=meta['league_id'],
+                    team_id=team_id, team_name=meta['team_name'], league_id=meta['league_id'],
                     **{k: v for k, v in stats_final.items() if v is not None}
                 )
-        print(f"✅ Cache de statistiques créé avec {len(self.stats_cache)} équipes.")
+
+        print(f"✅ Cache de statistiques final créé avec {len(self.stats_cache)} équipes.")
 
     def analyser_match(self, team_a_id: int, team_b_id: int) -> Optional[MatchAnalysis]:
-        """Analyse complète d'un match selon l'arbre de décision."""
+        """Analyse complète d'un match."""
         team_a = self.stats_cache.get(team_a_id)
         team_b = self.stats_cache.get(team_b_id)
 
         if not team_a or not team_b:
-            if self.debug: print(f"[AVERTISSEMENT] Statistiques manquantes pour le match {team_a_id} vs {team_b_id}.")
+            if self.debug: print(f"[AVERTISSEMENT] Stats manquantes pour {team_a_id} vs {team_b_id}.")
             return None
         
         if team_a.league_id != team_b.league_id:
-            if self.debug: print(f"[AVERTISSEMENT] Ligues différentes pour {team_a.team_name} vs {team_b.team_name}.")
+            if self.debug: print(f"[AVERTISSEMENT] Ligues différentes: {team_a.team_name} vs {team_b.team_name}.")
             return None
 
-        # 1. Calcul des indices
+        # Calcul des indices
         o15i = 1 - (1 - team_a.over15_rate) * (1 - team_b.over15_rate)
         delta_win = team_a.win_rate - team_b.win_rate
-        delta_gdiff = (team_a.goal_diff_avg - team_b.goal_diff_avg) / 2.0 # Normalisé
-        delta_def = (team_b.ga_avg - team_a.ga_avg) / 3.0 # Normalisé
+        delta_gdiff = (team_a.goal_diff_avg - team_b.goal_diff_avg) / 2.0
+        delta_def = (team_b.ga_avg - team_a.ga_avg) / 3.0
         rsi_a = (0.50 * delta_win + 0.30 * delta_gdiff + 0.20 * delta_def)
-        rsi_b = -rsi_a
         
-        # 2. Application des filtres
         flags = []
-        if team_a.played_total < self.SEUILS['played_min']: flags.append(f"echantillon_faible_A({team_a.played_total})")
-        if team_b.played_total < self.SEUILS['played_min']: flags.append(f"echantillon_faible_B({team_b.played_total})")
-        if (team_a.played_total + team_b.played_total) < self.SEUILS['played_combine_min']: flags.append("echantillon_combine_faible")
+        if team_a.played_total < self.SEUILS['played_min']: flags.append(f"low_sample_A({team_a.played_total})")
+        if team_b.played_total < self.SEUILS['played_min']: flags.append(f"low_sample_B({team_b.played_total})")
 
-        # 3. Prise de décision
-        seuil_ultra_o15, seuil_safe_o15 = self.SEUILS['ultrasafe_over15'], self.SEUILS['safe_over15']
-        seuil_ultra_res, seuil_safe_res = self.SEUILS['ultrasafe_result'], self.SEUILS['safe_result']
-
-        if flags: # Pénalité si flags
-            seuil_ultra_o15, seuil_safe_o15 = seuil_ultra_o15 + 0.05, seuil_safe_o15 + 0.03
-            seuil_ultra_res, seuil_safe_res = seuil_ultra_res + 0.05, seuil_safe_res + 0.03
-
-        decision_over15 = "UltraSafe +1.5" if o15i >= seuil_ultra_o15 else "Safe +1.5" if o15i >= seuil_safe_o15 else "Éviter +1.5"
+        # Prise de décision
+        s = self.SEUILS
+        decision_over15 = "UltraSafe +1.5" if o15i >= s['ultrasafe_over15'] else "Safe +1.5" if o15i >= s['safe_over15'] else "Éviter"
         
-        if rsi_a >= seuil_ultra_res and "echantillon_combine_faible" not in flags: decision_result = "UltraSafe A ou Nul"
-        elif rsi_a >= seuil_safe_res: decision_result = "Safe A ou Nul"
-        elif rsi_b >= seuil_ultra_res and "echantillon_combine_faible" not in flags: decision_result = "UltraSafe B ou Nul"
-        elif rsi_b >= seuil_safe_res: decision_result = "Safe B ou Nul"
-        else: decision_result = "Éviter Résultat"
+        if rsi_a >= s['ultrasafe_result']: decision_result = "UltraSafe A ou Nul"
+        elif rsi_a >= s['safe_result']: decision_result = "Safe A ou Nul"
+        elif rsi_a <= -s['ultrasafe_result']: decision_result = "UltraSafe B ou Nul"
+        elif rsi_a <= -s['safe_result']: decision_result = "Safe B ou Nul"
+        else: decision_result = "Éviter"
 
         return MatchAnalysis(
             equipe_a=team_a.team_name, equipe_b=team_b.team_name,
             equipe_a_id=team_a_id, equipe_b_id=team_b_id,
-            league_id=team_a.league_id, o15i=o15i, rsi_a=rsi_a, rsi_b=rsi_b,
+            league_id=team_a.league_id, o15i=o15i, rsi_a=rsi_a, rsi_b=-rsi_a,
             decision_over15=decision_over15, decision_result=decision_result,
-            fiabilite_over15=o15i, fiabilite_result=max(abs(rsi_a), abs(rsi_b)),
+            fiabilite_over15=o15i, fiabilite_result=abs(rsi_a),
             flags=flags
         )
 
     def generer_paris(self, matchs: List[Tuple[int, int]], output_file: str, historique_file: str):
-        """Génère les fichiers CSV de paris et d'historique."""
+        """Génère les fichiers CSV."""
         print(f"\n🎰 Génération des paris pour {len(matchs)} matchs...")
-        analyses = [self.analyser_match(a, b) for a, b in matchs]
-        analyses = [a for a in analyses if a] # Filtrer les analyses None
+        analyses = [self.analyser_match(a, b) for a, b in matchs if self.analyser_match(a, b)]
         
-        if self.debug:
-            print(f"🔍 {len(analyses)} analyses réussies sur {len(matchs)} matchs")
-            for analysis in analyses:
-                print(f"  - {analysis.equipe_a} vs {analysis.equipe_b}: O15I={analysis.o15i:.3f}, RSI_A={analysis.rsi_a:.3f}")
-
         ultrasafe_paris = [a for a in analyses if "UltraSafe" in a.decision_over15 or "UltraSafe" in a.decision_result]
         ultrasafe_paris.sort(key=lambda x: x.fiabilite_result, reverse=True)
         
-        # Écriture de paris_du_jour.csv
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
@@ -313,7 +227,6 @@ class MoteurUltraSafe:
                     pari = f"{analysis.equipe_a} ou Nul" if analysis.rsi_a > 0 else f"{analysis.equipe_b} ou Nul"
                     writer.writerow(['UltraSafe_Result', f"{analysis.equipe_a} vs {analysis.equipe_b}", pari, f"{analysis.fiabilite_result:.3f}", analysis.league_id, '|'.join(analysis.flags)])
         
-        # Mise à jour de l'historique
         self._ajouter_historique(analyses, historique_file)
         print(f"✅ {len(ultrasafe_paris)} paris UltraSafe écrits dans {output_file}.")
 
@@ -341,13 +254,7 @@ def charger_matchs(fichier_matchs: str) -> List[Tuple[int, int]]:
     try:
         with open(fichier_matchs, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        
-        # Support pour les deux formats : ancien (matchs) et nouveau (fixtures)
-        if 'fixtures' in data:
-            matchs = [(m['home_team']['id'], m['away_team']['id']) for m in data['fixtures']]
-        else:
-            matchs = [(m['team_a_id'], m['team_b_id']) for m in data.get('matchs', []) if m.get('team_a_id') and m.get('team_b_id')]
-        
+        matchs = [(m['team_a_id'], m['team_b_id']) for m in data.get('matchs', []) if m.get('team_a_id') and m.get('team_b_id')]
         print(f"📅 {len(matchs)} matchs chargés depuis {fichier_matchs}")
         return matchs
     except Exception as e:
@@ -356,11 +263,11 @@ def charger_matchs(fichier_matchs: str) -> List[Tuple[int, int]]:
 
 def main():
     parser = argparse.ArgumentParser(description="Moteur de Paris UltraSafe")
-    parser.add_argument("--stats-file", required=True, help="Chemin vers le fichier stats_equipes.jsonl")
-    parser.add_argument("--fallback-stats", help="Chemin vers le fichier fallback stats_equipes.jsonl (optionnel)")
+    parser.add_argument("--stats-file", required=True, help="Chemin vers le fichier de stats principal (ex: 2025)")
+    parser.add_argument("--fallback-stats", help="Chemin vers le fichier de stats de secours (ex: 2024)")
     parser.add_argument("--matchs-file", required=True, help="Chemin vers le fichier JSON des matchs du jour")
     parser.add_argument("--output", default="donnees/paris_du_jour.csv", help="Fichier de sortie pour les paris")
-    parser.add_argument("--historique", default="donnees/historique.csv", help="Fichier d'historique des analyses")
+    parser.add_argument("--historique", default="donnees/historique.csv", help="Fichier d'historique")
     parser.add_argument("--seuils", help="Chemin vers un fichier JSON de seuils custom (optionnel)")
     parser.add_argument("--debug", action="store_true", help="Activer les logs détaillés")
     args = parser.parse_args()
@@ -381,27 +288,13 @@ def main():
     
     moteur.charger_stats_equipes(args.stats_file, args.fallback_stats)
     
-    # Diagnostic si le cache est vide
     if len(moteur.stats_cache) == 0:
-        print("⚠️ DIAGNOSTIC: Cache de statistiques vide !")
-        print("💡 Vérifiez que le fichier de stats contient des enregistrements avec 'raw_data_available': true")
-        
-        # Créer un fichier de diagnostic
-        try:
-            with open(args.stats_file, 'r', encoding='utf-8') as f:
-                first_lines = [f.readline().strip() for _ in range(3)]
-            print("📄 Premières lignes du fichier de stats:")
-            for i, line in enumerate(first_lines):
-                if line:
-                    print(f"  Ligne {i+1}: {line[:100]}...")
-        except Exception as e:
-            print(f"❌ Impossible de lire le fichier de stats: {e}")
+        print("⚠️ DIAGNOSTIC: Le cache de statistiques est vide ! Aucune équipe n'a pu être chargée.")
     
     matchs = charger_matchs(args.matchs_file)
 
     if not matchs:
-        print("ℹ️ Aucun match à analyser. Arrêt du processus.")
-        # Crée un fichier de paris vide pour éviter les erreurs dans le workflow
+        print("ℹ️ Aucun match à analyser. Le processus s'arrête.")
         os.makedirs(os.path.dirname(args.output), exist_ok=True)
         with open(args.output, 'w', newline='', encoding='utf-8') as f:
             f.write('Type,Match,Pari,Fiabilité,League_ID,Flags\n')
@@ -411,4 +304,5 @@ def main():
     print("\n🎉 Processus terminé avec succès !")
 
 if __name__ == "__main__":
-    main() 
+    main()
+`
