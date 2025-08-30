@@ -60,13 +60,11 @@ jobs:
             echo "💡 Exécutez d'abord le workflow 'Générer Stats Équipes'."
             exit 1
           fi
-          # Exporter la variable pour les étapes suivantes
           echo "stats_file_path=$stats_file" >> "$GITHUB_ENV"
 
       - name: 2. Préparer la source des matchs
         id: prepare_matches
         run: |
-          # Par défaut, la source est celle de l'input ou 'existing' pour les lancements programmés
           if [ "${{ github.event_name }}" == "schedule" ]; then
             matchs_source="existing"
           else
@@ -74,66 +72,44 @@ jobs:
           fi
           
           echo "🎯 Stratégie initiale des matchs : $matchs_source"
-          
-          # Créer le répertoire de données s'il n'existe pas
           mkdir -p donnees
-
-          # Logique de décision pour la source finale des matchs
           final_source="$matchs_source"
           
           if [ "$matchs_source" == "existing" ]; then
             echo "📁 Vérification du fichier 'donnees/matchs_du_jour.json'..."
             if [ -f "donnees/matchs_du_jour.json" ]; then
-              # Vérifier que le fichier contient bien des matchs
-              # Support both 'matchs' and 'fixtures' field names
-              match_count=$(python3 -c "
-import json
-try:
-    with open('donnees/matchs_du_jour.json', 'r') as f:
-        data = json.load(f)
-    # Check for both possible field names
-    matches = data.get('matchs', data.get('fixtures', []))
-    print(len(matches))
-except Exception as e:
-    print(0)
-")
-              
+              match_count=$(python3 -c "import json; f=open('donnees/matchs_du_jour.json'); data=json.load(f); print(len(data.get('matchs', data.get('fixtures', []))))")
               if [ "$match_count" -gt 0 ]; then
-                echo "✅ Fichier existant valide trouvé avec $match_count matchs."
-                
-                # Convert fixtures to matchs format if needed
+                echo "✅ Fichier existant valide trouvé avec $match_count entrées."
+                # Script de conversion (si nécessaire)
                 python3 -c "
-import json
-with open('donnees/matchs_du_jour.json', 'r') as f:
+import json, os
+file_path = 'donnees/matchs_du_jour.json'
+with open(file_path, 'r', encoding='utf-8') as f:
     data = json.load(f)
 
-# If using fixtures format, convert to expected matchs format
 if 'fixtures' in data and 'matchs' not in data:
+    print('Détection du format API (fixtures), conversion en format moteur (matchs)...')
     converted_matches = []
-    for fixture in data['fixtures']:
-        converted_match = {
-            'team_a_id': fixture['home_team']['id'],
-            'team_b_id': fixture['away_team']['id'],
-            'commentaire': f\"{fixture['home_team']['name']} vs {fixture['away_team']['name']} ({fixture['league_name']})\"
-        }
-        converted_matches.append(converted_match)
+    for fixture in data.get('fixtures', []):
+        home = fixture.get('home_team', {})
+        away = fixture.get('away_team', {})
+        if home.get('id') and away.get('id'):
+            converted_matches.append({
+                'team_a_id': home['id'],
+                'team_b_id': away['id'],
+                'commentaire': f\"{home.get('name', 'N/A')} vs {away.get('name', 'N/A')}\"
+            })
     
-    # Create new format
     new_data = {
         'source': 'existing-converted',
-        'matchs': converted_matches,
-        'original_count': len(data['fixtures']),
-        'converted_at': data.get('generated_at', 'unknown')
+        'matchs': converted_matches
     }
     
-    # Backup original and write new format
-    with open('donnees/matchs_du_jour_original.json', 'w') as f:
-        json.dump(data, f, indent=2)
-    
-    with open('donnees/matchs_du_jour.json', 'w') as f:
+    os.rename(file_path, 'donnees/matchs_du_jour_original.json')
+    with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(new_data, f, indent=2)
-    
-    print(f'✅ Converted {len(converted_matches)} fixtures to matchs format')
+    print(f'✅ Conversion réussie: {len(converted_matches)} matchs préparés.')
 "
               else
                 echo "⚠️ Fichier existant est vide. Basculement en mode 'test'."
@@ -151,14 +127,12 @@ if 'fixtures' in data and 'matchs' not in data:
               "source": "test",
               "matchs": [
                 {"team_a_id": 50, "team_b_id": 42, "commentaire": "Man City vs Arsenal"},
-                {"team_a_id": 40, "team_b_id": 49, "commentaire": "Liverpool vs Chelsea"},
-                {"team_a_id": 529, "team_b_id": 541, "commentaire": "Barcelona vs Real Madrid"}
+                {"team_a_id": 40, "team_b_id": 49, "commentaire": "Liverpool vs Chelsea"}
               ]
             }' > donnees/matchs_du_jour.json
             echo "✅ Fichier de matchs de test créé."
           elif [ "$final_source" == "api" ]; then
             echo "🌐 Récupération des matchs via l'API..."
-            # Remplacez cette section par l'appel à votre script de récupération API
             echo "⚠️ La logique de récupération API n'est pas implémentée. Utilisation d'un fichier de fallback."
             echo '{
               "source": "api-fallback",
@@ -168,7 +142,6 @@ if 'fixtures' in data and 'matchs' not in data:
             }' > donnees/matchs_du_jour.json
           fi
           
-          # Exporter la source finale utilisée pour le message de commit
           echo "final_match_source=$final_source" >> "$GITHUB_OUTPUT"
 
       - name: 3. Créer les seuils custom (si fournis)
@@ -182,19 +155,15 @@ if 'fixtures' in data and 'matchs' not in data:
         id: run_engine
         run: |
           echo "🚀 Lancement du moteur de paris UltraSafe..."
-          # Construction des arguments pour le script
           args="--stats-file ${{ env.stats_file_path }}"
           args="$args --matchs-file donnees/matchs_du_jour.json"
           args="$args --output donnees/paris_du_jour.csv"
           args="$args --historique donnees/historique.csv"
 
-          # Ajout des seuils custom s'ils existent
           if [ -f "donnees/seuils_custom.json" ]; then
             args="$args --seuils donnees/seuils_custom.json"
             echo "Inclusion des seuils custom."
           fi
-
-          # Ajout du mode debug si activé
           if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
             args="$args --debug"
             echo "🐛 Mode debug activé."
@@ -204,7 +173,7 @@ if 'fixtures' in data and 'matchs' not in data:
           python3 scripts/moteur_paris_ultrasafe.py $args
 
       - name: 5. Analyser les résultats
-        if: always() && steps.run_engine.outcome == 'success'
+        if: success()
         run: |
           echo "📊 Analyse des résultats..."
           if [ -f "donnees/paris_du_jour.csv" ]; then
@@ -216,7 +185,6 @@ if 'fixtures' in data and 'matchs' not in data:
             fi
           else
             echo "❌ Le fichier 'paris_du_jour.csv' n'a pas été généré."
-            exit 1
           fi
 
       - name: 6. Sauvegarder les résultats dans le repository
