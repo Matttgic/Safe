@@ -1,0 +1,71 @@
+name: recuperer_matchs_jour
+
+on:
+  schedule:
+    # Tous les jours vers 07:05 Europe/Paris
+    - cron: "05 5 * * *"
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Saison (ex: 2025)"
+        required: true
+        default: "2025"
+      date:
+        description: "Date au format YYYY-MM-DD (laisser vide = aujourd'hui Europe/Paris)"
+        required: false
+        default: ""
+
+jobs:
+  fetch_fixtures:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Compute date (Europe/Paris) if empty
+        id: dparis
+        run: |
+          if [ -z "${{ github.event.inputs.date }}" ]; then
+            echo "today=$(TZ=Europe/Paris date +%F)" >> $GITHUB_OUTPUT
+          else
+            echo "today=${{ github.event.inputs.date }}" >> $GITHUB_OUTPUT
+          fi
+          if [ -z "${{ github.event.inputs.season }}" ]; then
+            echo "season=2025" >> $GITHUB_OUTPUT
+          else
+            echo "season=${{ github.event.inputs.season }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pyyaml
+
+      - name: Récupérer matchs du jour (JSON unique)
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          RAPIDAPI_HOST: api-football-v1.p.rapidapi.com
+        run: |
+          python scripts/recuperer_matchs_jour.py \
+            --ligues ligues.yaml \
+            --season "${{ steps.dparis.outputs.season }}" \
+            --date "${{ steps.dparis.outputs.today }}" \
+            --out "donnees/matchs_du_jour.json"
+
+      - name: Commit & Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add donnees/matchs_du_jour.json
+          git commit -m "chore(data): matchs du jour (${{ steps.dparis.outputs.today }}, saison ${{ steps.dparis.outputs.season }})" || echo "rien à committer"
+          git push
