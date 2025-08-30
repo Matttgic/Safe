@@ -29,43 +29,31 @@ def api_get(path: str, params: Dict[str, Any], key: str, host: str, max_retry: i
 
 def load_leagues(yaml_path: str) -> List[Dict[str, Any]]:
     """
-    Supporte les formats :
-    - dict : { "Premier League": 39, "La Liga": [140, 850] }
-    - list : [ {league_id: 39, league_name: "Premier League"}, ... ]
+    Lit ton ligues.yaml EXACT tel que fourni (clé racine 'ligues' et items { nom, league_id })
+    et renvoie une liste [{league_id, league_name}].
     """
     with open(yaml_path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
 
-    leagues = []
-    if isinstance(data, dict):
-        for name, lids in data.items():
-            if not isinstance(lids, list):
-                lids = [lids]
-            for lid in lids:
-                try:
-                    leagues.append({"league_id": int(lid), "league_name": str(name)})
-                except Exception:
-                    continue
-    elif isinstance(data, list):
-        for entry in data:
-            if isinstance(entry, dict):
-                lid = entry.get("league_id") or entry.get("id")
-                name = entry.get("league_name") or entry.get("name") or f"Ligue {lid}"
-                if isinstance(lid, list):
-                    for x in lid:
-                        try:
-                            leagues.append({"league_id": int(x), "league_name": str(name)})
-                        except Exception:
-                            continue
-                else:
-                    try:
-                        leagues.append({"league_id": int(lid), "league_name": str(name)})
-                    except Exception:
-                        continue
-    return leagues
+    out: List[Dict[str, Any]] = []
+    items = data.get("ligues") if isinstance(data, dict) else None
+    if not items or not isinstance(items, list):
+        return out
+
+    for entry in items:
+        if not isinstance(entry, dict):
+            continue
+        lid = entry.get("league_id")
+        nom = entry.get("nom") or entry.get("league_name") or f"Ligue {lid}"
+        try:
+            lid = int(lid)
+        except Exception:
+            continue
+        out.append({"league_id": lid, "league_name": str(nom)})
+    return out
 
 def normalize_fixture(fx: Dict[str, Any], league_id: int, league_name: str, season: str, date_str: str) -> Dict[str, Any]:
-    """Simplifie une fixture (match) pour garder les infos essentielles"""
+    """Simplifie une fixture pour ne garder que l'essentiel."""
     fi = fx.get("fixture", {}) or {}
     te = fx.get("teams", {}) or {}
     return {
@@ -74,34 +62,37 @@ def normalize_fixture(fx: Dict[str, Any], league_id: int, league_name: str, seas
         "league_name": league_name,
         "season": season,
         "date": date_str,
-        "kickoff": fi.get("date"),
+        "kickoff": fi.get("date"),  # ISO datetime
         "status": (fi.get("status") or {}).get("short"),
         "home_team": {
             "id": (te.get("home") or {}).get("id"),
-            "name": (te.get("home") or {}).get("name")
+            "name": (te.get("home") or {}).get("name"),
         },
         "away_team": {
             "id": (te.get("away") or {}).get("id"),
-            "name": (te.get("away") or {}).get("name")
-        }
+            "name": (te.get("away") or {}).get("name"),
+        },
     }
 
 def main():
     ap = argparse.ArgumentParser(description="Récupère les fixtures du jour pour les ligues listées dans ligues.yaml")
-    ap.add_argument("--ligues", default="ligues.yaml")
+    ap.add_argument("--ligues", required=False, default="ligues.yaml", help="Chemin du fichier des ligues (YAML)")
     ap.add_argument("--season", required=True, help="Saison (ex: 2025)")
     ap.add_argument("--date", required=True, help="Date au format YYYY-MM-DD")
-    ap.add_argument("--out", default="donnees/matchs_du_jour.json")
+    ap.add_argument("--out", required=False, default="donnees/matchs_du_jour.json",
+                    help="Fichier de sortie unique (écrasé à chaque run)")
     args = ap.parse_args()
 
     key = os.getenv("RAPIDAPI_KEY")
     host = os.getenv("RAPIDAPI_HOST", "api-football-v1.p.rapidapi.com")
     if not key:
-        print("Erreur: RAPIDAPI_KEY manquant", file=sys.stderr); sys.exit(1)
+        print("Erreur: RAPIDAPI_KEY manquant", file=sys.stderr)
+        sys.exit(1)
 
     leagues = load_leagues(args.ligues)
     if not leagues:
-        print("Aucune ligue trouvée dans ligues.yaml", file=sys.stderr); sys.exit(1)
+        print("Aucune ligue trouvée dans ligues.yaml (clé 'ligues')", file=sys.stderr)
+        sys.exit(1)
 
     date_str = args.date.strip()
     season = str(args.season).strip()
@@ -115,25 +106,26 @@ def main():
         league_id = lig["league_id"]
         league_name = lig["league_name"]
         params = {
+            # ordre conforme à ta préférence/doc : date -> league -> season -> timezone
             "date": date_str,
             "league": league_id,
             "season": season,
-            "timezone": TZ_PARIS
+            "timezone": "Europe/Paris",
         }
         data = api_get("/fixtures", params=params, key=key, host=host)
         fixtures = data.get("response", []) or []
-        print(f"[INFO] {league_name} (ID {league_id}) — {len(fixtures)} match(s)")
+        print(f"[INFO] {league_name} (ID {league_id}) — {len(fixtures)} match(s) le {date_str}")
         for fx in fixtures:
             all_fixtures.append(normalize_fixture(fx, league_id, league_name, season, date_str))
-        time.sleep(0.2)
+        time.sleep(0.2)  # douceur rate-limit
 
     result = {
         "generated_at": datetime.now(timezone.utc).astimezone().isoformat(),
-        "timezone": TZ_PARIS,
+        "timezone": "Europe/Paris",
         "season": season,
         "date": date_str,
         "count": len(all_fixtures),
-        "fixtures": all_fixtures
+        "fixtures": all_fixtures,
     }
 
     with open(out_path, "w", encoding="utf-8") as f:
