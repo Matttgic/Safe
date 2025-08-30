@@ -81,7 +81,6 @@ jobs:
               match_count=$(python3 -c "import json; f=open('donnees/matchs_du_jour.json'); data=json.load(f); print(len(data.get('matchs', data.get('fixtures', []))))")
               if [ "$match_count" -gt 0 ]; then
                 echo "✅ Fichier existant valide trouvé avec $match_count entrées."
-                # Script de conversion (si nécessaire)
                 python3 -c "
 import json, os
 file_path = 'donnees/matchs_du_jour.json'
