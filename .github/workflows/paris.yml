@@ -1,122 +1,55 @@
-name: Générer Paris du Jour UltraSafe
+name: Paris UltraSafe
 
 on:
   workflow_dispatch:
-    inputs:
-      seuils_custom:
-        description: "Seuils custom en JSON (optionnel)"
-        required: false
-        type: string
-      debug_mode:
-        description: "Mode debug verbose"
-        required: false
-        default: false
-        type: boolean
   schedule:
     - cron: '0 8 * * *'
 
 jobs:
   generer_paris:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
+    timeout-minutes: 15
+    
     steps:
-      - name: Checkout du code
-        uses: actions/checkout@v4
-
-      - name: Configuration de Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Installer les dépendances
-        run: pip install requests pandas
-
-      - name: 1. Préparer les fichiers de stats et de matchs
-        id: prepare_files
-        run: |
-          mkdir -p donnees
-          echo "🔍 Recherche des fichiers de stats..."
-          
-          primary_stats="donnees/stats_equipes_2025.jsonl"
-          fallback_stats="donnees/stats_equipes_2024.jsonl"
-          
-          if [ ! -f "$primary_stats" ] && [ ! -f "$fallback_stats" ]; then
-            echo "❌ Aucun fichier de stats (2025 ou 2024) n'a été trouvé."
-            exit 1
-          fi
-          
-          echo "stats_file=$primary_stats" >> "$GITHUB_ENV"
-          echo "fallback_stats_file=$fallback_stats" >> "$GITHUB_ENV"
-          
-          echo "📁 Vérification du fichier 'donnees/matchs_du_jour.json'..."
-          if [ -f "donnees/matchs_du_jour.json" ]; then
-            python3 -c "
-import json, os
-file_path = 'donnees/matchs_du_jour.json'
-try:
-    with open(file_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    if 'fixtures' in data and 'matchs' not in data:
-        print('Détection du format API (fixtures), conversion...')
-        converted = []
-        for fixture in data.get('fixtures', []):
-            home_id = fixture.get('home_team', {}).get('id')
-            away_id = fixture.get('away_team', {}).get('id')
-            if home_id and away_id:
-                converted.append({'team_a_id': home_id, 'team_b_id': away_id})
-        new_data = {'source': 'converted', 'matchs': converted}
-        with open(file_path, 'w', encoding='utf-8') as f:
-            json.dump(new_data, f, indent=2)
-        print(f'✅ Conversion réussie: {len(converted)} matchs préparés.')
-    else:
-        print('Format déjà converti ou pas de fixtures trouvées.')
-except Exception as e:
-    print(f'⚠️ Erreur : {e}')
-"
-          else
-            echo "❌ Fichier 'donnees/matchs_du_jour.json' non trouvé."
-            exit 1
-          fi
-
-      - name: 2. Créer les seuils custom (si fournis)
-        if: github.event.inputs.seuils_custom != ''
-        run: |
-          echo '${{ github.event.inputs.seuils_custom }}' > donnees/seuils_custom.json
-          echo "✅ Fichier de seuils custom créé."
-
-      - name: 3. Exécuter le moteur de paris
-        run: |
-          args="--stats-file ${{ env.stats_file }}"
-          args="$args --fallback-stats ${{ env.fallback_stats_file }}"
-          args="$args --matchs-file donnees/matchs_du_jour.json"
-          args="$args --output donnees/paris_du_jour.csv"
-          args="$args --historique donnees/historique.csv"
-
-          if [ -f "donnees/seuils_custom.json" ]; then
-            args="$args --seuils donnees/seuils_custom.json"
-          fi
-          if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
-            args="$args --debug"
-          fi
-
-          echo "🚀 Exécution: python3 scripts/moteur_paris_ultrasafe.py $args"
-          python3 scripts/moteur_paris_ultrasafe.py $args
-
-      - name: 4. Sauvegarder les résultats
-        if: success()
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "🎰 Paris UltraSafe du $(date -u +%Y-%m-%d)"
-          file_pattern: "donnees/paris_du_jour.csv donnees/historique.csv"
-          commit_user_name: "Paris UltraSafe Bot"
-          commit_user_email: "bot@ultrasafe.com"
-
-      - name: 5. Créer un artefact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: paris-${{ github.run_number }}
-          path: |
-            donnees/paris_du_jour.csv
-            donnees/historique.csv
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    
+    - name: Install dependencies
+      run: pip install requests pandas
+    
+    - name: Convert match format
+      run: |
+        python3 -c """
+import json
+with open('donnees/matchs_du_jour.json', 'r') as f:
+    data = json.load(f)
+if 'fixtures' in data:
+    matchs = [{'team_a_id': f['home_team']['id'], 'team_b_id': f['away_team']['id']} 
+              for f in data['fixtures']]
+    with open('donnees/matchs_du_jour.json', 'w') as f:
+        json.dump({'matchs': matchs}, f)
+"""
+    
+    - name: Generate predictions
+      run: |
+        python3 scripts/moteur_paris_ultrasafe.py \
+          --stats-file donnees/stats_equipes_2025.jsonl \
+          --fallback-stats donnees/stats_equipes_2024.jsonl \
+          --matchs-file donnees/matchs_du_jour.json \
+          --output donnees/paris_du_jour.csv \
+          --historique donnees/historique.csv
+    
+    - name: Commit results
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "🎰 Paris du $(date +%Y-%m-%d)"
+        file_pattern: "donnees/*.csv"
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: paris-results
+        path: donnees/*.csv
