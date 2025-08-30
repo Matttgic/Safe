@@ -38,11 +38,9 @@ jobs:
           mkdir -p donnees
           echo "🔍 Recherche des fichiers de stats..."
           
-          # On définit les chemins attendus
           primary_stats="donnees/stats_equipes_2025.jsonl"
           fallback_stats="donnees/stats_equipes_2024.jsonl"
           
-          # On vérifie qu'au moins un des deux fichiers existe
           if [ ! -f "$primary_stats" ] && [ ! -f "$fallback_stats" ]; then
             echo "❌ Aucun fichier de stats (2025 ou 2024) n'a été trouvé."
             exit 1
@@ -51,9 +49,8 @@ jobs:
           echo "stats_file=$primary_stats" >> "$GITHUB_ENV"
           echo "fallback_stats_file=$fallback_stats" >> "$GITHUB_ENV"
           
-          echo "📁 Vérification du fichier de matchs 'donnees/matchs_du_jour.json'..."
+          echo "📁 Vérification du fichier 'donnees/matchs_du_jour.json'..."
           if [ -f "donnees/matchs_du_jour.json" ]; then
-            # On convertit le format 'fixtures' au format 'matchs' si nécessaire
             python3 -c "
 import json, os
 file_path = 'donnees/matchs_du_jour.json'
@@ -113,5 +110,4 @@ except Exception as e:
           path: |
             donnees/paris_du_jour.csv
             donnees/historique.csv
-          retention-days: 7
 `
