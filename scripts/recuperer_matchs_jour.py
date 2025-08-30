@@ -3,7 +3,7 @@
 
 import os, sys, json, argparse, time
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 import requests
 import yaml
 
@@ -28,16 +28,44 @@ def api_get(path: str, params: Dict[str, Any], key: str, host: str, max_retry: i
     raise RuntimeError("Retries exhausted")
 
 def load_leagues(yaml_path: str) -> List[Dict[str, Any]]:
+    """
+    Supporte les formats :
+    - dict : { "Premier League": 39, "La Liga": [140, 850] }
+    - list : [ {league_id: 39, league_name: "Premier League"}, ... ]
+    """
     with open(yaml_path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
+
     leagues = []
     if isinstance(data, dict):
-        for name, lid in data.items():
-            leagues.append({"league_id": int(lid), "league_name": str(name)})
+        for name, lids in data.items():
+            if not isinstance(lids, list):
+                lids = [lids]
+            for lid in lids:
+                try:
+                    leagues.append({"league_id": int(lid), "league_name": str(name)})
+                except Exception:
+                    continue
+    elif isinstance(data, list):
+        for entry in data:
+            if isinstance(entry, dict):
+                lid = entry.get("league_id") or entry.get("id")
+                name = entry.get("league_name") or entry.get("name") or f"Ligue {lid}"
+                if isinstance(lid, list):
+                    for x in lid:
+                        try:
+                            leagues.append({"league_id": int(x), "league_name": str(name)})
+                        except Exception:
+                            continue
+                else:
+                    try:
+                        leagues.append({"league_id": int(lid), "league_name": str(name)})
+                    except Exception:
+                        continue
     return leagues
 
 def normalize_fixture(fx: Dict[str, Any], league_id: int, league_name: str, season: str, date_str: str) -> Dict[str, Any]:
-    """Nettoie une fixture pour garder seulement les infos essentielles"""
+    """Simplifie une fixture (match) pour garder les infos essentielles"""
     fi = fx.get("fixture", {}) or {}
     te = fx.get("teams", {}) or {}
     return {
@@ -60,10 +88,10 @@ def normalize_fixture(fx: Dict[str, Any], league_id: int, league_name: str, seas
 
 def main():
     ap = argparse.ArgumentParser(description="Récupère les fixtures du jour pour les ligues listées dans ligues.yaml")
-    ap.add_argument("--ligues", required=False, default="ligues.yaml")
+    ap.add_argument("--ligues", default="ligues.yaml")
     ap.add_argument("--season", required=True, help="Saison (ex: 2025)")
     ap.add_argument("--date", required=True, help="Date au format YYYY-MM-DD")
-    ap.add_argument("--out", required=False, default="donnees/matchs_du_jour.json")
+    ap.add_argument("--out", default="donnees/matchs_du_jour.json")
     args = ap.parse_args()
 
     key = os.getenv("RAPIDAPI_KEY")
@@ -94,7 +122,7 @@ def main():
         }
         data = api_get("/fixtures", params=params, key=key, host=host)
         fixtures = data.get("response", []) or []
-        print(f"[INFO] {league_name} (ID {league_id}) — {len(fixtures)} match(s) le {date_str}")
+        print(f"[INFO] {league_name} (ID {league_id}) — {len(fixtures)} match(s)")
         for fx in fixtures:
             all_fixtures.append(normalize_fixture(fx, league_id, league_name, season, date_str))
         time.sleep(0.2)
