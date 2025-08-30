@@ -48,23 +48,23 @@ def main():
     ap.add_argument("--ligues", required=False, default="ligues.yaml", help="Chemin du fichier des ligues (YAML)")
     ap.add_argument("--season", required=True, help="Saison (ex: 2025)")
     ap.add_argument("--date", required=True, help="Date au format YYYY-MM-DD")
+    ap.add_argument("--out", required=False, default="donnees/matchs_du_jour.json",
+                    help="Fichier de sortie (défaut: donnees/matchs_du_jour.json)")
     args = ap.parse_args()
 
     key = os.getenv("RAPIDAPI_KEY")
     host = os.getenv("RAPIDAPI_HOST", "api-football-v1.p.rapidapi.com")
     if not key:
-        print("Erreur: RAPIDAPI_KEY manquant", file=sys.stderr)
-        sys.exit(1)
+        print("Erreur: RAPIDAPI_KEY manquant", file=sys.stderr); sys.exit(1)
 
     leagues = load_leagues(args.ligues)
     if not leagues:
-        print("Aucune ligue trouvée dans ligues.yaml", file=sys.stderr)
-        sys.exit(1)
+        print("Aucune ligue trouvée dans ligues.yaml", file=sys.stderr); sys.exit(1)
 
     date_str = args.date.strip()
     season = str(args.season).strip()
 
-    out_path = f"donnees/matchs_jour_{date_str}.json"
+    out_path = args.out.strip()
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
     all_fixtures: List[Dict[str, Any]] = []
