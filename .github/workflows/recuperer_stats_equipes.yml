@@ -1,0 +1,50 @@
+name: Récupérer Stats des Équipes (depuis team_ids.json)
+
+on:
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Saison (ex: 2024 ou 2025). Si vide, on lit la saison dans team_ids.json."
+        required: false
+        default: ""
+      input_path:
+        description: "Chemin du fichier d'entrée (team_ids.json)"
+        required: false
+        default: "donnees/team_ids.json"
+      output_path:
+        description: "Chemin du fichier de sortie (stats_equipes.jsonl)"
+        required: false
+        default: "donnees/stats_equipes.jsonl"
+
+jobs:
+  fetch-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pyyaml
+
+      - name: Récupérer stats équipes
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          RAPIDAPI_HOST: api-football-v1.p.rapidapi.com
+        run: |
+          python scripts/recuperer_stats_equipes.py \
+            --entree "${{ github.event.inputs.input_path || 'donnees/team_ids.json' }}" \
+            --sortie "${{ github.event.inputs.output_path || 'donnees/stats_equipes.jsonl' }}" \
+            --saison "${{ github.event.inputs.season || '' }}"
+
+      - name: Upload (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: stats_equipes
+          path: ${{ github.event.inputs.output_path || 'donnees/stats_equipes.jsonl' }}
