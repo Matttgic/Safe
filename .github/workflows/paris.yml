@@ -1,0 +1,186 @@
+name: Générer Paris du Jour UltraSafe
+
+on:
+  workflow_dispatch:
+    inputs:
+      seuils_custom:
+        description: "Seuils custom en JSON (optionnel)"
+        required: false
+        type: string
+      debug_mode:
+        description: "Mode debug verbose"
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    # Exécution automatique chaque jour à 8h UTC
+    - cron: '0 8 * * *'
+
+env:
+  PYTHONIOENCODING: utf-8
+
+jobs:
+  generer_paris:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configuration de Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas python-dateutil pytz
+
+      - name: Créer répertoire données
+        run: mkdir -p donnees
+
+      - name: Trouver le fichier de stats
+        id: find_stats
+        run: |
+          # Chercher le fichier de stats le plus récent
+          stats_file=""
+          for year in 2025 2024 2023; do
+            candidate="donnees/stats_equipes_${year}.jsonl"
+            if [ -f "$candidate" ] && [ -s "$candidate" ]; then
+              stats_file="$candidate"
+              echo "✅ Stats trouvées: $stats_file"
+              break
+            fi
+          done
+          
+          if [ -z "$stats_file" ]; then
+            echo "❌ Aucun fichier de stats trouvé"
+            exit 1
+          fi
+          
+          echo "stats_file=$stats_file" >> "$GITHUB_OUTPUT"
+
+      - name: Convertir le fichier de matchs
+        run: |
+          # Si le fichier existe et contient des fixtures, le convertir
+          if [ -f "donnees/matchs_du_jour.json" ]; then
+            python3 -c "
+import json
+import sys
+from datetime import datetime
+
+try:
+    # Lire le fichier
+    with open('donnees/matchs_du_jour.json', 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    # Si déjà au bon format, ne rien faire
+    if 'matchs' in data and isinstance(data['matchs'], list) and len(data['matchs']) > 0:
+        print(f'✅ Fichier déjà converti avec {len(data[\"matchs\"])} matchs')
+        sys.exit(0)
+    
+    # Sinon convertir depuis fixtures
+    fixtures = data.get('fixtures', [])
+    if not fixtures:
+        print('❌ Aucune fixture trouvée')
+        sys.exit(1)
+    
+    # Conversion simple
+    matchs = []
+    for fixture in fixtures:
+        try:
+            match = {
+                'team_a_id': fixture['home_team']['id'],
+                'team_b_id': fixture['away_team']['id'],
+                'commentaire': f\"{fixture['home_team']['name']} vs {fixture['away_team']['name']} ({fixture.get('league_name', 'Unknown')})\"
+            }
+            matchs.append(match)
+        except Exception as e:
+            print(f'Erreur fixture: {e}')
+            continue
+    
+    if not matchs:
+        print('❌ Aucun match converti')
+        sys.exit(1)
+    
+    # Sauvegarder au nouveau format
+    new_data = {
+        'source': 'converted',
+        'matchs': matchs,
+        'converted_at': datetime.now().isoformat(),
+        'original_count': len(fixtures)
+    }
+    
+    with open('donnees/matchs_du_jour.json', 'w', encoding='utf-8') as f:
+        json.dump(new_data, f, indent=2, ensure_ascii=False)
+    
+    print(f'✅ Converti {len(matchs)} matchs depuis {len(fixtures)} fixtures')
+
+except Exception as e:
+    print(f'❌ Erreur conversion: {e}')
+    sys.exit(1)
+"
+          else
+            echo "❌ Fichier donnees/matchs_du_jour.json introuvable"
+            exit 1
+          fi
+
+      - name: Créer seuils custom si fournis
+        if: github.event.inputs.seuils_custom != ''
+        run: |
+          echo '${{ github.event.inputs.seuils_custom }}' > donnees/seuils_custom.json
+          echo "✅ Seuils custom créés"
+
+      - name: Exécuter le moteur de paris
+        run: |
+          # Arguments de base
+          args="--stats-file ${{ steps.find_stats.outputs.stats_file }}"
+          args="$args --matchs-file donnees/matchs_du_jour.json"
+          args="$args --output donnees/paris_du_jour.csv"
+          args="$args --historique donnees/historique.csv"
+
+          # Seuils custom
+          if [ -f "donnees/seuils_custom.json" ]; then
+            args="$args --seuils donnees/seuils_custom.json"
+          fi
+
+          # Mode debug
+          if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
+            args="$args --debug"
+          fi
+
+          echo "🚀 Exécution: python3 scripts/moteur_paris_ultrasafe.py $args"
+          python3 scripts/moteur_paris_ultrasafe.py $args
+
+      - name: Vérifier les résultats
+        run: |
+          if [ -f "donnees/paris_du_jour.csv" ]; then
+            paris_count=$(tail -n +2 donnees/paris_du_jour.csv | wc -l)
+            echo "✅ $paris_count paris générés"
+            echo "📋 Aperçu:"
+            head -n 5 donnees/paris_du_jour.csv
+          else
+            echo "❌ Aucun fichier de paris généré"
+            exit 1
+          fi
+
+      - name: Sauvegarder les résultats
+        if: success()
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "🎰 Paris du $(date -u +%Y-%m-%d)"
+          file_pattern: "donnees/paris_du_jour.csv donnees/historique.csv"
+          commit_user_name: "Paris UltraSafe Bot"
+          commit_user_email: "bot@ultrasafe.paris"
+
+      - name: Créer artefact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paris-${{ github.run_number }}
+          path: |
+            donnees/paris_du_jour.csv
+            donnees/historique.csv
+          retention-days: 7
