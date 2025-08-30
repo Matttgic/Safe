@@ -48,32 +48,51 @@ jobs:
         run: |
           echo "🔍 Vérification des fichiers requis..."
           
-          # Vérifier stats_equipes.jsonl
-          if [ ! -f donnees/stats_equipes.jsonl ]; then
-            echo "❌ Fichier donnees/stats_equipes.jsonl manquant"
-            echo "💡 Exécutez d'abord le workflow 'Récupérer Stats Équipes'"
+          # Vérifier d'abord stats_equipes_2025.jsonl puis fallback sur 2024
+          stats_file=""
+          if [ -f donnees/stats_equipes_2025.jsonl ]; then
+            stats_file="donnees/stats_equipes_2025.jsonl"
+            echo "✅ Utilisation stats 2025"
+          elif [ -f donnees/stats_equipes_2024.jsonl ]; then
+            stats_file="donnees/stats_equipes_2024.jsonl"
+            echo "✅ Utilisation stats 2024 (fallback)"
+          elif [ -f donnees/stats_equipes.jsonl ]; then
+            stats_file="donnees/stats_equipes.jsonl"
+            echo "✅ Utilisation stats génériques"
+          else
+            echo "❌ Aucun fichier de stats trouvé"
+            echo "💡 Exécutez d'abord le workflow 'Générer Stats Équipes'"
             exit 1
           fi
           
-          echo "✅ stats_equipes.jsonl trouvé"
-          echo "📊 Taille: $(wc -c < donnees/stats_equipes.jsonl) bytes"
-          echo "📄 Lignes: $(wc -l < donnees/stats_equipes.jsonl)"
+          echo "STATS_FILE=$stats_file" >> $GITHUB_ENV
+          
+          echo "📊 Taille: $(wc -c < $stats_file) bytes"
+          echo "📄 Lignes: $(wc -l < $stats_file)"
           
           # Compter les équipes avec stats
           equipes_avec_stats=$(python3 -c "
 import json
 count = 0
-with open('donnees/stats_equipes.jsonl', 'r') as f:
+with open('$stats_file', 'r') as f:
     for line in f:
         if line.strip():
-            record = json.loads(line)
-            if record.get('raw_data_available', False):
-                count += 1
+            try:
+                record = json.loads(line)
+                # Vérifier si les stats essentielles sont présentes
+                stats = record.get('stats', {})
+                if (stats.get('played_total') and 
+                    stats.get('wins_total') is not None and
+                    stats.get('gf_avg') and 
+                    stats.get('ga_avg')):
+                    count += 1
+            except:
+                pass
 print(count)
 ")
-          echo "⚽ Équipes avec statistiques: $equipes_avec_stats"
+          echo "⚽ Équipes avec statistiques valides: $equipes_avec_stats"
           
-          if [ "$equipes_avec_stats" -lt 20 ]; then
+          if [ "$equipes_avec_stats" -lt 10 ]; then
             echo "⚠️ Peu d'équipes avec stats - résultats limités"
           fi
 
@@ -85,14 +104,16 @@ print(count)
           case $matchs_source in
             "test")
               echo "🧪 Création matchs de test..."
+              mkdir -p donnees
               python3 -c "
 import json, os
-os.makedirs('donnees', exist_ok=True)
+from datetime import datetime, timezone
 
 # Matchs test avec équipes ayant probablement des stats
 matchs_test = {
-    'generated_at': '$(date -u +%Y-%m-%dT%H:%M:%SZ)',
+    'generated_at': datetime.now(timezone.utc).isoformat(),
     'source': 'test',
+    'date': datetime.now().strftime('%Y-%m-%d'),
     'matchs': [
         {'team_a_id': 50, 'team_b_id': 42, 'commentaire': 'Man City vs Arsenal'},
         {'team_a_id': 40, 'team_b_id': 49, 'commentaire': 'Liverpool vs Chelsea'}, 
@@ -114,9 +135,20 @@ print('✅ Matchs test générés')
               
             "api")
               echo "🌐 Récupération matchs via API..."
-              # TODO: implémenter récupération API des matchs du jour
-              echo "⚠️ Mode API pas encore implémenté - utilisation du mode test"
-              python3 -c "exec(open('.github/workflows/create_test_matches.py').read())" 2>/dev/null || echo "Fallback test matches"
+              # Utiliser le script existant si disponible
+              if [ -f scripts/recuperer_matchs_jour.py ]; then
+                python3 scripts/recuperer_matchs_jour.py \
+                  --ligues ligues.yaml \
+                  --season 2025 \
+                  --date $(date +%Y-%m-%d) \
+                  --out donnees/matchs_du_jour.json || {
+                    echo "⚠️ Erreur API - fallback mode test"
+                    python3 -c "exec(open('create_test_matches.py').read())" 2>/dev/null || echo "Utilisation matchs test par défaut"
+                  }
+              else
+                echo "⚠️ Script API manquant - utilisation du mode test"
+                ${{ github.workspace }}/.github/workflows/create_test_matches.sh || echo "Fallback test matches"
+              fi
               ;;
               
             "manuel")
@@ -130,19 +162,44 @@ print('✅ Matchs test générés')
               ;;
           esac
           
-          # Vérifier le fichier final
+          # Vérifier et valider le fichier final
           if [ -f donnees/matchs_du_jour.json ]; then
-            echo "📋 Aperçu matchs du jour:"
+            echo "📋 Validation du fichier matchs..."
             python3 -c "
 import json
-with open('donnees/matchs_du_jour.json', 'r') as f:
-    data = json.load(f)
-matchs = data.get('matchs', [])
-print(f'Total matchs: {len(matchs)}')
-for i, m in enumerate(matchs[:3], 1):
-    print(f'{i}. Team {m[\"team_a_id\"]} vs Team {m[\"team_b_id\"]} - {m.get(\"commentaire\", \"\")}')
-if len(matchs) > 3:
-    print(f'... et {len(matchs)-3} autres')
+import sys
+
+try:
+    with open('donnees/matchs_du_jour.json', 'r') as f:
+        data = json.load(f)
+    
+    matchs = data.get('matchs', [])
+    if not matchs:
+        print('❌ Aucun match trouvé dans le fichier')
+        sys.exit(1)
+    
+    valid_matchs = 0
+    for i, m in enumerate(matchs, 1):
+        team_a = m.get('team_a_id')
+        team_b = m.get('team_b_id')
+        if team_a and team_b:
+            valid_matchs += 1
+        else:
+            print(f'⚠️ Match {i}: IDs manquants (team_a_id={team_a}, team_b_id={team_b})')
+    
+    print(f'✅ {valid_matchs}/{len(matchs)} matchs valides')
+    
+    # Aperçu
+    for i, m in enumerate(matchs[:3], 1):
+        comment = m.get('commentaire', f'Team {m.get(\"team_a_id\")} vs Team {m.get(\"team_b_id\")}')
+        print(f'{i}. {comment}')
+    
+    if len(matchs) > 3:
+        print(f'... et {len(matchs)-3} autres')
+        
+except Exception as e:
+    print(f'❌ Erreur validation fichier matchs: {e}')
+    sys.exit(1)
 "
           else
             echo "❌ Aucun fichier de matchs généré"
@@ -160,9 +217,23 @@ if len(matchs) > 3:
 import json, sys
 try:
     data = json.load(sys.stdin)
+    
+    # Validation des clés attendues
+    valid_keys = [
+        'ultrasafe_over15', 'safe_over15', 'ultrasafe_result', 'safe_result',
+        'played_min', 'played_combine_min'
+    ]
+    
+    for key, value in data.items():
+        if key not in valid_keys:
+            print(f'⚠️ Clé inconnue: {key}')
+        if not isinstance(value, (int, float)):
+            print(f'⚠️ Valeur non numérique pour {key}: {value}')
+    
     with open('donnees/seuils_custom.json', 'w') as f:
         json.dump(data, f, indent=2)
     print('✅ Seuils custom validés et sauvegardés')
+    
 except Exception as e:
     print(f'❌ Seuils JSON invalides: {e}')
     sys.exit(1)
@@ -173,23 +244,34 @@ except Exception as e:
           echo "🚀 Lancement du moteur UltraSafe..."
           
           # Arguments de base
-          args="--stats-file donnees/stats_equipes.jsonl --matchs-file donnees/matchs_du_jour.json"
-          args="$args --output donnees/paris_du_jour.csv --historique donnees/historique.csv"
+          args="--stats-file $STATS_FILE"
+          args="$args --matchs-file donnees/matchs_du_jour.json"
+          args="$args --output donnees/paris_du_jour.csv"
+          args="$args --historique donnees/historique.csv"
           
           # Seuils custom si fournis
           if [ -f donnees/seuils_custom.json ]; then
             args="$args --seuils donnees/seuils_custom.json"
+            echo "🎛️ Utilisation seuils custom"
           fi
           
           # Mode debug
           if [ "${{ github.event.inputs.debug_mode }}" = "true" ]; then
             args="$args --debug"
+            echo "🐛 Mode debug activé"
           fi
           
           echo "📋 Commande: python3 scripts/moteur_paris_ultrasafe.py $args"
           
-          # Exécuter
-          python3 scripts/moteur_paris_ultrasafe.py $args
+          # Exécuter avec gestion d'erreur améliorée
+          python3 scripts/moteur_paris_ultrasafe.py $args || {
+            echo "❌ Erreur lors de l'exécution du moteur"
+            echo "📋 Contenu du répertoire donnees:"
+            ls -la donnees/ || echo "Répertoire donnees introuvable"
+            echo "📋 Variables d'environnement:"
+            echo "STATS_FILE=$STATS_FILE"
+            exit 1
+          }
 
       - name: Analyser les résultats
         run: |
@@ -206,15 +288,17 @@ except Exception as e:
 import csv
 from collections import Counter
 
-ultrasafe_count = 0
-safe_count = 0
-type_counts = Counter()
-
 try:
+    ultrasafe_count = 0
+    safe_count = 0
+    type_counts = Counter()
+    total_rows = 0
+
     with open('donnees/paris_du_jour.csv', 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         
         for row in reader:
+            total_rows += 1
             pari_type = row.get('Type', '')
             type_counts[pari_type] += 1
             
@@ -223,23 +307,32 @@ try:
             elif 'Safe' in pari_type:
                 safe_count += 1
 
-    print(f'📈 RÉPARTITION DES PARIS:')
+    print(f'📈 RÉPARTITION DES PARIS ({total_rows} total):')
     print(f'   🎯 UltraSafe: {ultrasafe_count}')
     print(f'   ✅ Safe: {safe_count}')
-    print(f'   📊 Détail par type:')
-    for ptype, count in type_counts.items():
-        print(f'     - {ptype}: {count}')
+    print(f'   ❌ Autres: {total_rows - ultrasafe_count - safe_count}')
+    
+    if type_counts:
+        print(f'📊 Détail par type:')
+        for ptype, count in type_counts.most_common():
+            print(f'     - {ptype}: {count}')
+    else:
+        print('⚠️ Aucun paris trouvé')
         
 except Exception as e:
     print(f'❌ Erreur analyse paris_du_jour.csv: {e}')
+    import traceback
+    traceback.print_exc()
 "
             
             echo ""
-            echo "📋 Aperçu paris du jour (top 3):"
-            head -4 donnees/paris_du_jour.csv | column -t -s, 2>/dev/null || head -4 donnees/paris_du_jour.csv
+            echo "📋 Aperçu paris du jour (header + top 3):"
+            head -4 donnees/paris_du_jour.csv || echo "Impossible d'afficher le contenu"
             
           else
             echo "❌ Fichier paris_du_jour.csv manquant"
+            echo "📋 Contenu du répertoire donnees:"
+            ls -la donnees/ || echo "Répertoire donnees introuvable"
             exit 1
           fi
           
@@ -251,7 +344,7 @@ except Exception as e:
             
             # Compter les entrées du jour
             today=$(date -u +%Y-%m-%d)
-            entries_today=$(grep "^$today," donnees/historique.csv | wc -l)
+            entries_today=$(grep -c "^$today," donnees/historique.csv 2>/dev/null || echo "0")
             echo "📅 Entrées ajoutées aujourd'hui: $entries_today"
             
           else
@@ -284,21 +377,23 @@ try:
         # Vérifier champs requis
         required = ['Type', 'Match', 'Pari', 'Fiabilité']
         for field in required:
-            if not row.get(field):
+            if not row.get(field, '').strip():
                 errors.append(f'Ligne {i}: champ {field} manquant')
         
         # Vérifier fiabilité [0-1]
+        fiab_str = row.get('Fiabilité', '0')
         try:
-            fiab = float(row.get('Fiabilité', 0))
+            fiab = float(fiab_str)
             if not (0 <= fiab <= 1):
                 warnings.append(f'Ligne {i}: fiabilité {fiab} hors [0,1]')
         except ValueError:
-            errors.append(f'Ligne {i}: fiabilité non numérique')
+            errors.append(f'Ligne {i}: fiabilité non numérique: {fiab_str}')
+            continue
         
         # Vérifier cohérence UltraSafe
         if 'UltraSafe' in row.get('Type', ''):
             if fiab < 0.6:  # Seuil minimum UltraSafe
-                warnings.append(f'Ligne {i}: UltraSafe avec fiabilité faible ({fiab})')
+                warnings.append(f'Ligne {i}: UltraSafe avec fiabilité faible ({fiab:.3f})')
 
     print(f'📊 Validation: {len(rows)} paris analysés')
     
@@ -315,8 +410,13 @@ try:
     
     print('✅ Validation réussie')
     
+except FileNotFoundError:
+    print(f'❌ Fichier paris_du_jour.csv introuvable')
+    sys.exit(1)
 except Exception as e:
     print(f'❌ Erreur validation: {e}')
+    import traceback
+    traceback.print_exc()
     sys.exit(1)
 "
 
@@ -330,7 +430,7 @@ except Exception as e:
             donnees/historique.csv
             donnees/matchs_du_jour.json
             donnees/seuils_custom.json
-          retention-days: 30  # Garder plus longtemps pour l'historique
+          retention-days: 30
 
       - name: Afficher résumé final
         if: success()
@@ -341,8 +441,8 @@ except Exception as e:
           
           # Statistiques finales
           if [ -f donnees/paris_du_jour.csv ]; then
-            total_paris=$(tail -n +2 donnees/paris_du_jour.csv | wc -l)
-            ultrasafe_count=$(grep "UltraSafe" donnees/paris_du_jour.csv | wc -l)
+            total_paris=$(tail -n +2 donnees/paris_du_jour.csv | wc -l 2>/dev/null || echo "0")
+            ultrasafe_count=$(grep -c "UltraSafe" donnees/paris_du_jour.csv 2>/dev/null || echo "0")
             
             echo "📊 RÉSUMÉ DU JOUR:"
             echo "   🎯 Total paris: $total_paris"
@@ -351,8 +451,9 @@ except Exception as e:
             
             if [ "$ultrasafe_count" -gt 0 ]; then
               echo ""
-              echo "🏆 TOP ULTRASAFE:"
-              head -2 donnees/paris_du_jour.csv | tail -1 | cut -d, -f1-4
+              echo "🏆 EXEMPLE ULTRASAFE:"
+              # Afficher la première ligne de données (skip header)
+              sed -n '2p' donnees/paris_du_jour.csv | cut -d, -f1-4 2>/dev/null || echo "Format CSV non standard"
             fi
           fi
           
@@ -370,20 +471,23 @@ except Exception as e:
           git config --local user.name "GitHub Action UltraSafe"
           
           # Ajouter les fichiers modifiés
+          files_to_add=""
           if [ -f donnees/paris_du_jour.csv ]; then
             git add donnees/paris_du_jour.csv
+            files_to_add="$files_to_add paris_du_jour.csv"
           fi
           
           if [ -f donnees/historique.csv ]; then
             git add donnees/historique.csv
+            files_to_add="$files_to_add historique.csv"
           fi
           
           # Vérifier s'il y a des changements
           if [ -n "$(git status --porcelain)" ]; then
             # Compter les paris générés
             if [ -f donnees/paris_du_jour.csv ]; then
-              paris_count=$(tail -n +2 donnees/paris_du_jour.csv | wc -l)
-              ultrasafe_count=$(grep -c "UltraSafe" donnees/paris_du_jour.csv || echo "0")
+              paris_count=$(tail -n +2 donnees/paris_du_jour.csv | wc -l 2>/dev/null || echo "0")
+              ultrasafe_count=$(grep -c "UltraSafe" donnees/paris_du_jour.csv 2>/dev/null || echo "0")
             else
               paris_count=0
               ultrasafe_count=0
@@ -391,8 +495,17 @@ except Exception as e:
             
             commit_msg="🎰 Paris UltraSafe du $(date -u +%Y-%m-%d) - $paris_count paris ($ultrasafe_count UltraSafe)"
             
-            git commit -m "$commit_msg"
-            git push
+            git commit -m "$commit_msg" || {
+              echo "❌ Erreur lors du commit"
+              git status
+              exit 1
+            }
+            
+            git push || {
+              echo "❌ Erreur lors du push"
+              exit 1
+            }
+            
             echo "✅ Paris commitées: $commit_msg"
           else
             echo "ℹ️ Aucun changement à committer"
