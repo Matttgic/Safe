@@ -1,13 +1,13 @@
-name: Générer stats équipes (2024, one-shot)
+name: generer_stats_2024
 
 on:
   workflow_dispatch: {}
 
 jobs:
-  gen-2024:
+  gen_2024:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write  # nécessaire pour commit/push
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,7 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Générer fichier 2024 (sans merge)
+      - name: Générer stats 2024 (indispensables)
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           RAPIDAPI_HOST: api-football-v1.p.rapidapi.com
@@ -39,5 +39,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add donnees/stats_equipes_2024.jsonl
-          git commit -m "chore(data): génération stats équipes (2024)"
+          git commit -m "chore(data): génération stats équipes 2024"
           git push
