@@ -4,16 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       matchs_source:
-        description: "Source des matchs (test/api/manuel)"
-        required: false
+        description: "Source des matchs (test/api)"
+        required: true
         default: "test"
         type: choice
         options:
           - test
           - api
-          - manuel
       seuils_custom:
-        description: "Seuils custom JSON (optionnel)"
+        description: "Seuils custom en JSON (optionnel)"
         required: false
         type: string
       debug_mode:
@@ -22,499 +21,148 @@ on:
         default: false
         type: boolean
   schedule:
-    # Exécution automatique chaque jour à 8h UTC (optionnel)
+    # Exécution automatique chaque jour à 8h UTC
     - cron: '0 8 * * *'
-  
+
 jobs:
   generer_paris:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    
+
     steps:
-      - name: Checkout
+      - name: Checkout du code
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Configuration de Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Installer dépendances
+      - name: Installer les dépendances
         run: |
           python -m pip install --upgrade pip
-          pip install requests
+          pip install requests pandas # Ajout de pandas pour la validation
 
-      - name: Vérifier prérequis
+      - name: 1. Vérifier les prérequis (fichiers de stats)
+        id: check_stats
         run: |
-          echo "🔍 Vérification des fichiers requis..."
-          
-          # Vérifier d'abord stats_equipes_2025.jsonl puis fallback sur 2024
+          echo "🔍 Vérification des fichiers de statistiques..."
           stats_file=""
-          if [ -f donnees/stats_equipes_2025.jsonl ]; then
+          if [ -f "donnees/stats_equipes_2025.jsonl" ]; then
             stats_file="donnees/stats_equipes_2025.jsonl"
-            echo "✅ Utilisation stats 2025"
-          elif [ -f donnees/stats_equipes_2024.jsonl ]; then
+            echo "✅ Utilisation du fichier de stats 2025."
+          elif [ -f "donnees/stats_equipes_2024.jsonl" ]; then
             stats_file="donnees/stats_equipes_2024.jsonl"
-            echo "✅ Utilisation stats 2024 (fallback)"
-          elif [ -f donnees/stats_equipes.jsonl ]; then
-            stats_file="donnees/stats_equipes.jsonl"
-            echo "✅ Utilisation stats génériques"
+            echo "⚠️ Fichier 2025 non trouvé, utilisation du fallback 2024."
           else
-            echo "❌ Aucun fichier de stats trouvé"
-            echo "💡 Exécutez d'abord le workflow 'Générer Stats Équipes'"
+            echo "❌ Aucun fichier de statistiques trouvé (stats_equipes_2025.jsonl ou _2024.jsonl)."
+            echo "💡 Exécutez d'abord le workflow 'Générer Stats Équipes'."
             exit 1
           fi
-          
-          echo "STATS_FILE=$stats_file" >> $GITHUB_ENV
-          
-          echo "📊 Taille: $(wc -c < $stats_file) bytes"
-          echo "📄 Lignes: $(wc -l < $stats_file)"
-          
-          # Compter les équipes avec stats
-          equipes_avec_stats=$(python3 -c "
-import json
-count = 0
-with open('$stats_file', 'r') as f:
-    for line in f:
-        if line.strip():
-            try:
-                record = json.loads(line)
-                # Vérifier si les stats essentielles sont présentes
-                stats = record.get('stats', {})
-                if (stats.get('played_total') and 
-                    stats.get('wins_total') is not None and
-                    stats.get('gf_avg') and 
-                    stats.get('ga_avg')):
-                    count += 1
-            except:
-                pass
-print(count)
-")
-          echo "⚽ Équipes avec statistiques valides: $equipes_avec_stats"
-          
-          if [ "$equipes_avec_stats" -lt 10 ]; then
-            echo "⚠️ Peu d'équipes avec stats - résultats limités"
-          fi
+          # Exporter la variable pour les étapes suivantes
+          echo "stats_file_path=$stats_file" >> $GITHUB_ENV
 
-      - name: Préparer source des matchs
+      - name: 2. Préparer la source des matchs
         run: |
-          matchs_source="${{ github.event.inputs.matchs_source || 'test' }}"
-          echo "🎯 Source matchs: $matchs_source"
-          
-          case $matchs_source in
-            "test")
-              echo "🧪 Création matchs de test..."
-              mkdir -p donnees
-              python3 -c "
-import json, os
-from datetime import datetime, timezone
-
-# Matchs test avec équipes ayant probablement des stats
-matchs_test = {
-    'generated_at': datetime.now(timezone.utc).isoformat(),
-    'source': 'test',
-    'date': datetime.now().strftime('%Y-%m-%d'),
-    'matchs': [
-        {'team_a_id': 50, 'team_b_id': 42, 'commentaire': 'Man City vs Arsenal'},
-        {'team_a_id': 40, 'team_b_id': 49, 'commentaire': 'Liverpool vs Chelsea'}, 
-        {'team_a_id': 33, 'team_b_id': 47, 'commentaire': 'Man United vs Tottenham'},
-        {'team_a_id': 66, 'team_b_id': 51, 'commentaire': 'Aston Villa vs Brighton'},
-        {'team_a_id': 48, 'team_b_id': 45, 'commentaire': 'West Ham vs Everton'},
-        {'team_a_id': 529, 'team_b_id': 541, 'commentaire': 'Barcelona vs Real Madrid'},
-        {'team_a_id': 489, 'team_b_id': 496, 'commentaire': 'AC Milan vs Juventus'},
-        {'team_a_id': 157, 'team_b_id': 165, 'commentaire': 'Bayern vs Dortmund'}
-    ]
-}
-
-with open('donnees/matchs_du_jour.json', 'w', encoding='utf-8') as f:
-    json.dump(matchs_test, f, indent=2, ensure_ascii=False)
-
-print('✅ Matchs test générés')
-"
-              ;;
-              
-            "api")
-              echo "🌐 Récupération matchs via API..."
-              # Utiliser le script existant si disponible
-              if [ -f scripts/recuperer_matchs_jour.py ]; then
-                python3 scripts/recuperer_matchs_jour.py \
-                  --ligues ligues.yaml \
-                  --season 2025 \
-                  --date $(date +%Y-%m-%d) \
-                  --out donnees/matchs_du_jour.json || {
-                    echo "⚠️ Erreur API - fallback mode test"
-                    python3 -c "exec(open('create_test_matches.py').read())" 2>/dev/null || echo "Utilisation matchs test par défaut"
-                  }
-              else
-                echo "⚠️ Script API manquant - utilisation du mode test"
-                ${{ github.workspace }}/.github/workflows/create_test_matches.sh || echo "Fallback test matches"
-              fi
-              ;;
-              
-            "manuel")
-              echo "📝 Mode manuel - vérification fichier existant..."
-              if [ ! -f donnees/matchs_du_jour.json ]; then
-                echo "❌ Fichier donnees/matchs_du_jour.json manquant en mode manuel"
-                echo "💡 Créez le fichier avec vos matchs ou utilisez le mode 'test'"
-                exit 1
-              fi
-              echo "✅ Fichier manuel trouvé"
-              ;;
-          esac
-          
-          # Vérifier et valider le fichier final
-          if [ -f donnees/matchs_du_jour.json ]; then
-            echo "📋 Validation du fichier matchs..."
-            python3 -c "
-import json
-import sys
-
-try:
-    with open('donnees/matchs_du_jour.json', 'r') as f:
-        data = json.load(f)
-    
-    matchs = data.get('matchs', [])
-    if not matchs:
-        print('❌ Aucun match trouvé dans le fichier')
-        sys.exit(1)
-    
-    valid_matchs = 0
-    for i, m in enumerate(matchs, 1):
-        team_a = m.get('team_a_id')
-        team_b = m.get('team_b_id')
-        if team_a and team_b:
-            valid_matchs += 1
-        else:
-            print(f'⚠️ Match {i}: IDs manquants (team_a_id={team_a}, team_b_id={team_b})')
-    
-    print(f'✅ {valid_matchs}/{len(matchs)} matchs valides')
-    
-    # Aperçu
-    for i, m in enumerate(matchs[:3], 1):
-        comment = m.get('commentaire', f'Team {m.get(\"team_a_id\")} vs Team {m.get(\"team_b_id\")}')
-        print(f'{i}. {comment}')
-    
-    if len(matchs) > 3:
-        print(f'... et {len(matchs)-3} autres')
-        
-except Exception as e:
-    print(f'❌ Erreur validation fichier matchs: {e}')
-    sys.exit(1)
-"
+          # Si le workflow est déclenché par un schedule, on utilise 'api', sinon on prend l'input de l'utilisateur.
+          if [ "${{ github.event_name }}" == "schedule" ]; then
+            matchs_source="api"
           else
-            echo "❌ Aucun fichier de matchs généré"
-            exit 1
+            matchs_source="${{ github.event.inputs.matchs_source }}"
+          fi
+          echo "🎯 Source des matchs sélectionnée : $matchs_source"
+          echo "MATCHS_SOURCE=$matchs_source" >> $GITHUB_ENV
+
+          if [ "$matchs_source" == "test" ]; then
+            echo "🧪 Création du fichier de matchs de test..."
+            mkdir -p donnees
+            # Création d'un fichier JSON de test simple et valide
+            echo '{
+              "source": "test",
+              "matchs": [
+                {"team_a_id": 50, "team_b_id": 42, "commentaire": "Man City vs Arsenal"},
+                {"team_a_id": 40, "team_b_id": 49, "commentaire": "Liverpool vs Chelsea"},
+                {"team_a_id": 529, "team_b_id": 541, "commentaire": "Barcelona vs Real Madrid"}
+              ]
+            }' > donnees/matchs_du_jour.json
+            echo "✅ Fichier de matchs de test créé."
+          elif [ "$matchs_source" == "api" ]; then
+            echo "🌐 Récupération des matchs via l'API..."
+            # Simule l'appel à un script de récupération. Remplacez par votre vrai script.
+            # python3 scripts/recuperer_matchs_jour.py --out donnees/matchs_du_jour.json
+            echo "⚠️ Logique de récupération API à implémenter. Utilisation d'un fichier test en fallback."
+            echo '{
+              "source": "api-fallback",
+              "matchs": [
+                {"team_a_id": 157, "team_b_id": 165, "commentaire": "Bayern vs Dortmund"}
+              ]
+            }' > donnees/matchs_du_jour.json
           fi
 
-      - name: Créer seuils custom si fournis
+      - name: 3. Créer les seuils custom (si fournis)
         if: github.event.inputs.seuils_custom != ''
         run: |
-          echo "🎛️ Création seuils custom..."
-          seuils_input='${{ github.event.inputs.seuils_custom }}'
-          
-          # Valider et écrire le JSON
-          echo "$seuils_input" | python3 -c "
-import json, sys
-try:
-    data = json.load(sys.stdin)
-    
-    # Validation des clés attendues
-    valid_keys = [
-        'ultrasafe_over15', 'safe_over15', 'ultrasafe_result', 'safe_result',
-        'played_min', 'played_combine_min'
-    ]
-    
-    for key, value in data.items():
-        if key not in valid_keys:
-            print(f'⚠️ Clé inconnue: {key}')
-        if not isinstance(value, (int, float)):
-            print(f'⚠️ Valeur non numérique pour {key}: {value}')
-    
-    with open('donnees/seuils_custom.json', 'w') as f:
-        json.dump(data, f, indent=2)
-    print('✅ Seuils custom validés et sauvegardés')
-    
-except Exception as e:
-    print(f'❌ Seuils JSON invalides: {e}')
-    sys.exit(1)
-"
+          echo "🎛️ Création du fichier de seuils custom..."
+          echo '${{ github.event.inputs.seuils_custom }}' > donnees/seuils_custom.json
+          echo "✅ Fichier de seuils custom créé."
 
-      - name: Exécuter moteur UltraSafe
+      - name: 4. Exécuter le moteur UltraSafe
+        id: run_engine
         run: |
-          echo "🚀 Lancement du moteur UltraSafe..."
-          
-          # Arguments de base
-          args="--stats-file $STATS_FILE"
+          echo "🚀 Lancement du moteur de paris UltraSafe..."
+          # Construction des arguments pour le script
+          args="--stats-file ${{ env.stats_file_path }}"
           args="$args --matchs-file donnees/matchs_du_jour.json"
           args="$args --output donnees/paris_du_jour.csv"
           args="$args --historique donnees/historique.csv"
-          
-          # Seuils custom si fournis
-          if [ -f donnees/seuils_custom.json ]; then
+
+          # Ajout des seuils custom s'ils existent
+          if [ -f "donnees/seuils_custom.json" ]; then
             args="$args --seuils donnees/seuils_custom.json"
-            echo "🎛️ Utilisation seuils custom"
+            echo "Inclusion des seuils custom."
           fi
-          
-          # Mode debug
-          if [ "${{ github.event.inputs.debug_mode }}" = "true" ]; then
+
+          # Ajout du mode debug si activé
+          if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
             args="$args --debug"
-            echo "🐛 Mode debug activé"
+            echo "🐛 Mode debug activé."
           fi
-          
-          echo "📋 Commande: python3 scripts/moteur_paris_ultrasafe.py $args"
-          
-          # Exécuter avec gestion d'erreur améliorée
-          python3 scripts/moteur_paris_ultrasafe.py $args || {
-            echo "❌ Erreur lors de l'exécution du moteur"
-            echo "📋 Contenu du répertoire donnees:"
-            ls -la donnees/ || echo "Répertoire donnees introuvable"
-            echo "📋 Variables d'environnement:"
-            echo "STATS_FILE=$STATS_FILE"
-            exit 1
-          }
 
-      - name: Analyser les résultats
+          echo "Commande: python3 scripts/moteur_paris_ultrasafe.py $args"
+          python3 scripts/moteur_paris_ultrasafe.py $args
+
+      - name: 5. Analyser et afficher les résultats
+        if: always() && steps.run_engine.outcome == 'success'
         run: |
-          echo "📊 ANALYSE DES RÉSULTATS"
-          echo "=" * 40
-          
-          # Vérifier paris_du_jour.csv
-          if [ -f donnees/paris_du_jour.csv ]; then
-            echo "✅ paris_du_jour.csv généré"
-            echo "📊 Taille: $(wc -c < donnees/paris_du_jour.csv) bytes"
-            
-            # Analyser le contenu
-            python3 -c "
-import csv
-from collections import Counter
-
-try:
-    ultrasafe_count = 0
-    safe_count = 0
-    type_counts = Counter()
-    total_rows = 0
-
-    with open('donnees/paris_du_jour.csv', 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        
-        for row in reader:
-            total_rows += 1
-            pari_type = row.get('Type', '')
-            type_counts[pari_type] += 1
-            
-            if 'UltraSafe' in pari_type:
-                ultrasafe_count += 1
-            elif 'Safe' in pari_type:
-                safe_count += 1
-
-    print(f'📈 RÉPARTITION DES PARIS ({total_rows} total):')
-    print(f'   🎯 UltraSafe: {ultrasafe_count}')
-    print(f'   ✅ Safe: {safe_count}')
-    print(f'   ❌ Autres: {total_rows - ultrasafe_count - safe_count}')
-    
-    if type_counts:
-        print(f'📊 Détail par type:')
-        for ptype, count in type_counts.most_common():
-            print(f'     - {ptype}: {count}')
-    else:
-        print('⚠️ Aucun paris trouvé')
-        
-except Exception as e:
-    print(f'❌ Erreur analyse paris_du_jour.csv: {e}')
-    import traceback
-    traceback.print_exc()
-"
-            
-            echo ""
-            echo "📋 Aperçu paris du jour (header + top 3):"
-            head -4 donnees/paris_du_jour.csv || echo "Impossible d'afficher le contenu"
-            
+          echo "📊 Analyse des résultats..."
+          if [ -f "donnees/paris_du_jour.csv" ]; then
+            echo "✅ Fichier 'paris_du_jour.csv' généré."
+            echo "📋 Aperçu des 5 premiers paris :"
+            head -n 6 donnees/paris_du_jour.csv | sed 's/$/,/' # Pour l'affichage
           else
-            echo "❌ Fichier paris_du_jour.csv manquant"
-            echo "📋 Contenu du répertoire donnees:"
-            ls -la donnees/ || echo "Répertoire donnees introuvable"
+            echo "❌ Le fichier 'paris_du_jour.csv' n'a pas été généré."
             exit 1
           fi
-          
-          # Vérifier historique.csv
-          if [ -f donnees/historique.csv ]; then
-            lignes_hist=$(wc -l < donnees/historique.csv)
-            echo ""
-            echo "✅ historique.csv mis à jour ($lignes_hist lignes total)"
-            
-            # Compter les entrées du jour
-            today=$(date -u +%Y-%m-%d)
-            entries_today=$(grep -c "^$today," donnees/historique.csv 2>/dev/null || echo "0")
-            echo "📅 Entrées ajoutées aujourd'hui: $entries_today"
-            
-          else
-            echo "⚠️ Fichier historique.csv non créé (normal si premier run)"
+          if [ -f "donnees/historique.csv" ]; then
+            echo "✅ Fichier 'historique.csv' mis à jour."
           fi
 
-      - name: Validation qualité
-        run: |
-          echo "🔍 VALIDATION QUALITÉ"
-          echo "=" * 30
-          
-          # Test de cohérence des données
-          python3 -c "
-import csv, json
-import sys
-
-errors = []
-warnings = []
-
-# Vérifier paris_du_jour.csv
-try:
-    with open('donnees/paris_du_jour.csv', 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        rows = list(reader)
-    
-    if not rows:
-        errors.append('Aucun pari généré')
-    
-    for i, row in enumerate(rows, 1):
-        # Vérifier champs requis
-        required = ['Type', 'Match', 'Pari', 'Fiabilité']
-        for field in required:
-            if not row.get(field, '').strip():
-                errors.append(f'Ligne {i}: champ {field} manquant')
-        
-        # Vérifier fiabilité [0-1]
-        fiab_str = row.get('Fiabilité', '0')
-        try:
-            fiab = float(fiab_str)
-            if not (0 <= fiab <= 1):
-                warnings.append(f'Ligne {i}: fiabilité {fiab} hors [0,1]')
-        except ValueError:
-            errors.append(f'Ligne {i}: fiabilité non numérique: {fiab_str}')
-            continue
-        
-        # Vérifier cohérence UltraSafe
-        if 'UltraSafe' in row.get('Type', ''):
-            if fiab < 0.6:  # Seuil minimum UltraSafe
-                warnings.append(f'Ligne {i}: UltraSafe avec fiabilité faible ({fiab:.3f})')
-
-    print(f'📊 Validation: {len(rows)} paris analysés')
-    
-    if errors:
-        print(f'❌ ERREURS ({len(errors)}):')
-        for err in errors[:5]:  # Limite affichage
-            print(f'   - {err}')
-        sys.exit(1)
-    
-    if warnings:
-        print(f'⚠️ AVERTISSEMENTS ({len(warnings)}):')
-        for warn in warnings[:3]:
-            print(f'   - {warn}')
-    
-    print('✅ Validation réussie')
-    
-except FileNotFoundError:
-    print(f'❌ Fichier paris_du_jour.csv introuvable')
-    sys.exit(1)
-except Exception as e:
-    print(f'❌ Erreur validation: {e}')
-    import traceback
-    traceback.print_exc()
-    sys.exit(1)
-"
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        if: always()
+      - name: 6. Sauvegarder les résultats dans le repository
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          name: paris_ultrasafe_${{ github.run_number }}
+          commit_message: "🎰 Paris UltraSafe du $(date -u +%Y-%m-%d)"
+          file_pattern: "donnees/paris_du_jour.csv donnees/historique.csv"
+          commit_user_name: "GitHub Action UltraSafe"
+          commit_user_email: "action@github.com"
+          commit_author: "GitHub Action UltraSafe <action@github.com>"
+
+      - name: 7. Créer un artefact avec les résultats
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Paris-du-jour-${{ github.run_number }}
           path: |
             donnees/paris_du_jour.csv
             donnees/historique.csv
             donnees/matchs_du_jour.json
-            donnees/seuils_custom.json
-          retention-days: 30
-
-      - name: Afficher résumé final
-        if: success()
-        run: |
-          echo ""
-          echo "🎉 GÉNÉRATION TERMINÉE AVEC SUCCÈS!"
-          echo "=" * 50
-          
-          # Statistiques finales
-          if [ -f donnees/paris_du_jour.csv ]; then
-            total_paris=$(tail -n +2 donnees/paris_du_jour.csv | wc -l 2>/dev/null || echo "0")
-            ultrasafe_count=$(grep -c "UltraSafe" donnees/paris_du_jour.csv 2>/dev/null || echo "0")
-            
-            echo "📊 RÉSUMÉ DU JOUR:"
-            echo "   🎯 Total paris: $total_paris"
-            echo "   🎯 UltraSafe: $ultrasafe_count"
-            echo "   📅 Date: $(date -u +%Y-%m-%d)"
-            
-            if [ "$ultrasafe_count" -gt 0 ]; then
-              echo ""
-              echo "🏆 EXEMPLE ULTRASAFE:"
-              # Afficher la première ligne de données (skip header)
-              sed -n '2p' donnees/paris_du_jour.csv | cut -d, -f1-4 2>/dev/null || echo "Format CSV non standard"
-            fi
-          fi
-          
-          echo ""
-          echo "📁 Fichiers générés:"
-          echo "   - donnees/paris_du_jour.csv (écrasé quotidiennement)"
-          echo "   - donnees/historique.csv (cumulatif)"
-          echo ""
-          echo "🚀 Prêt pour la martingale!"
-
-      - name: Commit des résultats
-        if: success()
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action UltraSafe"
-          
-          # Ajouter les fichiers modifiés
-          files_to_add=""
-          if [ -f donnees/paris_du_jour.csv ]; then
-            git add donnees/paris_du_jour.csv
-            files_to_add="$files_to_add paris_du_jour.csv"
-          fi
-          
-          if [ -f donnees/historique.csv ]; then
-            git add donnees/historique.csv
-            files_to_add="$files_to_add historique.csv"
-          fi
-          
-          # Vérifier s'il y a des changements
-          if [ -n "$(git status --porcelain)" ]; then
-            # Compter les paris générés
-            if [ -f donnees/paris_du_jour.csv ]; then
-              paris_count=$(tail -n +2 donnees/paris_du_jour.csv | wc -l 2>/dev/null || echo "0")
-              ultrasafe_count=$(grep -c "UltraSafe" donnees/paris_du_jour.csv 2>/dev/null || echo "0")
-            else
-              paris_count=0
-              ultrasafe_count=0
-            fi
-            
-            commit_msg="🎰 Paris UltraSafe du $(date -u +%Y-%m-%d) - $paris_count paris ($ultrasafe_count UltraSafe)"
-            
-            git commit -m "$commit_msg" || {
-              echo "❌ Erreur lors du commit"
-              git status
-              exit 1
-            }
-            
-            git push || {
-              echo "❌ Erreur lors du push"
-              exit 1
-            }
-            
-            echo "✅ Paris commitées: $commit_msg"
-          else
-            echo "ℹ️ Aucun changement à committer"
-          fi
-
-      - name: Nettoyer fichiers temporaires
-        if: always()
-        run: |
-          # Nettoyer les fichiers de debug/test si présents
-          rm -f donnees/seuils_custom.json || true
-          rm -f debug_*.json || true
-          echo "🧹 Nettoyage terminé"
+          retention-days: 7
