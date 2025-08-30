@@ -40,25 +40,47 @@ jobs:
       - name: Créer répertoire données
         run: mkdir -p donnees
 
-      - name: Trouver le fichier de stats
+      - name: Préparer les fichiers de stats
         id: find_stats
         run: |
-          stats_file=""
+          echo "🔍 Recherche des fichiers de stats disponibles..."
+          
+          # Lister tous les fichiers de stats disponibles
+          available_files=""
           for year in 2025 2024 2023; do
             candidate="donnees/stats_equipes_${year}.jsonl"
             if [ -f "$candidate" ] && [ -s "$candidate" ]; then
-              stats_file="$candidate"
-              echo "✅ Stats trouvées: $stats_file"
-              break
+              available_files="$available_files $candidate"
+              echo "✅ Trouvé: $candidate ($(du -h "$candidate" | cut -f1))"
+            else
+              echo "❌ Manquant: $candidate"
             fi
           done
           
-          if [ -z "$stats_file" ]; then
+          if [ -z "$available_files" ]; then
             echo "❌ Aucun fichier de stats trouvé"
             exit 1
           fi
           
-          echo "stats_file=$stats_file" >> "$GITHUB_OUTPUT"
+          # Utiliser le fichier 2025 comme principal, mais assurer qu'on a aussi 2024
+          primary_file="donnees/stats_equipes_2025.jsonl"
+          backup_file="donnees/stats_equipes_2024.jsonl"
+          
+          if [ -f "$primary_file" ] && [ -f "$backup_file" ]; then
+            echo "✅ Configuration idéale: 2025 + 2024 disponibles"
+            echo "stats_file=$primary_file" >> "$GITHUB_OUTPUT"
+          elif [ -f "$backup_file" ]; then
+            echo "⚠️ Utilisation du fichier 2024 uniquement"
+            echo "stats_file=$backup_file" >> "$GITHUB_OUTPUT"
+          elif [ -f "$primary_file" ]; then
+            echo "⚠️ Utilisation du fichier 2025 uniquement (risqué si vide)"
+            echo "stats_file=$primary_file" >> "$GITHUB_OUTPUT"
+          else
+            # Prendre le premier disponible
+            first_file=$(echo $available_files | awk '{print $1}')
+            echo "⚠️ Utilisation du fallback: $first_file"
+            echo "stats_file=$first_file" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Créer script de conversion
         run: |
@@ -140,6 +162,12 @@ jobs:
           args="$args --matchs-file donnees/matchs_du_jour.json"
           args="$args --output donnees/paris_du_jour.csv"
           args="$args --historique donnees/historique.csv"
+
+          # Ajouter le fichier 2024 comme fallback si disponible
+          if [ -f "donnees/stats_equipes_2024.jsonl" ] && [ "${{ steps.find_stats.outputs.stats_file }}" != "donnees/stats_equipes_2024.jsonl" ]; then
+            args="$args --fallback-stats donnees/stats_equipes_2024.jsonl"
+            echo "📊 Ajout du fallback 2024"
+          fi
 
           if [ -f "donnees/seuils_custom.json" ]; then
             args="$args --seuils donnees/seuils_custom.json"
