@@ -2,303 +2,143 @@
 # -*- coding: utf-8 -*-
 
 import os, sys, json, time, argparse
-import requests
 from datetime import datetime, timezone
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
+import requests
 
 BASE_URL = "https://api-football-v1.p.rapidapi.com/v3"
 
-def charger_team_ids(fichier_path: str) -> List[Dict]:
-    """Charge le fichier team_ids.json généré précédemment"""
-    with open(fichier_path, 'r', encoding='utf-8') as f:
+def charge_team_ids(path: str) -> Dict[str, Any]:
+    with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
-    
-    equipes = []
-    for league in data.get('leagues', []):
-        league_id = league['league_id']
-        season = league['season']
-        for team in league.get('teams', []):
-            equipes.append({
-                'league_id': league_id,
-                'season': season,
-                'team_id': team['team_id'],
-                'team_name': team['name']
-            })
-    
-    return equipes
+    # attendu: {"generated_at":..., "season":"2025", "leagues":[{league_id, league_name, season, teams:[{team_id,name,...}], ...}]}
+    if "leagues" not in data or not isinstance(data["leagues"], list):
+        raise ValueError("Fichier team_ids.json invalide: clé 'leagues' manquante ou non-liste.")
+    return data
 
-def get_team_statistics(league_id: int, season: str, team_id: int, api_key: str) -> Optional[Dict]:
-    """Récupère les statistiques d'une équipe via l'endpoint /teams/statistics"""
-    
-    url = f"{BASE_URL}/teams/statistics"
+def api_get(path: str, params: Dict[str, Any], key: str, host: str, max_retry: int = 3, pause: float = 1.5) -> Dict[str, Any]:
     headers = {
-        "X-RapidAPI-Key": api_key,
-        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+        "X-RapidAPI-Key": key,
+        "X-RapidAPI-Host": host or "api-football-v1.p.rapidapi.com",
+        "Accept": "application/json",
     }
-    params = {
-        "league": league_id,
-        "season": season,
-        "team": team_id
-    }
-    
-    print(f"[API] GET {url}?league={league_id}&season={season}&team={team_id}")
-    
-    try:
-        response = requests.get(url, headers=headers, params=params, timeout=30)
-        
-        if response.status_code == 429:  # Rate limit
-            print(f"[WARN] Rate limit - pause 10s...")
-            time.sleep(10)
-            return None
-        
-        if response.status_code != 200:
-            print(f"[ERROR] Status {response.status_code}: {response.text[:200]}")
-            return None
-        
-        data = response.json()
-        
-        if data.get('errors'):
-            print(f"[WARN] API Errors: {data['errors']}")
-            return None
-        
-        results = data.get('results', 0)
-        if results == 0:
-            print(f"[WARN] Aucune statistique trouvée")
-            return None
-        
-        # L'API renvoie les stats dans response
-        stats_raw = data.get('response', {})
-        if not stats_raw:
-            return None
-        
-        return stats_raw
-        
-    except requests.exceptions.Timeout:
-        print(f"[TIMEOUT] Team {team_id}")
-        return None
-    except Exception as e:
-        print(f"[ERROR] Exception: {e}")
-        return None
+    url = f"{BASE_URL}{path}"
+    for attempt in range(1, max_retry + 1):
+        r = requests.get(url, headers=headers, params=params, timeout=30)
+        if r.status_code == 200:
+            try:
+                return r.json()
+            except Exception as e:
+                raise RuntimeError(f"Réponse JSON invalide pour {url}: {e}")
+        if r.status_code in (429, 500, 502, 503, 504) and attempt < max_retry:
+            time.sleep(pause * attempt)
+            continue
+        raise RuntimeError(f"API error {r.status_code} for {url} params={params} body={r.text[:400]}")
+    raise RuntimeError("Épuisement des retries API.")
 
-def extraire_stats_cles(stats_raw: Dict, team_id: int, team_name: str) -> Dict:
-    """Extrait et formate les statistiques clés selon votre spec UltraSafe"""
-    
-    # Structure de base
-    stats_clean = {
-        "gf_avg": None,      # goals.for.average.total
-        "ga_avg": None,      # goals.against.average.total  
-        "sot_avg": None,     # shots.on.average
-        "possession": None,  # possession moyenne
-        "wins_total": None,  # fixtures.wins.total
-        "played_total": None, # fixtures.played.total
-        
-        # Stats bonus
-        "gf_total": None,    # goals.for.total.total
-        "ga_total": None,    # goals.against.total.total
-        "wins5": None,       # forme récente (si dispo)
-        "pass_accuracy": None # précision passes
-    }
-    
+def extract_stat_safe(d: Dict[str, Any], path: List[str], default: Optional[float] = None) -> Optional[float]:
+    """Accède en profondeur sans lever d'erreur, renvoie default si absent."""
+    cur: Any = d
+    for k in path:
+        if not isinstance(cur, dict) or k not in cur:
+            return default
+        cur = cur[k]
+    # Convertit en float si possible
     try:
-        # Buts pour/contre moyens
-        goals = stats_raw.get('goals', {})
-        if goals.get('for', {}).get('average', {}).get('total'):
-            stats_clean['gf_avg'] = float(goals['for']['average']['total'])
-        if goals.get('against', {}).get('average', {}).get('total'):  
-            stats_clean['ga_avg'] = float(goals['against']['average']['total'])
-        
-        # Buts totaux (bonus)
-        if goals.get('for', {}).get('total', {}).get('total'):
-            stats_clean['gf_total'] = int(goals['for']['total']['total'])
-        if goals.get('against', {}).get('total', {}).get('total'):
-            stats_clean['ga_total'] = int(goals['against']['total']['total'])
-        
-        # Tirs cadrés moyens
-        shots = stats_raw.get('shots', {})
-        if shots.get('on', {}).get('average'):
-            stats_clean['sot_avg'] = float(shots['on']['average'])
-        
-        # Possession
-        # (L'API peut avoir différents formats pour la possession)
-        possession_data = stats_raw.get('possession', {})
-        if isinstance(possession_data, dict):
-            poss_avg = possession_data.get('average')
-            if poss_avg:
-                # Nettoyer le % si présent
-                poss_val = str(poss_avg).replace('%', '')
-                stats_clean['possession'] = float(poss_val)
-        
-        # Victoires et matchs joués
-        fixtures = stats_raw.get('fixtures', {})
-        if fixtures.get('wins', {}).get('total'):
-            stats_clean['wins_total'] = int(fixtures['wins']['total'])
-        if fixtures.get('played', {}).get('total'):
-            stats_clean['played_total'] = int(fixtures['played']['total'])
-        
-        # Précision des passes (bonus)
-        passes = stats_raw.get('passes', {})
-        if passes.get('accuracy'):
-            acc_val = str(passes['accuracy']).replace('%', '')
-            stats_clean['pass_accuracy'] = float(acc_val)
-        
-        print(f"[STATS] {team_name}: GF={stats_clean['gf_avg']}, GA={stats_clean['ga_avg']}, Wins={stats_clean['wins_total']}/{stats_clean['played_total']}")
-        
-    except Exception as e:
-        print(f"[WARN] Erreur extraction stats pour {team_name}: {e}")
-    
-    return stats_clean
+        if cur is None:
+            return default
+        return float(cur)
+    except Exception:
+        return default
 
 def main():
-    parser = argparse.ArgumentParser(description="Récupère les statistiques détaillées des équipes")
-    parser.add_argument("--teams-file", required=True, help="Fichier team_ids.json")
-    parser.add_argument("--output", required=True, help="Fichier de sortie .jsonl")
-    parser.add_argument("--league", type=int, help="Traiter une seule ligue (optionnel)")
-    parser.add_argument("--limit", type=int, help="Limiter le nombre d'équipes (test)")
-    parser.add_argument("--pause", type=float, default=2.0, help="Pause entre requêtes (secondes)")
-    args = parser.parse_args()
+    p = argparse.ArgumentParser(description="Récupère les statistiques d'équipes à partir d'un team_ids.json")
+    p.add_argument("--entree", required=True, help="Chemin du team_ids.json (ex: donnees/team_ids.json)")
+    p.add_argument("--sortie", required=True, help="Chemin du JSONL de sortie (ex: donnees/stats_equipes.jsonl)")
+    p.add_argument("--saison", required=False, default="", help="Saison (ex: 2024/2025). Si vide, lue depuis team_ids.json.")
+    args = p.parse_args()
 
-    api_key = os.getenv("RAPIDAPI_KEY")
-    if not api_key:
-        print("❌ RAPIDAPI_KEY manquante")
+    rapid_key = os.getenv("RAPIDAPI_KEY")
+    rapid_host = os.getenv("RAPIDAPI_HOST", "api-football-v1.p.rapidapi.com")
+    if not rapid_key:
+        print("Erreur: RAPIDAPI_KEY manquant (secret GitHub).", file=sys.stderr)
         sys.exit(1)
 
-    print(f"🔑 API Key: {api_key[:10]}...")
-    print(f"📁 Teams file: {args.teams_file}")
-    print(f"💾 Output: {args.output}")
-    print(f"⏸️ Pause: {args.pause}s")
+    team_ids = charge_team_ids(args.entree)
 
-    # Charger les équipes
-    try:
-        equipes = charger_team_ids(args.teams_file)
-        print(f"📋 {len(equipes)} équipes chargées")
-    except Exception as e:
-        print(f"❌ Erreur lecture {args.teams_file}: {e}")
+    # Saison prioritaire : argument CLI, sinon prise depuis le fichier d'entrée
+    season_cli = args.saison.strip()
+    season_from_file = str(team_ids.get("season", "")).strip()
+    season = season_cli or season_from_file
+    if not season:
+        print("Erreur: saison non fournie et absente de team_ids.json.", file=sys.stderr)
         sys.exit(1)
 
-    # Filtrage optionnel
-    if args.league:
-        equipes = [e for e in equipes if e['league_id'] == args.league]
-        print(f"🎯 Filtré sur ligue {args.league}: {len(equipes)} équipes")
-    
-    if args.limit:
-        equipes = equipes[:args.limit]
-        print(f"⚡ Limité à {args.limit} équipes pour test")
+    # Ouvre la sortie JSONL
+    os.makedirs(os.path.dirname(args.sortie), exist_ok=True)
+    out = open(args.sortie, "w", encoding="utf-8")
 
-    # Préparer fichier de sortie
-    os.makedirs(os.path.dirname(args.output), exist_ok=True)
-    
-    # Traitement avec sauvegarde progressive (JSONL = 1 ligne par équipe)
-    successes = 0
-    echecs = 0
-    start_time = time.time()
-    
-    with open(args.output, 'w', encoding='utf-8') as f:
-        
-        for i, equipe in enumerate(equipes, 1):
-            league_id = equipe['league_id']
-            season = equipe['season']  
-            team_id = equipe['team_id']
-            team_name = equipe['team_name']
-            
-            print(f"\n[{i}/{len(equipes)}] 📊 {team_name} (L{league_id}, T{team_id})")
-            print("-" * 60)
-            
-            # Estimation temps restant
-            if i > 1:
-                elapsed = time.time() - start_time
-                avg_time = elapsed / (i - 1)
-                remaining_time = avg_time * (len(equipes) - i)
-                print(f"⏱️ Temps écoulé: {elapsed:.1f}s | Estimation: {remaining_time:.1f}s")
-            
+    total_leagues = 0
+    total_teams = 0
+
+    for lig in team_ids["leagues"]:
+        league_id = lig.get("league_id")
+        league_name = lig.get("league_name") or lig.get("league") or f"Ligue {league_id}"
+        if not league_id:
+            continue
+        teams = lig.get("teams", []) or []
+        total_leagues += 1
+        print(f"[INFO] Ligue {league_name} (ID {league_id}) - {len(teams)} équipes")
+
+        for t in teams:
+            team_id = t.get("team_id") or t.get("id")
+            team_name = t.get("name") or ""
+            if not team_id:
+                continue
+
+            params = {"league": league_id, "season": season, "team": team_id}
+            data = api_get("/teams/statistics", params=params, key=rapid_key, host=rapid_host)
+
+            # La réponse API-Football pour /teams/statistics est un objet avec les stats dans "response" (souvent directement au premier niveau).
+            resp = data.get("response") or {}
+            # Champs essentiels (avec chemins prudents, certaines clés peuvent varier selon la ligue/saison)
+            gf_avg = extract_stat_safe(resp, ["goals", "for", "average", "total"], None)
+            ga_avg = extract_stat_safe(resp, ["goals", "against", "average", "total"], None)
+            sot_avg = extract_stat_safe(resp, ["shots", "on", "average"], None)
+            possession = extract_stat_safe(resp, ["ball", "possession"], None)  # certaines ligues n'ont pas ce champ
+
+            wins_total = None
+            played_total = None
+            # Fallback sécurisé si la structure varie
             try:
-                # Récupérer statistiques brutes
-                stats_raw = get_team_statistics(league_id, season, team_id, api_key)
-                
-                if stats_raw:
-                    # Extraire les stats clés
-                    stats_clean = extraire_stats_cles(stats_raw, team_id, team_name)
-                    
-                    # Format final JSONL
-                    record = {
-                        "league_id": league_id,
-                        "season": season,
-                        "team_id": team_id, 
-                        "team_name": team_name,
-                        "stats": stats_clean,
-                        "source_timestamp": datetime.now(timezone.utc).isoformat(),
-                        "raw_data_available": True
-                    }
-                    
-                    # Écrire ligne JSONL
-                    f.write(json.dumps(record, ensure_ascii=False) + '\n')
-                    f.flush()  # Force l'écriture
-                    
-                    successes += 1
-                    print(f"✅ Statistiques sauvegardées")
-                    
-                else:
-                    # Équipe sans stats
-                    record = {
-                        "league_id": league_id,
-                        "season": season, 
-                        "team_id": team_id,
-                        "team_name": team_name,
-                        "stats": {},
-                        "source_timestamp": datetime.now(timezone.utc).isoformat(),
-                        "raw_data_available": False,
-                        "error": "Aucune statistique disponible"
-                    }
-                    
-                    f.write(json.dumps(record, ensure_ascii=False) + '\n')
-                    f.flush()
-                    
-                    echecs += 1
-                    print(f"❌ Aucune statistique disponible")
-                
-                # Pause entre requêtes
-                if i < len(equipes):
-                    print(f"⏸️ Pause {args.pause}s...")
-                    time.sleep(args.pause)
-                    
-            except KeyboardInterrupt:
-                print(f"\n🛑 Interruption - {successes} équipes traitées")
-                break
-            except Exception as e:
-                echecs += 1
-                print(f"❌ Erreur critique: {e}")
-                
-                # Sauvegarder l'erreur aussi
-                record = {
-                    "league_id": league_id,
-                    "season": season,
-                    "team_id": team_id, 
-                    "team_name": team_name,
-                    "stats": {},
-                    "source_timestamp": datetime.now(timezone.utc).isoformat(),
-                    "raw_data_available": False,
-                    "error": str(e)
-                }
-                
-                f.write(json.dumps(record, ensure_ascii=False) + '\n')
-                f.flush()
+                fixtures = resp.get("fixtures", {})
+                wins_total = fixtures.get("wins", {}).get("total")
+                played_total = fixtures.get("played", {}).get("total")
+            except Exception:
+                pass
 
-    # Statistiques finales
-    total_time = time.time() - start_time
-    
-    print(f"\n📊 RÉSUMÉ FINAL:")
-    print(f"✅ Équipes avec statistiques: {successes}")
-    print(f"❌ Équipes sans statistiques: {echecs}")
-    print(f"⏱️ Temps total: {total_time:.1f}s")
-    print(f"💾 Fichier: {args.output}")
-    
-    # Vérifier le fichier
-    if os.path.exists(args.output):
-        taille = os.path.getsize(args.output)
-        lignes = sum(1 for line in open(args.output, 'r'))
-        print(f"📏 Taille fichier: {taille:,} bytes")
-        print(f"📄 Lignes JSONL: {lignes}")
-    
-    print(f"\n🎯 Prêt pour la logique UltraSafe ! 🚀")
+            record = {
+                "league_id": league_id,
+                "season": season,
+                "team_id": team_id,
+                "team_name": team_name,
+                "stats": {
+                    "gf_avg": gf_avg,
+                    "ga_avg": ga_avg,
+                    "sot_avg": sot_avg,
+                    "possession": possession,
+                    "wins_total": wins_total,
+                    "played_total": played_total
+                },
+                "source_timestamp": datetime.now(timezone.utc).astimezone().isoformat()
+            }
+            out.write(json.dumps(record, ensure_ascii=False) + "\n")
+            total_teams += 1
+            # petite pause pour rester soft sur le rate limit
+            time.sleep(0.25)
+
+    out.close()
+    print(f"[OK] Écrit: {args.sortie} | Ligues: {total_leagues} | Équipes: {total_teams}")
 
 if __name__ == "__main__":
     main()
