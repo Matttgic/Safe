@@ -22,16 +22,17 @@ jobs:
     
     - name: Convert match format
       run: |
-        python3 -c """
-import json
-with open('donnees/matchs_du_jour.json', 'r') as f:
-    data = json.load(f)
-if 'fixtures' in data:
-    matchs = [{'team_a_id': f['home_team']['id'], 'team_b_id': f['away_team']['id']} 
-              for f in data['fixtures']]
-    with open('donnees/matchs_du_jour.json', 'w') as f:
-        json.dump({'matchs': matchs}, f)
-"""
+        python3 -c "
+        import json
+        with open('donnees/matchs_du_jour.json', 'r') as f:
+            data = json.load(f)
+        if 'fixtures' in data:
+            matchs = []
+            for f in data['fixtures']:
+                matchs.append({'team_a_id': f['home_team']['id'], 'team_b_id': f['away_team']['id']})
+            with open('donnees/matchs_du_jour.json', 'w') as f:
+                json.dump({'matchs': matchs}, f)
+        "
     
     - name: Generate predictions
       run: |
