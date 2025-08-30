@@ -42,7 +42,7 @@ jobs:
       - name: Installer les dépendances
         run: |
           python -m pip install --upgrade pip
-          pip install requests pandas jq
+          pip install requests pandas
 
       - name: 1. Vérifier les prérequis (fichiers de stats)
         id: check_stats
@@ -61,51 +61,45 @@ jobs:
             exit 1
           fi
           # Exporter la variable pour les étapes suivantes
-          echo "stats_file_path=$stats_file" >> $GITHUB_ENV
+          echo "stats_file_path=$stats_file" >> "$GITHUB_ENV"
 
       - name: 2. Préparer la source des matchs
+        id: prepare_matches
         run: |
-          # Déterminer la source des matchs
+          # Par défaut, la source est celle de l'input ou 'existing' pour les lancements programmés
           if [ "${{ github.event_name }}" == "schedule" ]; then
-            matchs_source="existing"  # Par défaut utiliser le fichier existant
+            matchs_source="existing"
           else
             matchs_source="${{ github.event.inputs.matchs_source }}"
           fi
-          echo "🎯 Source des matchs sélectionnée : $matchs_source"
-          echo "MATCHS_SOURCE=$matchs_source" >> $GITHUB_ENV
-
-          # Créer le répertoire si nécessaire
+          
+          echo "🎯 Stratégie initiale des matchs : $matchs_source"
+          
+          # Créer le répertoire de données s'il n'existe pas
           mkdir -p donnees
 
+          # Logique de décision pour la source finale des matchs
+          final_source="$matchs_source"
+          
           if [ "$matchs_source" == "existing" ]; then
-            echo "📁 Utilisation du fichier de matchs existant..."
+            echo "📁 Vérification du fichier 'donnees/matchs_du_jour.json'..."
             if [ -f "donnees/matchs_du_jour.json" ]; then
-              # Vérifier que le fichier contient des données
-              match_count=$(python3 -c "
-import json
-try:
-    with open('donnees/matchs_du_jour.json', 'r') as f:
-        data = json.load(f)
-    count = data.get('count', len(data.get('fixtures', data.get('matchs', []))))
-    print(count)
-except:
-    print(0)
-")
+              # Vérifier que le fichier contient bien des matchs
+              match_count=$(python3 -c "import json; f=open('donnees/matchs_du_jour.json'); data=json.load(f); print(len(data.get('matchs', [])))")
               if [ "$match_count" -gt 0 ]; then
-                echo "✅ Fichier existant trouvé avec $match_count matchs"
+                echo "✅ Fichier existant valide trouvé avec $match_count matchs."
               else
-                echo "⚠️ Fichier existant vide, passage en mode test"
-                matchs_source="test"
+                echo "⚠️ Fichier existant est vide. Basculement en mode 'test'."
+                final_source="test"
               fi
             else
-              echo "⚠️ Fichier matchs_du_jour.json non trouvé, passage en mode test"
-              matchs_source="test"
+              echo "⚠️ Fichier 'donnees/matchs_du_jour.json' non trouvé. Basculement en mode 'test'."
+              final_source="test"
             fi
           fi
 
-          if [ "$matchs_source" == "test" ]; then
-            echo "🧪 Création du fichier de matchs de test..."
-            # Création d'un fichier JSON de test simple et valide
+          if [ "$final_source" == "test" ]; then
+            echo "🧪 Création d'un fichier de matchs de test..."
             echo '{
               "source": "test",
               "matchs": [
@@ -115,11 +109,10 @@ except:
               ]
             }' > donnees/matchs_du_jour.json
             echo "✅ Fichier de matchs de test créé."
-          elif [ "$matchs_source" == "api" ]; then
+          elif [ "$final_source" == "api" ]; then
             echo "🌐 Récupération des matchs via l'API..."
-            # Simule l'appel à un script de récupération. Remplacez par votre vrai script.
-            # python3 scripts/recuperer_matchs_jour.py --out donnees/matchs_du_jour.json
-            echo "⚠️ Logique de récupération API à implémenter. Utilisation d'un fichier test en fallback."
+            # Remplacez cette section par l'appel à votre script de récupération API
+            echo "⚠️ La logique de récupération API n'est pas implémentée. Utilisation d'un fichier de fallback."
             echo '{
               "source": "api-fallback",
               "matchs": [
@@ -127,9 +120,9 @@ except:
               ]
             }' > donnees/matchs_du_jour.json
           fi
-
-          # Mise à jour de la variable d'environnement avec la source finale
-          echo "MATCHS_SOURCE_FINAL=$matchs_source" >> $GITHUB_ENV
+          
+          # Exporter la source finale utilisée pour le message de commit
+          echo "final_match_source=$final_source" >> "$GITHUB_OUTPUT"
 
       - name: 3. Créer les seuils custom (si fournis)
         if: github.event.inputs.seuils_custom != ''
@@ -163,60 +156,30 @@ except:
           echo "Commande: python3 scripts/moteur_paris_ultrasafe.py $args"
           python3 scripts/moteur_paris_ultrasafe.py $args
 
-      - name: 5. Analyser et afficher les résultats
+      - name: 5. Analyser les résultats
         if: always() && steps.run_engine.outcome == 'success'
         run: |
           echo "📊 Analyse des résultats..."
           if [ -f "donnees/paris_du_jour.csv" ]; then
-            echo "✅ Fichier 'paris_du_jour.csv' généré."
-            
-            # Compter les lignes de paris (en excluant l'en-tête)
             paris_count=$(tail -n +2 donnees/paris_du_jour.csv | wc -l)
-            echo "📈 Nombre de paris générés : $paris_count"
-            
+            echo "✅ Fichier 'paris_du_jour.csv' généré avec $paris_count pari(s)."
             if [ "$paris_count" -gt 0 ]; then
-              echo "📋 Aperçu des paris générés :"
-              head -n 10 donnees/paris_du_jour.csv
-            else
-              echo "ℹ️ Aucun pari UltraSafe trouvé pour aujourd'hui"
+              echo "📋 Aperçu des paris :"
+              head -n 6 donnees/paris_du_jour.csv
             fi
           else
             echo "❌ Le fichier 'paris_du_jour.csv' n'a pas été généré."
             exit 1
           fi
-          
-          if [ -f "donnees/historique.csv" ]; then
-            echo "✅ Fichier 'historique.csv' mis à jour."
-            
-            # Afficher les dernières analyses ajoutées
-            echo "📋 Dernières analyses ajoutées à l'historique :"
-            tail -n 5 donnees/historique.csv
-          fi
-
-          # Afficher des statistiques sur le fichier de matchs utilisé
-          if [ -f "donnees/matchs_du_jour.json" ]; then
-            match_count=$(python3 -c "
-import json
-try:
-    with open('donnees/matchs_du_jour.json', 'r') as f:
-        data = json.load(f)
-    count = data.get('count', len(data.get('fixtures', data.get('matchs', []))))
-    source = data.get('source', 'inconnu')
-    print(f'Matchs analysés: {count}, Source: {source}')
-except Exception as e:
-    print(f'Erreur lecture matchs: {e}')
-")
-            echo "📊 $match_count"
-          fi
 
       - name: 6. Sauvegarder les résultats dans le repository
+        if: success()
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "🎰 Paris UltraSafe du $(date -u +%Y-%m-%d) - Source: ${{ env.MATCHS_SOURCE_FINAL }}"
+          commit_message: "🎰 Paris UltraSafe du $(date -u +%Y-%m-%d) | Source: ${{ steps.prepare_matches.outputs.final_match_source }}"
           file_pattern: "donnees/paris_du_jour.csv donnees/historique.csv"
           commit_user_name: "GitHub Action UltraSafe"
           commit_user_email: "action@github.com"
-          commit_author: "GitHub Action UltraSafe <action@github.com>"
 
       - name: 7. Créer un artefact avec les résultats
         if: always()
