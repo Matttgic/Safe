@@ -92,9 +92,12 @@ class MoteurUltraSafe:
         """Charge et traite le fichier stats_equipes.jsonl en pondérant les saisons."""
         print(f"📊 Chargement des statistiques depuis {fichier_stats}...")
         stats_par_saison = defaultdict(lambda: defaultdict(dict))
+        total_lignes = 0
+        lignes_valides = 0
 
         with open(fichier_stats, 'r', encoding='utf-8') as f:
             for line in f:
+                total_lignes += 1
                 if not line.strip(): continue
                 try:
                     record = json.loads(line)
@@ -102,13 +105,79 @@ class MoteurUltraSafe:
                         team_id = record['team_id']
                         season = record['season']
                         stats_par_saison[season][team_id] = record
+                        lignes_valides += 1
                 except json.JSONDecodeError:
                     if self.debug: print(f"[AVERTISSEMENT] Ligne JSON invalide ignorée.")
         
-        self._creer_stats_ponderees(stats_par_saison.get('2024', {}), stats_par_saison.get('2025', {}))
+        if self.debug:
+            print(f"📈 Lignes totales: {total_lignes}, lignes valides: {lignes_valides}")
+            print(f"📈 Données 2024: {len(stats_par_saison.get('2024', {}))}")
+            print(f"📈 Données 2025: {len(stats_par_saison.get('2025', {}))}")
+        
+        # Logique adaptative pour début de saison
+        total_equipes_2025 = len(stats_par_saison.get('2025', {}))
+        
+        if total_equipes_2025 < 50:  # Début de saison détecté
+            print(f"🆕 Début de saison détecté ({total_equipes_2025} équipes en 2025)")
+            print("🔄 Application de la stratégie fallback : priorité aux données 2024")
+            self._creer_stats_ponderees_fallback(stats_par_saison.get('2024', {}), stats_par_saison.get('2025', {}))
+        else:
+            print("📊 Saison en cours : utilisation de la pondération standard")
+            self._creer_stats_ponderees(stats_par_saison.get('2024', {}), stats_par_saison.get('2025', {}))
+
+    def _creer_stats_ponderees_fallback(self, stats2024: Dict, stats2025: Dict):
+        """Stratégie fallback pour début de saison : privilégier 2024 avec ajustements légers de 2025."""
+        all_team_ids = set(stats2024.keys()) | set(stats2025.keys())
+        
+        for team_id in all_team_ids:
+            s24_record = stats2024.get(team_id, {})
+            s25_record = stats2025.get(team_id, {})
+            
+            # Prioriser les métadonnées de 2025 si disponibles, sinon 2024
+            meta = s25_record or s24_record
+            if not meta: continue
+                
+            s24 = s24_record.get('stats', {})
+            s25 = s25_record.get('stats', {})
+            
+            # Stratégie adaptative pour le poids
+            played2025 = s25.get('played_total', 0)
+            
+            if played2025 >= 5:  # Équipe avec quelques matchs en 2025
+                weight2025, weight2024 = 0.4, 0.6  # Plus de poids sur 2024
+            elif played2025 >= 1:  # Équipe avec très peu de matchs en 2025
+                weight2025, weight2024 = 0.2, 0.8  # Beaucoup plus de poids sur 2024
+            else:  # Pas de données 2025
+                weight2025, weight2024 = 0.0, 1.0  # Que les données 2024
+            
+            if self.debug:
+                print(f"Équipe {team_id}: {played2025} matchs 2025 → poids 2024={weight2024:.1f}, 2025={weight2025:.1f}")
+            
+            stats_final = {}
+            for field in ['played_total', 'wins_total', 'gf_avg', 'ga_avg', 'clean_sheets_total', 'failed_to_score_total', 'over15_rate']:
+                val2025 = s25.get(field)
+                val2024 = s24.get(field)
+                
+                if val2025 is not None and val2024 is not None:
+                    stats_final[field] = weight2025 * val2025 + weight2024 * val2024
+                elif val2024 is not None:  # Prioriser 2024 si 2025 manque
+                    stats_final[field] = val2024
+                elif val2025 is not None:  # Utiliser 2025 en dernier recours
+                    stats_final[field] = val2025
+            
+            # Créer l'objet stats seulement si on a des données suffisantes
+            if stats_final.get('played_total', 0) > 0:
+                self.stats_cache[team_id] = TeamStats(
+                    team_id=team_id,
+                    team_name=meta['team_name'],
+                    league_id=meta['league_id'],
+                    **{k: v for k, v in stats_final.items() if v is not None}
+                )
+        
+        print(f"✅ Cache de statistiques (fallback) créé avec {len(self.stats_cache)} équipes.")
 
     def _creer_stats_ponderees(self, stats2024: Dict, stats2025: Dict):
-        """Crée les stats finales en pondérant 2024 et 2025."""
+        """Crée les stats finales en pondérant 2024 et 2025 (logique originale)."""
         all_team_ids = set(stats2024.keys()) | set(stats2025.keys())
         
         for team_id in all_team_ids:
@@ -200,6 +269,11 @@ class MoteurUltraSafe:
         print(f"\n🎰 Génération des paris pour {len(matchs)} matchs...")
         analyses = [self.analyser_match(a, b) for a, b in matchs]
         analyses = [a for a in analyses if a] # Filtrer les analyses None
+        
+        if self.debug:
+            print(f"🔍 {len(analyses)} analyses réussies sur {len(matchs)} matchs")
+            for analysis in analyses:
+                print(f"  - {analysis.equipe_a} vs {analysis.equipe_b}: O15I={analysis.o15i:.3f}, RSI_A={analysis.rsi_a:.3f}")
 
         ultrasafe_paris = [a for a in analyses if "UltraSafe" in a.decision_over15 or "UltraSafe" in a.decision_result]
         ultrasafe_paris.sort(key=lambda x: x.fiabilite_result, reverse=True)
@@ -244,7 +318,13 @@ def charger_matchs(fichier_matchs: str) -> List[Tuple[int, int]]:
     try:
         with open(fichier_matchs, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        matchs = [(m['team_a_id'], m['team_b_id']) for m in data.get('matchs', []) if m.get('team_a_id') and m.get('team_b_id')]
+        
+        # Support pour les deux formats : ancien (matchs) et nouveau (fixtures)
+        if 'fixtures' in data:
+            matchs = [(m['home_team']['id'], m['away_team']['id']) for m in data['fixtures']]
+        else:
+            matchs = [(m['team_a_id'], m['team_b_id']) for m in data.get('matchs', []) if m.get('team_a_id') and m.get('team_b_id')]
+        
         print(f"📅 {len(matchs)} matchs chargés depuis {fichier_matchs}")
         return matchs
     except Exception as e:
@@ -276,6 +356,23 @@ def main():
             print(f"[AVERTISSEMENT] Impossible de charger le fichier de seuils : {e}")
     
     moteur.charger_stats_equipes(args.stats_file)
+    
+    # Diagnostic si le cache est vide
+    if len(moteur.stats_cache) == 0:
+        print("⚠️ DIAGNOSTIC: Cache de statistiques vide !")
+        print("💡 Vérifiez que le fichier de stats contient des enregistrements avec 'raw_data_available': true")
+        
+        # Créer un fichier de diagnostic
+        try:
+            with open(args.stats_file, 'r', encoding='utf-8') as f:
+                first_lines = [f.readline().strip() for _ in range(3)]
+            print("📄 Premières lignes du fichier de stats:")
+            for i, line in enumerate(first_lines):
+                if line:
+                    print(f"  Ligne {i+1}: {line[:100]}...")
+        except Exception as e:
+            print(f"❌ Impossible de lire le fichier de stats: {e}")
+    
     matchs = charger_matchs(args.matchs_file)
 
     if not matchs:
