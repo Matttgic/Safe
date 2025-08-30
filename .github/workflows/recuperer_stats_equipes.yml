@@ -1,0 +1,189 @@
+name: Récupérer Stats Équipes UltraSafe
+
+on:
+  workflow_dispatch:
+    inputs:
+      league_id:
+        description: "ID Ligue spécifique (optionnel, ex: 39 pour Premier League)"
+        required: false
+        type: string
+      limit:
+        description: "Nombre max d'équipes à traiter (test)"
+        required: false
+        default: ""
+        type: string
+      pause:
+        description: "Pause entre requêtes API (secondes)"
+        required: false
+        default: "2.0"
+        type: string
+  push:
+    paths:
+      - donnees/team_ids.json
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60  # 1 heure max
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Vérifier team_ids.json
+        run: |
+          if [ ! -f donnees/team_ids.json ]; then
+            echo "❌ Fichier donnees/team_ids.json manquant"
+            echo "💡 Exécutez d'abord le workflow 'Récupérer Team IDs'"
+            exit 1
+          fi
+          
+          echo "✅ team_ids.json trouvé"
+          echo "📊 Taille: $(wc -c < donnees/team_ids.json) bytes"
+          
+          # Compter les équipes
+          teams_count=$(grep -o '"team_id"' donnees/team_ids.json | wc -l)
+          echo "⚽ Total équipes à traiter: $teams_count"
+
+      - name: Test API rapide
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+        run: |
+          echo "🧪 Test endpoint /teams/statistics..."
+          python -c "
+import requests, os
+headers = {
+    'X-RapidAPI-Key': os.getenv('RAPIDAPI_KEY'),
+    'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+}
+# Test avec Manchester City (team 50, Premier League)
+resp = requests.get(
+    'https://api-football-v1.p.rapidapi.com/v3/teams/statistics?league=39&season=2025&team=50',
+    headers=headers
+)
+print(f'Status: {resp.status_code}')
+if resp.status_code == 200:
+    data = resp.json()
+    print(f'Results: {data.get(\"results\", 0)}')
+    if data.get('response'):
+        goals = data['response'].get('goals', {})
+        print(f'Sample - Goals for avg: {goals.get(\"for\", {}).get(\"average\", {}).get(\"total\", \"N/A\")}')
+else:
+    print(f'Error: {resp.text[:200]}')
+"
+
+      - name: Récupérer statistiques équipes
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+        run: |
+          echo "🚀 Récupération des statistiques équipes..."
+          
+          # Construction des arguments
+          args="--teams-file donnees/team_ids.json --output donnees/stats_equipes.jsonl"
+          
+          if [ -n "${{ github.event.inputs.league_id }}" ]; then
+            args="$args --league ${{ github.event.inputs.league_id }}"
+            echo "🎯 Ligue spécifique: ${{ github.event.inputs.league_id }}"
+          fi
+          
+          if [ -n "${{ github.event.inputs.limit }}" ]; then
+            args="$args --limit ${{ github.event.inputs.limit }}"
+            echo "⚡ Limite: ${{ github.event.inputs.limit }} équipes"
+          fi
+          
+          if [ -n "${{ github.event.inputs.pause }}" ]; then
+            args="$args --pause ${{ github.event.inputs.pause }}"
+            echo "⏸️ Pause: ${{ github.event.inputs.pause }}s"
+          fi
+          
+          python scripts/recuperer_stats_equipes.py $args
+
+      - name: Analyser les résultats
+        run: |
+          if [ -f donnees/stats_equipes.jsonl ]; then
+            echo "✅ Fichier stats_equipes.jsonl généré"
+            echo "📊 Taille: $(wc -c < donnees/stats_equipes.jsonl) bytes"
+            echo "📄 Lignes: $(wc -l < donnees/stats_equipes.jsonl)"
+            
+            # Analyser le contenu JSONL
+            python3 -c "
+import json
+import sys
+
+total_teams = 0
+with_stats = 0
+without_stats = 0
+leagues = set()
+
+try:
+    with open('donnees/stats_equipes.jsonl', 'r') as f:
+        for line in f:
+            if line.strip():
+                record = json.loads(line)
+                total_teams += 1
+                leagues.add(record.get('league_id'))
+                
+                if record.get('raw_data_available', False):
+                    with_stats += 1
+                else:
+                    without_stats += 1
+
+    print(f'📈 Total équipes traitées: {total_teams}')
+    print(f'✅ Avec statistiques: {with_stats}')
+    print(f'❌ Sans statistiques: {without_stats}')
+    print(f'🏆 Ligues couvertes: {sorted(list(leagues))}')
+    
+except Exception as e:
+    print(f'❌ Erreur analyse: {e}')
+    sys.exit(1)
+"
+            
+            echo ""
+            echo "📋 Exemple de données (premières lignes):"
+            head -3 donnees/stats_equipes.jsonl | python3 -m json.tool
+            
+          else
+            echo "❌ Fichier stats_equipes.jsonl manquant"
+            exit 1
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: stats_equipes_${{ github.run_number }}
+          path: |
+            donnees/stats_equipes.jsonl
+            donnees/team_ids.json
+
+      - name: Commit des résultats
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action UltraSafe"
+          
+          if [ -n "$(git status --porcelain donnees/stats_equipes.jsonl)" ]; then
+            git add donnees/stats_equipes.jsonl
+            
+            # Message de commit avec détails
+            teams_count=$(wc -l < donnees/stats_equipes.jsonl)
+            if [ -n "${{ github.event.inputs.league_id }}" ]; then
+              commit_msg="📊 Stats équipes UltraSafe - Ligue ${{ github.event.inputs.league_id }} ($teams_count équipes)"
+            else
+              commit_msg="📊 Stats équipes UltraSafe - Toutes ligues ($teams_count équipes)"
+            fi
+            
+            git commit -m "$commit_msg"
+            git push
+            echo "✅ Statistiques commitées: $commit_msg"
+          else
+            echo "ℹ️ Aucun changement dans stats_equipes.jsonl"
+          fi
