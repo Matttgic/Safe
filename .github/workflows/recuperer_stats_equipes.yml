@@ -1,27 +1,31 @@
-name: Récupérer Stats des Équipes (depuis team_ids.json)
+name: Récupérer Stats des Équipes (fichier unique)
 
 on:
   workflow_dispatch:
     inputs:
       season:
-        description: "Saison (ex: 2024 ou 2025). Si vide, on lit la saison dans team_ids.json."
+        description: "Saison (ex: 2024). Si vide, lit la saison depuis team_ids.json"
         required: false
         default: ""
       input_path:
-        description: "Chemin du fichier d'entrée (team_ids.json)"
+        description: "Chemin d'entrée (team_ids.json)"
         required: false
         default: "donnees/team_ids.json"
       output_path:
-        description: "Chemin du fichier de sortie (stats_equipes.jsonl)"
+        description: "Chemin de sortie (stats_equipes.jsonl)"
         required: false
         default: "donnees/stats_equipes.jsonl"
 
 jobs:
   fetch-stats:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # autorise le commit/push
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -33,7 +37,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests pyyaml
 
-      - name: Récupérer stats équipes
+      - name: Récupérer stats équipes (fichier unique)
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           RAPIDAPI_HOST: api-football-v1.p.rapidapi.com
@@ -43,8 +47,10 @@ jobs:
             --sortie "${{ github.event.inputs.output_path || 'donnees/stats_equipes.jsonl' }}" \
             --saison "${{ github.event.inputs.season || '' }}"
 
-      - name: Upload (artifact)
-        uses: actions/upload-artifact@v4
-        with:
-          name: stats_equipes
-          path: ${{ github.event.inputs.output_path || 'donnees/stats_equipes.jsonl' }}
+      - name: Commit & Push résultats
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ${{ github.event.inputs.output_path || 'donnees/stats_equipes.jsonl' }}
+          git commit -m "chore(data): maj stats_equipes.jsonl (workflow)" || echo "rien à committer"
+          git push
