@@ -1,4 +1,4 @@
-name: Clean Historique
+name: Nettoyer Historique
 
 on:
   workflow_dispatch:
