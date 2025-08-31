@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+import csv
+from collections import defaultdict
+
+def nettoyer_historique():
+    # Lire le fichier et grouper par (Date, Match)
+    rows_by_key = defaultdict(list)
+    
+    with open('donnees/historique.csv', 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            key = (row['Date'], row['Match'])
+            rows_by_key[key].append(row)
+    
+    # Garder seulement la première occurrence de chaque (Date, Match)
+    unique_rows = []
+    for rows in rows_by_key.values():
+        unique_rows.append(rows[0])  # Première occurrence seulement
+    
+    # Trier par date
+    unique_rows.sort(key=lambda x: x['Date'])
+    
+    # Réécrire le fichier
+    fieldnames = ['Date', 'Match', 'League_ID', 'Decision_Over15', 'Decision_Result', 'O15I', 'RSI_A', 'Fiabilite_Over15', 'Fiabilite_Result', 'Flags', 'Resultat_Over15', 'Resultat_Result']
+    
+    with open('donnees/historique.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in unique_rows:
+            writer.writerow(row)
+    
+    print(f"✅ Nettoyage terminé. {len(unique_rows)} entrées uniques conservées.")
+
+if __name__ == "__main__":
+    nettoyer_historique()
