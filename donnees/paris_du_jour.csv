@@ -1,76 +1,88 @@
 Type,Match,League_ID,Decision_Over15,Decision_Result,O15I,RSI_A,Fiabilite_Over15,Fiabilite_Result,Flags
-Over15,FC Augsburg vs Bayern München,78,UltraSafe +1.5,Éviter,0.997,-0.694,0.997,0.694,
-Result,FC Augsburg vs Bayern München,78,Éviter,UltraSafe B ou Nul,0.997,-0.694,0.997,0.694,
-Over15,Galatasaray vs Rizespor,203,UltraSafe +1.5,Éviter,0.992,0.684,0.992,0.684,
-Result,Galatasaray vs Rizespor,203,Éviter,UltraSafe A ou Nul,0.992,0.684,0.992,0.684,
-Over15,Mlada Boleslav vs Slavia Praha,345,UltraSafe +1.5,Éviter,0.995,-0.638,0.995,0.638,
-Result,Mlada Boleslav vs Slavia Praha,345,Éviter,UltraSafe B ou Nul,0.995,-0.638,0.995,0.638,
-Over15,Volos NFC vs Olympiakos Piraeus,197,UltraSafe +1.5,Éviter,0.948,-0.620,0.948,0.620,
-Result,Volos NFC vs Olympiakos Piraeus,197,Éviter,UltraSafe B ou Nul,0.948,-0.620,0.948,0.620,
-Over15,Kolos Kovalivka vs Epitsentr Dunayivtsi,333,UltraSafe +1.5,Éviter,0.980,0.536,0.980,0.536,low_sample_B(1.5999999999999999)
-Result,Kolos Kovalivka vs Epitsentr Dunayivtsi,333,Éviter,Safe A ou Nul,0.980,0.536,0.980,0.536,low_sample_B(1.5999999999999999)
-Over15,Grazer AK vs Sturm Graz,218,UltraSafe +1.5,Éviter,0.997,-0.534,0.997,0.534,
-Result,Grazer AK vs Sturm Graz,218,Éviter,Safe B ou Nul,0.997,-0.534,0.997,0.534,
-Over15,Real Madrid vs Mallorca,140,UltraSafe +1.5,Éviter,0.980,0.532,0.980,0.532,
-Result,Real Madrid vs Mallorca,140,Éviter,Safe A ou Nul,0.980,0.532,0.980,0.532,
-Over15,Mjallby AIF vs Halmstad,113,UltraSafe +1.5,Éviter,0.995,0.517,0.995,0.517,
-Result,Mjallby AIF vs Halmstad,113,Éviter,Safe A ou Nul,0.995,0.517,0.995,0.517,
-Over15,FC Volendam vs Ajax,88,UltraSafe +1.5,Éviter,0.965,-0.504,0.965,0.504,low_sample_A(0.8999999999999999)
-Result,FC Volendam vs Ajax,88,Éviter,Safe B ou Nul,0.965,-0.504,0.965,0.504,low_sample_A(0.8999999999999999)
-Over15,Napoli vs Cagliari,135,UltraSafe +1.5,Éviter,0.949,0.485,0.949,0.485,
-Result,Napoli vs Cagliari,135,Éviter,Safe A ou Nul,0.949,0.485,0.949,0.485,
-Over15,Parma vs Atalanta,135,UltraSafe +1.5,Éviter,0.987,-0.476,0.987,0.476,
-Result,Parma vs Atalanta,135,Éviter,Safe B ou Nul,0.987,-0.476,0.987,0.476,
-Over15,AVS vs Famalicao,94,UltraSafe +1.5,Éviter,0.973,-0.408,0.973,0.408,
-Over15,Slovácko vs FK Jablonec,345,UltraSafe +1.5,Éviter,0.949,-0.403,0.949,0.403,
-Over15,Red Bull Salzburg vs FC BW Linz,218,UltraSafe +1.5,Éviter,0.989,0.391,0.989,0.391,
-Over15,1899 Hoffenheim vs Eintracht Frankfurt,78,UltraSafe +1.5,Éviter,0.997,-0.389,0.997,0.389,
-Over15,PSV Eindhoven vs Telstar,88,UltraSafe +1.5,Éviter,0.991,0.387,0.991,0.387,low_sample_B(5.1)
-Over15,Toulouse vs Paris Saint Germain,61,UltraSafe +1.5,Éviter,0.988,-0.385,0.988,0.385,
-Over15,Pisa vs AS Roma,135,Safe +1.5,Éviter,0.762,-0.352,0.762,0.352,low_sample_A(0.3)
-Over15,Excelsior vs Twente,88,UltraSafe +1.5,Éviter,0.972,-0.348,0.972,0.348,low_sample_A(0.8999999999999999)
-Over15,Aris Thessalonikis vs Panetolikos,197,UltraSafe +1.5,Éviter,0.894,0.332,0.894,0.332,
-Over15,NK Varazdin vs Dinamo Zagreb,210,UltraSafe +1.5,Éviter,0.979,-0.330,0.979,0.330,
-Over15,Werder Bremen vs Bayer Leverkusen,78,UltraSafe +1.5,Éviter,0.997,-0.316,0.997,0.316,
-Over15,Alaves vs Atletico Madrid,140,UltraSafe +1.5,Éviter,0.962,-0.276,0.962,0.276,
-Over15,Metalist 1925 Kharkiv vs Ruh Lviv,333,UltraSafe +1.5,Éviter,0.942,0.273,0.942,0.273,low_sample_A(2.9999999999999996)
-Over15,IFK Goteborg vs IFK Varnamo,113,UltraSafe +1.5,Éviter,0.994,0.264,0.994,0.264,
-Over15,Chelsea vs Fulham,39,UltraSafe +1.5,Éviter,0.993,0.247,0.993,0.247,
-Over15,Wolves vs Everton,39,UltraSafe +1.5,Éviter,0.984,-0.227,0.984,0.227,
-Over15,Charleroi vs Dender,144,UltraSafe +1.5,Éviter,0.974,0.215,0.974,0.215,
-Over15,Livingston vs Heart Of Midlothian,179,UltraSafe +1.5,Éviter,0.997,0.213,0.997,0.213,low_sample_A(3.6999999999999997)
-Over15,Oviedo vs Real Sociedad,140,UltraSafe +1.5,Éviter,0.853,-0.212,0.853,0.212,low_sample_A(0.6)
-Over15,Dukla Praha vs Hradec Králové,345,UltraSafe +1.5,Éviter,0.949,-0.205,0.949,0.205,
-Over15,Panserraikos vs OFI,197,UltraSafe +1.5,Éviter,0.949,-0.200,0.949,0.200,
-Over15,IF Brommapojkarna vs IF Elfsborg,113,UltraSafe +1.5,Éviter,0.997,-0.196,0.997,0.196,
-Over15,Pardubice vs Bohemians 1905,345,UltraSafe +1.5,Éviter,0.977,-0.191,0.977,0.191,
-Over15,Kryvbas KR vs Obolon'-Brovar,333,UltraSafe +1.5,Éviter,0.918,0.188,0.918,0.188,
-Over15,Gornik Zabrze vs Motor Lublin,106,UltraSafe +1.5,Éviter,0.990,0.185,0.990,0.185,
-Over15,Manchester United vs Burnley,39,UltraSafe +1.5,Éviter,0.830,-0.185,0.830,0.185,low_sample_B(0.6)
-Over15,Antalyaspor vs Fatih Karagümrük,203,UltraSafe +1.5,Éviter,0.860,0.182,0.860,0.182,low_sample_B(0.6)
-Over15,Guimaraes vs Arouca,94,UltraSafe +1.5,Éviter,0.996,0.178,0.996,0.178,
-Over15,Unirea Slobozia vs Universitatea Cluj,283,UltraSafe +1.5,Éviter,0.975,-0.171,0.975,0.171,
-Over15,Sporting CP vs FC Porto,94,UltraSafe +1.5,Éviter,0.997,0.157,0.997,0.157,
-Over15,Girona vs Sevilla,140,UltraSafe +1.5,Éviter,0.997,-0.149,0.997,0.149,
-Over15,KVC Westerlo vs Antwerp,144,UltraSafe +1.5,Éviter,0.995,-0.147,0.995,0.147,
-Over15,Sunderland vs Brentford,39,UltraSafe +1.5,Éviter,0.965,0.143,0.965,0.143,low_sample_A(0.6)
-Over15,Valerenga vs Bryne,103,UltraSafe +1.5,Éviter,0.918,0.136,0.918,0.136,
-Over15,Casa Pia vs Nacional,94,UltraSafe +1.5,Éviter,0.976,0.119,0.976,0.119,
-Over15,Vukovar vs NK Slaven Belupo,210,UltraSafe +1.5,Éviter,0.918,-0.103,0.918,0.103,low_sample_A(1.2)
-Over15,Leeds vs Newcastle,39,UltraSafe +1.5,Éviter,0.965,-0.102,0.965,0.102,low_sample_A(0.6)
-Over15,Nantes vs Auxerre,61,UltraSafe +1.5,Éviter,0.978,-0.093,0.978,0.093,
-Over15,Nieciecza vs Korona Kielce,106,UltraSafe +1.5,Éviter,0.846,0.087,0.846,0.087,low_sample_A(1.7999999999999998)
-Over15,Heerenveen vs GO Ahead Eagles,88,UltraSafe +1.5,Éviter,0.997,-0.075,0.997,0.075,
-Over15,Lorient vs Lille,61,UltraSafe +1.5,Éviter,0.965,0.074,0.965,0.074,low_sample_A(0.6)
-Over15,Tottenham vs Bournemouth,39,UltraSafe +1.5,Éviter,0.997,0.074,0.997,0.074,
-Over15,Bologna vs Como,135,UltraSafe +1.5,Éviter,0.954,-0.070,0.954,0.070,
-Over15,Lask Linz vs Ried,218,UltraSafe +1.5,Éviter,0.958,0.053,0.958,0.053,low_sample_B(1.2)
-Over15,RB Leipzig vs 1. FC Heidenheim,78,UltraSafe +1.5,Éviter,0.997,-0.046,0.997,0.046,
-Over15,KV Mechelen vs RAAL La Louvière,144,UltraSafe +1.5,Éviter,0.944,0.044,0.944,0.044,low_sample_B(1.5)
-Over15,Zaglebie Lubin vs Piast Gliwice,106,UltraSafe +1.5,Éviter,0.977,-0.043,0.977,0.043,
-Over15,Dinamo Bucuresti vs AFC Hermannstadt,283,UltraSafe +1.5,Éviter,0.956,0.038,0.956,0.038,
-Over15,Motherwell vs Kilmarnock,179,UltraSafe +1.5,Éviter,0.996,0.025,0.996,0.025,
-Over15,VfB Stuttgart vs Borussia Mönchengladbach,78,UltraSafe +1.5,Éviter,0.988,-0.024,0.988,0.024,
-Over15,Kasimpasa vs Gazişehir Gaziantep,203,UltraSafe +1.5,Éviter,0.997,0.007,0.997,0.007,
-Over15,Karviná vs Teplice,345,UltraSafe +1.5,Éviter,0.993,-0.002,0.993,0.002,
-Over15,Kocaelispor vs Kayserispor,203,UltraSafe +1.5,Éviter,0.965,-0.000,0.965,0.000,low_sample_A(0.8999999999999999)
+Over15,Alverca vs Benfica,94,UltraSafe +1.5,Éviter,0.967,-0.707,0.967,0.707,low_sample_A(0.8999999999999999)
+Result,Alverca vs Benfica,94,Éviter,UltraSafe B ou Nul,0.967,-0.707,0.967,0.707,low_sample_A(0.8999999999999999)
+Over15,Inter vs Udinese,135,UltraSafe +1.5,Éviter,0.990,0.603,0.990,0.603,
+Result,Inter vs Udinese,135,Éviter,UltraSafe A ou Nul,0.990,0.603,0.990,0.603,
+Over15,Genclerbirligi vs Fenerbahce,203,UltraSafe +1.5,Éviter,0.965,-0.568,0.965,0.568,low_sample_A(0.8999999999999999)
+Result,Genclerbirligi vs Fenerbahce,203,Éviter,Safe B ou Nul,0.965,-0.568,0.965,0.568,low_sample_A(0.8999999999999999)
+Over15,1.FC Köln vs SC Freiburg,78,UltraSafe +1.5,Éviter,0.965,0.558,0.965,0.558,low_sample_A(0.3)
+Result,1.FC Köln vs SC Freiburg,78,Éviter,Safe A ou Nul,0.965,0.558,0.965,0.558,low_sample_A(0.3)
+Over15,Torino vs Fiorentina,135,UltraSafe +1.5,Éviter,0.992,-0.500,0.992,0.500,
+Result,Torino vs Fiorentina,135,Éviter,Safe B ou Nul,0.992,-0.500,0.992,0.500,
+Over15,Fredrikstad vs Haugesund,103,UltraSafe +1.5,Éviter,0.990,0.468,0.990,0.468,
+Result,Fredrikstad vs Haugesund,103,Éviter,Safe A ou Nul,0.990,0.468,0.990,0.468,
+Over15,Malmo FF vs Degerfors IF,113,UltraSafe +1.5,Éviter,0.958,0.465,0.958,0.465,
+Result,Malmo FF vs Degerfors IF,113,Éviter,Safe A ou Nul,0.958,0.465,0.958,0.465,
+Over15,Rayo Vallecano vs Barcelona,140,UltraSafe +1.5,Éviter,0.989,-0.464,0.989,0.464,
+Result,Rayo Vallecano vs Barcelona,140,Éviter,Safe B ou Nul,0.989,-0.464,0.989,0.464,
+Over15,Nottingham Forest vs West Ham,39,UltraSafe +1.5,Éviter,0.997,0.463,0.997,0.463,
+Result,Nottingham Forest vs West Ham,39,Éviter,Safe A ou Nul,0.997,0.463,0.997,0.463,
+Over15,NAC Breda vs AZ Alkmaar,88,UltraSafe +1.5,Éviter,0.995,-0.442,0.995,0.442,
+Over15,Le Havre vs Nice,61,UltraSafe +1.5,Éviter,0.997,-0.437,0.997,0.437,
+Over15,Rio Ave vs SC Braga,94,UltraSafe +1.5,Éviter,0.996,-0.427,0.996,0.427,
+Over15,Sparta Rotterdam vs Feyenoord,88,UltraSafe +1.5,Éviter,0.997,-0.422,0.997,0.422,
+Over15,Gent vs Club Brugge KV,144,UltraSafe +1.5,Éviter,0.997,-0.419,0.997,0.419,
+Over15,Dynamo Kyiv vs Polessya,333,UltraSafe +1.5,Éviter,0.984,0.397,0.984,0.397,
+Over15,AEK Athens FC vs Asteras Tripolis,197,UltraSafe +1.5,Éviter,0.942,0.376,0.942,0.376,
+Over15,Hammarby FF vs Osters IF,113,UltraSafe +1.5,Éviter,0.946,0.369,0.946,0.369,
+Over15,Rangers vs Celtic,179,UltraSafe +1.5,Éviter,0.997,-0.360,0.997,0.360,
+Over15,Stromsgodset vs Molde,103,UltraSafe +1.5,Éviter,0.997,-0.351,0.997,0.351,
+Over15,Sandefjord vs Bodo/Glimt,103,UltraSafe +1.5,Éviter,0.997,-0.344,0.997,0.344,
+Over15,Celta Vigo vs Villarreal,140,UltraSafe +1.5,Éviter,0.996,-0.337,0.996,0.337,
+Over15,Kristiansund BK vs Brann,103,UltraSafe +1.5,Éviter,0.996,-0.325,0.996,0.325,
+Over15,Fortuna Sittard vs NEC Nijmegen,88,UltraSafe +1.5,Éviter,0.997,-0.321,0.997,0.321,
+Over15,Genoa vs Juventus,135,UltraSafe +1.5,Éviter,0.889,-0.313,0.889,0.313,
+Over15,Lech Poznan vs Widzew Łódź,106,UltraSafe +1.5,Éviter,0.992,0.288,0.992,0.288,
+Over15,Slovan Liberec vs Plzen,345,UltraSafe +1.5,Éviter,0.994,-0.282,0.994,0.282,
+Over15,Jagiellonia vs Lechia Gdansk,106,UltraSafe +1.5,Éviter,0.997,0.276,0.997,0.276,
+Over15,Paris FC vs Metz,61,UltraSafe +1.5,Éviter,0.940,-0.253,0.940,0.253,low_sample_A(0.6)|low_sample_B(2.0)
+Over15,Arges Pitesti vs Metaloglobus,283,Safe +1.5,Éviter,0.769,0.253,0.769,0.253,low_sample_A(2.1)|low_sample_B(3.5)
+Over15,Randers FC vs FC Copenhagen,119,UltraSafe +1.5,Éviter,0.997,-0.252,0.997,0.252,
+Over15,Brighton vs Manchester City,39,UltraSafe +1.5,Éviter,0.997,-0.252,0.997,0.252,
+Over15,Genk vs Zulte Waregem,144,UltraSafe +1.5,Éviter,0.953,0.249,0.953,0.249,low_sample_B(1.5)
+Over15,Alanyaspor vs Besiktas,203,UltraSafe +1.5,Éviter,0.977,-0.247,0.977,0.247,
+Over15,WSG Wattens vs Wolfsberger AC,218,UltraSafe +1.5,Éviter,0.997,-0.242,0.997,0.242,
+Over15,Sigma Olomouc vs Baník Ostrava,345,UltraSafe +1.5,Éviter,0.965,-0.217,0.965,0.217,
+Over15,FC Botosani vs Universitatea Craiova,283,UltraSafe +1.5,Éviter,0.987,-0.210,0.987,0.210,
+Over15,Shakhtar Donetsk vs Oleksandria,333,UltraSafe +1.5,Éviter,0.993,0.204,0.993,0.204,
+Over15,IFK Norrkoping vs Djurgardens IF,113,UltraSafe +1.5,Éviter,0.988,-0.202,0.988,0.202,
+Over15,PEC Zwolle vs Utrecht,88,UltraSafe +1.5,Éviter,0.990,-0.197,0.990,0.197,
+Over15,Santa Clara vs Estrela,94,UltraSafe +1.5,Éviter,0.914,0.187,0.914,0.187,
+Over15,Viking vs Rosenborg,103,UltraSafe +1.5,Éviter,0.994,0.180,0.994,0.180,
+Over15,Gais vs BK Hacken,113,UltraSafe +1.5,Éviter,0.989,0.176,0.989,0.176,
+Over15,Silkeborg vs Sonderjyske,119,UltraSafe +1.5,Éviter,0.997,0.174,0.997,0.174,
+Over15,Austria Vienna vs SCR Altach,218,UltraSafe +1.5,Éviter,0.971,0.174,0.971,0.174,
+Over15,AIK Stockholm vs Sirius,113,UltraSafe +1.5,Éviter,0.989,0.167,0.989,0.167,
+Over15,Tondela vs Estoril,94,UltraSafe +1.5,Éviter,0.965,-0.163,0.965,0.163,low_sample_A(0.8999999999999999)
+Over15,Union St. Gilloise vs Anderlecht,144,UltraSafe +1.5,Éviter,0.994,0.163,0.994,0.163,
+Over15,Real Betis vs Athletic Club,140,UltraSafe +1.5,Éviter,0.967,-0.137,0.967,0.137,
+Over15,Brondby vs FC Midtjylland,119,UltraSafe +1.5,Éviter,0.997,-0.135,0.997,0.135,
+Over15,Pogon Szczecin vs Raków Częstochowa,106,UltraSafe +1.5,Éviter,0.992,-0.129,0.992,0.129,
+Over15,Lazio vs Verona,135,UltraSafe +1.5,Éviter,0.976,0.128,0.976,0.128,
+Over15,LNZ Cherkasy vs Veres Rivne,333,UltraSafe +1.5,Éviter,0.886,0.125,0.886,0.125,
+Over15,PAOK vs Atromitos,197,UltraSafe +1.5,Éviter,0.958,0.121,0.958,0.121,
+Over15,Borussia Dortmund vs Union Berlin,78,UltraSafe +1.5,Éviter,0.995,0.115,0.995,0.115,
+Over15,TSV Hartberg vs Rapid Vienna,218,UltraSafe +1.5,Éviter,0.989,-0.112,0.989,0.112,
+Over15,Hibernian vs ST Mirren,179,UltraSafe +1.5,Éviter,0.990,0.111,0.990,0.111,
+Over15,Cracovia Krakow vs Legia Warszawa,106,UltraSafe +1.5,Éviter,0.995,-0.099,0.995,0.099,
+Over15,Panathinaikos vs Levadiakos,197,UltraSafe +1.5,Éviter,0.977,0.096,0.977,0.096,
+Over15,Trabzonspor vs Samsunspor,203,UltraSafe +1.5,Éviter,0.957,-0.088,0.957,0.088,
+Over15,CFR 1907 Cluj vs FCSB,283,UltraSafe +1.5,Éviter,0.991,-0.079,0.991,0.079,
+Over15,Aston Villa vs Crystal Palace,39,UltraSafe +1.5,Éviter,0.913,0.076,0.913,0.076,
+Over15,Aarhus vs FC Fredericia,119,UltraSafe +1.5,Éviter,0.968,-0.075,0.968,0.075,low_sample_B(1.7999999999999998)
+Over15,Dundee vs Dundee Utd,179,UltraSafe +1.5,Éviter,0.997,-0.074,0.997,0.074,
+Over15,HNK Hajduk Split vs HNK Rijeka,210,UltraSafe +1.5,Éviter,0.928,0.071,0.928,0.071,
+Over15,Istanbul Basaksehir vs Eyüpspor,203,UltraSafe +1.5,Éviter,0.997,0.070,0.997,0.070,
+Over15,OH Leuven vs Standard Liege,144,UltraSafe +1.5,Éviter,0.961,-0.068,0.961,0.068,
+Over15,VfL Wolfsburg vs FSV Mainz 05,78,UltraSafe +1.5,Éviter,0.989,0.052,0.989,0.052,
+Over15,Sparta Praha vs Zlin,345,UltraSafe +1.5,Éviter,0.965,-0.052,0.965,0.052,low_sample_B(1.7999999999999998)
+Over15,Aberdeen vs Falkirk,179,UltraSafe +1.5,Éviter,0.926,0.052,0.926,0.052,low_sample_B(0.6)
+Over15,Ham-Kam vs Sarpsborg 08 FF,103,UltraSafe +1.5,Éviter,0.994,-0.052,0.994,0.052,
+Over15,Odense vs FC Nordsjaelland,119,UltraSafe +1.5,Éviter,0.972,0.042,0.972,0.042,low_sample_A(1.7999999999999998)
+Over15,Monaco vs Strasbourg,61,UltraSafe +1.5,Éviter,0.989,0.027,0.989,0.027,
+Over15,Angers vs Rennes,61,UltraSafe +1.5,Éviter,0.984,-0.024,0.984,0.024,
+Over15,Liverpool vs Arsenal,39,UltraSafe +1.5,Éviter,0.997,-0.021,0.997,0.021,
+Over15,NK Lokomotiva Zagreb vs NK Osijek,210,UltraSafe +1.5,Éviter,0.986,0.018,0.986,0.018,
+Over15,Espanyol vs Osasuna,140,UltraSafe +1.5,Éviter,0.976,-0.016,0.976,0.016,
+Over15,Tromso vs KFUM Oslo,103,UltraSafe +1.5,Éviter,0.995,-0.007,0.995,0.007,
+Over15,Lyon vs Marseille,61,UltraSafe +1.5,Éviter,0.997,0.007,0.997,0.007,
