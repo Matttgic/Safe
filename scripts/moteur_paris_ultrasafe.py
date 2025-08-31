@@ -229,22 +229,39 @@ class MoteurUltraSafe:
         print(f"✅ {len(all_paris)} paris écrits dans {output_file}.")
 
     def _ajouter_historique(self, analyses: List[MatchAnalysis], historique_file: str):
-        """Ajoute les analyses du jour au fichier d'historique."""
-        file_exists = os.path.exists(historique_file)
+        """Ajoute les analyses du jour au fichier d'historique, en évitant les doublons."""
+        date_today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
         os.makedirs(os.path.dirname(historique_file), exist_ok=True)
-        with open(historique_file, 'a', newline='', encoding='utf-8') as f:
-            header = ['Date', 'Match', 'League_ID', 'Decision_Over15', 'Decision_Result', 'O15I', 'RSI_A', 'Fiabilite_Over15', 'Fiabilite_Result', 'Flags']
+        
+        # Lire les données existantes et supprimer les entrées du jour
+        existing_rows = []
+        file_exists = os.path.exists(historique_file)
+        
+        if file_exists:
+            with open(historique_file, 'r', newline='', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                existing_rows = [row for row in reader if row.get('Date') != date_today]
+        
+        # Réécrire le fichier avec les données existantes (sans doublons) + nouvelles données
+        header = ['Date', 'Match', 'League_ID', 'Decision_Over15', 'Decision_Result', 'O15I', 'RSI_A', 'Fiabilite_Over15', 'Fiabilite_Result', 'Flags', 'Resultat_Over15', 'Resultat_Result']
+        
+        with open(historique_file, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=header)
-            if not file_exists:
-                writer.writeheader()
-            date_today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+            writer.writeheader()
+            
+            # Écrire les données existantes (autres dates)
+            for row in existing_rows:
+                writer.writerow(row)
+            
+            # Ajouter les nouvelles analyses du jour
             for analysis in analyses:
                 writer.writerow({
                     'Date': date_today, 'Match': f"{analysis.equipe_a} vs {analysis.equipe_b}",
                     'League_ID': analysis.league_id, 'Decision_Over15': analysis.decision_over15,
                     'Decision_Result': analysis.decision_result, 'O15I': f"{analysis.o15i:.3f}",
                     'RSI_A': f"{analysis.rsi_a:.3f}", 'Fiabilite_Over15': f"{analysis.fiabilite_over15:.3f}",
-                    'Fiabilite_Result': f"{analysis.fiabilite_result:.3f}", 'Flags': '|'.join(analysis.flags)
+                    'Fiabilite_Result': f"{analysis.fiabilite_result:.3f}", 'Flags': '|'.join(analysis.flags),
+                    'Resultat_Over15': '', 'Resultat_Result': ''
                 })
 
 def charger_matchs(fichier_matchs: str) -> List[Tuple[int, int]]:
