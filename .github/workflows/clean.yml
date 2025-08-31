@@ -1,0 +1,56 @@
+name: Clean Historique
+
+on:
+  workflow_dispatch:
+
+jobs:
+  clean_historique:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    
+    - name: Clean duplicate entries
+      run: |
+        python3 -c "
+        import csv
+        from collections import defaultdict
+        
+        # Lire et grouper par (Date, Match)
+        rows_by_key = defaultdict(list)
+        
+        with open('donnees/historique.csv', 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                key = (row['Date'], row['Match'])
+                rows_by_key[key].append(row)
+        
+        # Garder première occurrence seulement
+        unique_rows = []
+        for rows in rows_by_key.values():
+            unique_rows.append(rows[0])
+        
+        # Trier par date
+        unique_rows.sort(key=lambda x: x['Date'])
+        
+        # Réécrire
+        fieldnames = ['Date', 'Match', 'League_ID', 'Decision_Over15', 'Decision_Result', 'O15I', 'RSI_A', 'Fiabilite_Over15', 'Fiabilite_Result', 'Flags', 'Resultat_Over15', 'Resultat_Result']
+        
+        with open('donnees/historique.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in unique_rows:
+                writer.writerow(row)
+        
+        print(f'✅ Nettoyage terminé. {len(unique_rows)} entrées uniques conservées.')
+        "
+    
+    - name: Commit cleaned file
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "🧹 Nettoyage doublons historique"
+        file_pattern: "donnees/historique.csv" 
