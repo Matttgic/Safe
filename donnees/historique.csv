@@ -142,3 +142,5 @@ Date,Match,League_ID,Decision_Over15,Decision_Result,O15I,RSI_A,Fiabilite_Over15
 2025-08-31,LNZ Cherkasy vs Veres Rivne,333,UltraSafe +1.5,Éviter,0.886,0.125,0.886,0.125,,WIN,
 2025-08-31,Dynamo Kyiv vs Polessya,333,UltraSafe +1.5,Éviter,0.984,0.397,0.984,0.397,,WIN,
 2025-08-31,Shakhtar Donetsk vs Oleksandria,333,UltraSafe +1.5,Éviter,0.993,0.204,0.993,0.204,,WIN,
+2025-09-01,Csikszereda vs Oţelul,283,UltraSafe +1.5,Éviter,0.796,-0.260,0.796,0.260,low_sample_A(1.7999999999999998),,
+2025-09-01,Farul Constanta vs Petrolul Ploiesti,283,UltraSafe +1.5,Éviter,0.930,-0.023,0.930,0.023,,,
