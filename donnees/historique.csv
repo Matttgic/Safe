@@ -148,3 +148,5 @@ Date,Match,League_ID,Decision_Over15,Decision_Result,O15I,RSI_A,Fiabilite_Over15
 2025-09-02,Farul Constanta vs Petrolul Ploiesti,283,UltraSafe +1.5,Éviter,0.930,-0.023,0.930,0.023,,,
 2025-09-03,Csikszereda vs Oţelul,283,UltraSafe +1.5,Éviter,0.796,-0.260,0.796,0.260,low_sample_A(1.7999999999999998),,
 2025-09-03,Farul Constanta vs Petrolul Ploiesti,283,UltraSafe +1.5,Éviter,0.930,-0.023,0.930,0.023,,,
+2025-09-04,Csikszereda vs Oţelul,283,UltraSafe +1.5,Éviter,0.796,-0.260,0.796,0.260,low_sample_A(1.7999999999999998),,
+2025-09-04,Farul Constanta vs Petrolul Ploiesti,283,UltraSafe +1.5,Éviter,0.930,-0.023,0.930,0.023,,,
